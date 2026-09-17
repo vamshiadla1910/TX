@@ -1,0 +1,702 @@
+/* =========================================================
+   TX-PATH-WING BLOG OVERVIEW & OFFERINGS STYLES
+   Design System Reference: media_1789540653220.png & Offerings
+========================================================= */
+
+.tx-overview-section {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 3.5rem 0 2.5rem;
+}
+
+.tx-overview-container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ─────────────────────────────────────────────────────────
+   1. ABOUT TX-PATH-WING (3-Column Layout)
+────────────────────────────────────────────────────────── */
+.tx-about-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1.35fr 1fr;
+  gap: 2.25rem;
+  align-items: center;
+  margin-bottom: 4.5rem;
+}
+
+/* Left Column: Heading & CTA */
+.tx-about-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tx-section-tagline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.tx-tagline-bar {
+  width: 20px;
+  height: 3px;
+  background: #0066ff;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+.tx-tagline-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #0066ff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tx-about-heading {
+  font-size: 2.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+  margin: 0.2rem 0 1rem;
+  letter-spacing: -0.025em;
+}
+
+.tx-about-description {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: #475569;
+  margin: 0 0 1.5rem;
+}
+
+.tx-know-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #0066ff;
+  color: #ffffff;
+  padding: 0.75rem 1.6rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.25);
+}
+
+.tx-know-more-btn:hover {
+  background: #0052cc;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 102, 255, 0.35);
+}
+
+/* Center Column: Classroom Photo */
+.tx-about-media {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.tx-about-img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.12);
+}
+
+/* Right Column: Stakeholder Cards */
+.tx-about-audiences {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.tx-audience-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.15rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.tx-audience-card:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 18px -3px rgba(15, 23, 42, 0.06);
+  transform: translateX(3px);
+}
+
+.tx-audience-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tx-audience-icon {
+  color: #0066ff;
+}
+
+.tx-audience-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-audience-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.15rem;
+}
+
+.tx-audience-desc {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* ─────────────────────────────────────────────────────────
+   2. OUR OFFERINGS ("Explore What You Can Do")
+────────────────────────────────────────────────────────── */
+.tx-offerings-wrap {
+  margin-bottom: 4rem;
+}
+
+.tx-offerings-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.tx-offerings-title {
+  font-size: 1.95rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0.35rem 0 0.35rem;
+  letter-spacing: -0.025em;
+}
+
+.tx-offerings-subtitle {
+  font-size: 0.92rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.tx-view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #0066ff;
+  padding: 0.55rem 1.15rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.tx-view-all-btn:hover {
+  background: #0066ff;
+  color: #ffffff;
+  border-color: #0066ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.2);
+}
+
+/* 8 Offerings Grid */
+.tx-offerings-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.85rem;
+}
+
+.tx-offering-card {
+  padding: 1.25rem 0.85rem 1.15rem;
+  border-radius: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 155px;
+  border: 1px solid transparent;
+  transition: all 0.22s ease;
+  cursor: pointer;
+}
+
+.tx-offering-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px -4px rgba(15, 23, 42, 0.08);
+}
+
+/* Card Themes matching the mockup */
+.tx-offering-card.theme-blue {
+  background-color: #eff6ff;
+  border-color: #dbeafe;
+}
+.tx-offering-card.theme-blue .tx-offering-icon {
+  color: #2563eb;
+}
+
+.tx-offering-card.theme-green {
+  background-color: #f0fdf4;
+  border-color: #dcfce7;
+}
+.tx-offering-card.theme-green .tx-offering-icon {
+  color: #16a34a;
+}
+
+.tx-offering-card.theme-red {
+  background-color: #fef2f2;
+  border-color: #fee2e2;
+}
+.tx-offering-card.theme-red .tx-offering-icon {
+  color: #dc2626;
+}
+
+.tx-offering-card.theme-purple {
+  background-color: #f5f3ff;
+  border-color: #ede9fe;
+}
+.tx-offering-card.theme-purple .tx-offering-icon {
+  color: #7c3aed;
+}
+
+.tx-offering-card.theme-orange {
+  background-color: #fff7ed;
+  border-color: #ffedd5;
+}
+.tx-offering-card.theme-orange .tx-offering-icon {
+  color: #ea580c;
+}
+
+.tx-offering-card.theme-cyan {
+  background-color: #ecfeff;
+  border-color: #cffafe;
+}
+.tx-offering-card.theme-cyan .tx-offering-icon {
+  color: #0891b2;
+}
+
+.tx-offering-card.theme-yellow {
+  background-color: #fffbeb;
+  border-color: #fef3c7;
+}
+.tx-offering-card.theme-yellow .tx-offering-icon {
+  color: #d97706;
+}
+
+.tx-offering-card.theme-indigo {
+  background-color: #eef2ff;
+  border-color: #e0e7ff;
+}
+.tx-offering-card.theme-indigo .tx-offering-icon {
+  color: #4f46e5;
+}
+
+.tx-offering-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+}
+
+.tx-offering-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.35rem;
+}
+
+.tx-offering-text {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* ─────────────────────────────────────────────────────────
+   3. BOTTOM STATS BANNER
+────────────────────────────────────────────────────────── */
+.tx-stats-banner {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem 1.75rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tx-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.tx-stat-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  background: #eff6ff;
+  color: #0066ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tx-stat-text-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.tx-stat-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.tx-stat-label {
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: #64748b;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────────────────
+   ABOUT & OFFERINGS MODALS
+────────────────────────────────────────────────────────── */
+.tx-overview-modal {
+  width: 92%;
+  max-width: 980px;
+  max-height: 88vh;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2.25rem;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: txModalIn 0.25s ease-out;
+}
+
+.tx-overview-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.tx-modal-headline {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0.3rem 0 0.2rem;
+  letter-spacing: -0.02em;
+}
+
+.tx-modal-subheadline {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.tx-overview-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tx-modal-intro {
+  font-size: 0.95rem;
+  color: #334155;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 4 Pillars Grid */
+.tx-modal-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.tx-modal-pillar-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tx-pillar-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.35rem;
+}
+
+.tx-pillar-icon.icon-blue {
+  background: #eff6ff;
+  color: #0066ff;
+}
+.tx-pillar-icon.icon-purple {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+.tx-pillar-icon.icon-green {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+.tx-pillar-icon.icon-orange {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.tx-modal-pillar-card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.tx-modal-pillar-card p {
+  font-size: 0.84rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Offerings Modal Grid */
+.tx-modal-offerings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.tx-modal-offering-card {
+  border-radius: 14px;
+  padding: 1.35rem;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-modal-offering-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.tx-modal-offering-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0066ff;
+  background: #eff6ff;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.tx-modal-offering-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.35rem;
+}
+
+.tx-modal-offering-desc {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  margin: 0 0 0.35rem;
+}
+
+.tx-modal-offering-details {
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Modal Bottom CTA box */
+.tx-modal-cta-box {
+  background: linear-gradient(105deg, #eff6ff 0%, #e0effe 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  padding: 1.25rem 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.tx-modal-cta-box h4 {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.2rem;
+}
+
+.tx-modal-cta-box p {
+  font-size: 0.82rem;
+  color: #475569;
+  margin: 0;
+}
+
+.tx-modal-btn-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.tx-modal-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #0066ff;
+  color: #ffffff;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tx-modal-primary-btn:hover {
+  background: #0052cc;
+}
+
+.tx-modal-secondary-btn {
+  padding: 0.65rem 1.15rem;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #475569;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tx-modal-secondary-btn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* ─────────────────────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS
+────────────────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  .tx-offerings-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 990px) {
+  .tx-about-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .tx-about-info {
+    text-align: center;
+    align-items: center;
+  }
+
+  .tx-about-audiences {
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .tx-stats-banner {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem 1rem;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .tx-stat-item {
+    min-width: 0;
+  }
+
+  .tx-modal-pillars-grid,
+  .tx-modal-offerings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tx-modal-cta-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .tx-offerings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tx-stats-banner {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 0.75rem;
+    padding: 1rem;
+  }
+
+  .tx-stat-item {
+    min-width: 0;
+  }
+
+  .tx-offerings-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  ArrowRight, BookOpen, Brain, Briefcase, Check, ChevronLeft, ChevronRight,
-  CircleCheck, Clock, CodeXml, Database, ExternalLink, FileText, Globe,
-  Layers, Search, ShoppingCart, Sparkles, Star, Users, Zap
-} from "lucide-react";
+import { ArrowRight, BookOpen, Brain, Briefcase, Check, ChevronLeft, ChevronRight, CircleCheck, Clock, CodeXml, Database, ExternalLink, FileText, Globe, Layers, Search, ShoppingCart, Sparkles, Star, Users, Zap } from "lucide-react";
 import "./Learner_journey.css";
 
+const STAGES = [
+  { step: "Step 1 — Fundamentals", pfx: "Build Your ", hl: "Strong Foundation", desc: "Start with the essential IT fundamentals and core technical concepts. Develop a clear understanding of programming, tools, and technologies that form the foundation for your career." },
+  { step: "Step 2 — Choose Your Job Track", pfx: "Focus on the ", hl: "Career You Want", desc: "Choose a job-oriented career track based on your interests and goals. Build the practical skills, projects, and industry knowledge required for your chosen IT role." },
+  { step: "Step 3 — Placement Assistance for Your Job", pfx: "Turn Your Skills Into ", hl: "Opportunities", desc: "Get career-focused placement support to help you become job-ready. Prepare with resume guidance, interview preparation, mock interviews, and assistance throughout your job search." }
+];
 const CORE_TECH = [
-  
   { name: "HTML", color: "#E34F26", letter: "H" }, { name: "CSS", color: "#1572B6", letter: "C" },
   { name: "Python", color: "#3776AB", letter: "Py" }, { name: "SQL", color: "#4479A1", letter: "S" },
 ];
@@ -39,8 +39,7 @@ const EcomSlide = () => (
       {ECOM_PRODUCTS.map((it) => (
         <div key={it.name} className="lj-ecom-product-card">
           <div className={`lj-ecom-thumb ${it.bg}`}><span className="lj-ecom-product-tag">{it.tag}</span><div className="lj-ecom-thumb-meta"><span>{it.cat}</span><span className="lj-ecom-rating"><Star className="lj-icon-xs lj-star-icon" />{it.rating}</span></div></div>
-          <div className="lj-ecom-product-name">{it.name}</div>
-          <div className="lj-ecom-product-footer"><span className="lj-ecom-price">{it.price}</span><span className="lj-ecom-add-btn">+ Add</span></div>
+          <div className="lj-ecom-product-name">{it.name}</div><div className="lj-ecom-product-footer"><span className="lj-ecom-price">{it.price}</span><span className="lj-ecom-add-btn">+ Add</span></div>
         </div>
       ))}
     </div>
@@ -89,18 +88,12 @@ const CareerSlide = () => (
         <div className="lj-eval-heading">Evaluation Score</div>
         <div className="lj-score-row"><span className="lj-big-score">9.4</span><span className="lj-score-max">/ 10</span></div>
         <div className="lj-progress-bars">
-          <div className="lj-progress-info"><span>DSA & Logic</span><span className="lj-progress-val">92%</span></div>
-          <div className="lj-progress-track"><div className="lj-progress-fill-sky" style={{ width: "92%" }} /></div>
-          <div className="lj-progress-info"><span>Full Stack Dev</span><span className="lj-progress-val lj-blue">96%</span></div>
-          <div className="lj-progress-track"><div className="lj-progress-fill-blue" style={{ width: "96%" }} /></div>
+          <div className="lj-progress-info"><span>DSA & Logic</span><span className="lj-progress-val">92%</span></div><div className="lj-progress-track"><div className="lj-progress-fill-sky" style={{ width: "92%" }} /></div>
+          <div className="lj-progress-info"><span>Full Stack Dev</span><span className="lj-progress-val lj-blue">96%</span></div><div className="lj-progress-track"><div className="lj-progress-fill-blue" style={{ width: "96%" }} /></div>
         </div>
       </div>
       <div className="lj-interview-box">
-        <div>
-          <div className="lj-interview-tag"><Clock className="lj-icon-sm" /><span>Next Scheduled Interview</span></div>
-          <div className="lj-interview-topic">Technical Mock Round with Senior SDE</div>
-          <p className="lj-interview-desc">Live Coding, Problem Solving & System Architecture Review</p>
-        </div>
+        <div><div className="lj-interview-tag"><Clock className="lj-icon-sm" /><span>Next Scheduled Interview</span></div><div className="lj-interview-topic">Technical Mock Round with Senior SDE</div><p className="lj-interview-desc">Live Coding, Problem Solving & System Architecture Review</p></div>
         <div className="lj-interview-footer"><span className="lj-feedback-tag">Feedback: Top 5%</span><button className="lj-room-btn">Enter Interview Room</button></div>
       </div>
     </div>
@@ -124,11 +117,7 @@ const TiltCard = ({ children, className = "" }) => {
   return (<div ref={ref} onMouseMove={onMouseMove} onMouseLeave={() => ref.current && (ref.current.style.transform = "perspective(1000px) rotateX(0) rotateY(0) translateY(0)")} className={`lj-tilt-card ${className}`}>{children}</div>);
 };
 
-const StepBadge = ({ num, activeStep }) => (
-  <div className={`lj-step-badge ${activeStep === num ? "active" : ""} ${activeStep > num ? "done" : ""}`}>
-    {activeStep > num ? <Check className="lj-badge-check" /> : num}
-  </div>
-);
+const StepBadge = ({ num, activeStep }) => (<div className={`lj-step-badge ${activeStep === num ? "active" : ""} ${activeStep > num ? "done" : ""}`}>{activeStep > num ? <Check className="lj-badge-check" /> : num}</div>);
 
 const ShowcaseCarousel = () => {
   const [idx, setIdx] = useState(0), [paused, setPaused] = useState(false);
@@ -179,19 +168,33 @@ export default function LearnerJourney() {
       const top = els[0].getBoundingClientRect().top + scrollY, total = els[2].getBoundingClientRect().bottom + scrollY - top - innerHeight * 0.5;
       setProgress(Math.min(1, Math.max(0, (scrollY - top + innerHeight * 0.3) / total)));
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <div className="lj-page">
+      <div className="lj-section-header">
+        <h1 className="lj-main-title">Get Ready for Your <span className="lj-title-highlight">IT Career</span> in <span className="lj-blue-text">3 Steps</span></h1>
+        <p className="lj-main-desc">A structured, industry-aligned path from fundamentals to placement. Scroll to explore how each stage compounds your growth.</p>
+        <div className="lj-accent-line"><div className="lj-accent-bar" /><div className="lj-accent-dot-1" /><div className="lj-accent-dot-2" /></div>
+      </div>
+
       <div className="lj-container">
         <div className="lj-sticky-sidebar">
           <div className="lj-sidebar-inner">
-            <h1 className="lj-main-title">Get Ready for<br />Your <span className="lj-title-highlight">IT Career</span><br />in <span className="lj-blue-text">3 Steps</span></h1>
-            <p className="lj-main-desc">A structured, industry-aligned path from fundamentals to placement. Scroll to explore how each stage compounds your growth.</p>
-            <div className="lj-accent-line"><div className="lj-accent-bar" /><div className="lj-accent-dot-1" /><div className="lj-accent-dot-2" /></div>
+            <div key={activeStep} className="lj-stage-text-block">
+              <div className="lj-stage-text-meta"><span className="lj-stage-text-tag">{STAGES[activeStep - 1].step}</span><span className="lj-stage-text-num">0{activeStep} / 03</span></div>
+              <h2 className="lj-stage-main-title">{STAGES[activeStep - 1].pfx}<span className="lj-title-highlight">{STAGES[activeStep - 1].hl}</span></h2>
+              <p className="lj-stage-desc-text">{STAGES[activeStep - 1].desc}</p>
+            </div>
+            <div className="lj-stage-text-steps">
+              {STAGES.map((s, i) => (
+                <button key={s.step} type="button" onClick={() => [s1Ref, s2Ref, s3Ref][i].current?.scrollIntoView({ behavior: "smooth", block: "center" })} className={`lj-stage-step-btn ${activeStep === i + 1 ? "active" : activeStep > i + 1 ? "done" : ""}`}>
+                  <span className="lj-stage-step-bar" /><span>Stage {i + 1}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -210,8 +213,7 @@ export default function LearnerJourney() {
                   { icon: BookOpen, title: "Milestone", desc: "Fundamentals Exam + Project Review", delay: "100ms" },
                 ].map((c) => (
                   <div key={c.title} className="lj-info-card" style={{ animationDelay: c.delay }}>
-                    <div className="lj-info-card-header"><c.icon className="lj-info-icon" /> {c.title}</div>
-                    <p className="lj-info-card-desc">{c.desc}</p>
+                    <div className="lj-info-card-header"><c.icon className="lj-info-icon" /> {c.title}</div><p className="lj-info-card-desc">{c.desc}</p>
                   </div>
                 ))}
               </div>
@@ -242,10 +244,7 @@ export default function LearnerJourney() {
                   <div className="lj-track-card" style={{ animationDelay: `${i * 110}ms` }}>
                     {t.popular && <div className="lj-popular-badge">Most Popular</div>}
                     <div className="lj-track-top">
-                      <div>
-                        <div className="lj-track-title">{t.title}</div>
-                        <div className="lj-track-pills"><span className="lj-pill-duration">{t.duration}</span><span className="lj-pill-mode">{t.mode}</span></div>
-                      </div>
+                      <div><div className="lj-track-title">{t.title}</div><div className="lj-track-pills"><span className="lj-pill-duration">{t.duration}</span><span className="lj-pill-mode">{t.mode}</span></div></div>
                       <div className="lj-track-icon" style={{ background: t.accent }}><Layers className="lj-icon-sm" /></div>
                     </div>
                     <div className="lj-track-checks">
@@ -271,8 +270,7 @@ export default function LearnerJourney() {
               <div className="lj-benefits-grid">
                 {PLACEMENT_BENEFITS.map((item, i) => (
                   <div key={item.label} className={`lj-benefit-item ${activeStep >= 3 ? "active" : ""}`} style={{ animationDelay: `${i * 90}ms` }}>
-                    <div className="lj-benefit-icon-box"><item.icon className="lj-benefit-icon" /></div>
-                    <span className="lj-benefit-label">{item.label}</span>
+                    <div className="lj-benefit-icon-box"><item.icon className="lj-benefit-icon" /></div><span className="lj-benefit-label">{item.label}</span>
                   </div>
                 ))}
               </div>
@@ -285,8 +283,7 @@ export default function LearnerJourney() {
             <div className="lj-drive-banner">
               <div className="lj-drive-glow" />
               <div className="lj-drive-content">
-                <div><div className="lj-drive-tag">Placement Drive</div><div className="lj-drive-title">Mega Offline Drives + AI Mock Interviews</div></div>
-                <div className="lj-drive-icon-box"><Database className="lj-drive-icon" /></div>
+                <div><div className="lj-drive-tag">Placement Drive</div><div className="lj-drive-title">Mega Offline Drives + AI Mock Interviews</div></div><div className="lj-drive-icon-box"><Database className="lj-drive-icon" /></div>
               </div>
             </div>
           </div>
