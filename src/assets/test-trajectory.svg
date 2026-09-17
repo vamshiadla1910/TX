@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" width="320" height="120" fill="none">
+  <!-- Dotted path matching mockup loop-the-loop -->
+  <path d="M 10 115 C 35 90, 65 80, 100 80 C 125 80, 142 82, 156 70 C 168 60, 172 38, 163 24 C 153 10, 137 12, 132 26 C 126 40, 134 58, 150 66 C 168 74, 192 72, 216 54 C 230 43, 242 28, 252 12"
+        stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 5" />
+  
+  <!-- Paper Airplane at (252, 12) -->
+  <g transform="translate(254, 8) rotate(24)">
+    <path d="M 0 16 L 22 -2 L 7 19 Z" fill="#0066ff" />
+    <path d="M 7 19 L 22 -2 L 13 18 Z" fill="#2563eb" />
+    <path d="M 7 19 L 10 24 L 13 18 Z" fill="#1d4ed8" />
+  </g>
+</svg>

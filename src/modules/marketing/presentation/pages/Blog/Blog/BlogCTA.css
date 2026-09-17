@@ -1,0 +1,133 @@
+/* ─────────────────────────────────────────────────────────
+   BLOG REGISTRATION CTA BANNER
+────────────────────────────────────────────────────────── */
+
+.tx-blog-cta-section {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 1.5rem 0 3.5rem;
+}
+
+.tx-blog-cta-container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.tx-blog-cta-card {
+  background: linear-gradient(105deg, #eef5ff 0%, #e0effe 55%, #ebf3fe 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 20px;
+  padding: 2.25rem 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -8px rgba(37, 99, 235, 0.08);
+}
+
+.tx-blog-cta-content {
+  max-width: 560px;
+  text-align: left;
+}
+
+.tx-blog-cta-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+  margin: 0.4rem 0 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.tx-text-blue {
+  color: #0066ff;
+}
+
+.tx-blog-cta-desc {
+  font-size: 0.92rem;
+  color: #475569;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Dotted Trajectory & Handwritten Note */
+.tx-blog-cta-graphic {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 1.5rem;
+}
+
+.tx-trajectory-svg {
+  width: 180px;
+  height: 65px;
+}
+
+.tx-handwritten-note {
+  position: absolute;
+  right: -25px;
+  top: -20px;
+  display: flex;
+  flex-direction: column;
+  font-family: "Caveat", "Comic Sans MS", cursive, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  transform: rotate(-6deg);
+  line-height: 1.1;
+  pointer-events: none;
+}
+
+/* Action button */
+.tx-blog-cta-action {
+  flex-shrink: 0;
+}
+
+.tx-register-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #0066ff;
+  color: #ffffff;
+  padding: 0.75rem 1.85rem;
+  border-radius: 10px;
+  font-size: 0.94rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 18px -3px rgba(0, 102, 255, 0.35);
+}
+
+.tx-register-btn:hover {
+  background: #0052cc;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(0, 102, 255, 0.45);
+}
+
+/* Responsive */
+@media (max-width: 1080px) {
+  .tx-blog-cta-graphic {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .tx-blog-cta-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.85rem;
+    gap: 1.5rem;
+  }
+
+  .tx-blog-cta-title {
+    font-size: 1.4rem;
+  }
+
+  .tx-register-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

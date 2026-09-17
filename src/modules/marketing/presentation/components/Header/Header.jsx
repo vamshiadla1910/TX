@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import txIcon from "../../../../../assets/tx-icon.jpg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./Header.css";
 
 const NAV_LINKS = [
@@ -16,6 +16,19 @@ const NAV_LINKS = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const getNavLinkHref = (label) => {
+    if (label === "Blog") return "/blog";
+    if (label === "About us" || label === "About") return "/about";
+    return "#";
+  };
+
+  const isLinkActive = (label) => {
+    const href = getNavLinkHref(label);
+    if (href === "#") return false;
+    return location.pathname === href;
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -44,6 +57,8 @@ export default function Header() {
                   to={
                     label === "Blog" ? "/blog" : label === "Events" ? "/events" : "#"
                   }
+                  className={`nav-link${isLinkActive(label) ? " active" : ""}`}
+                  to={getNavLinkHref(label)}
                 >
                   {label}
                 </Link>
@@ -107,6 +122,8 @@ export default function Header() {
                   ? "/blog"
                   : "#"
             }
+            className={`mobile-link${isLinkActive(label) ? " active" : ""}`}
+            to={getNavLinkHref(label)}
             onClick={() => setMenuOpen(false)}
           >
             {label}
