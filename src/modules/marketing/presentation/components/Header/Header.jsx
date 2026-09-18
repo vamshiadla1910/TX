@@ -1,66 +1,137 @@
 import { useState, useEffect } from "react";
 import txIcon from "../../../../../assets/tx-icon.jpg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./Header.css";
 
 const NAV_LINKS = [
-  "Events",
-  "Careers",
-  "Institutions",
-  "Pricing",
-  "Blog",
-  "Marketplace",
-  "About us",
+  {
+    label: "Home",
+    path: "/",
+  },
+  {
+    label: "Events",
+    path: "/events",
+  },
+  {
+    label: "Careers",
+    path: "/careers",
+  },
+  {
+    label: "Institutions",
+    path: "/institutions",
+  },
+  {
+    label: "Pricing",
+    path: "/pricing",
+  },
+  {
+    label: "Blog",
+    path: "/blog",
+  },
+  {
+    label: "Marketplace",
+    path: "/marketplace",
+  },
+  {
+    label: "About us",
+    path: "/about",
+  },
 ];
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const location = useLocation();
+
+  /* Header scroll effect */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 12);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
-  // lock page scroll while the mobile panel is open
+  /* Prevent page scrolling when mobile menu is open */
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [menuOpen]);
+
+  /* Check active page */
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
+  /* Close mobile menu */
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
   return (
     <>
+      {/* HEADER */}
       <header className={`header${scrolled ? " scrolled" : ""}`}>
         <div className="nav-container">
-          <Link className="brand" to="/">
-            <img src={txIcon} alt="Tx Pathwing" />
+
+          {/* LOGO */}
+          <Link
+            className="brand"
+            to="/"
+            onClick={closeMenu}
+          >
+            <img
+              src={txIcon}
+              alt="Tx Pathwing"
+            />
           </Link>
 
+          {/* DESKTOP NAVIGATION */}
           <ul className="nav-links">
-            {NAV_LINKS.map((label) => (
-              <li key={label}>
+            {NAV_LINKS.map((item) => (
+              <li key={item.path}>
                 <Link
-                  className="nav-link"
-                  to={
-                    label === "Blog" ? "/blog" : label === "Events" ? "/events" : "#"
-                  }
+                  className={`nav-link${
+                    isActive(item.path) ? " active" : ""
+                  }`}
+                  to={item.path}
                 >
-                  {label}
+                  {item.label}
                 </Link>
               </li>
             ))}
           </ul>
 
+          {/* SIGN IN */}
           <div className="nav-actions">
-            <a className="btn-signin" href="#">
+            <Link
+              className="btn-signin"
+              to="/login"
+            >
               Sign in
-            </a>
+            </Link>
           </div>
 
+          {/* MOBILE MENU BUTTON */}
           <button
             className={`hamburger${menuOpen ? " open" : ""}`}
-            aria-label="Open menu"
-            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={
+              menuOpen
+                ? "Close menu"
+                : "Open menu"
+            }
+            aria-expanded={menuOpen}
+            onClick={() =>
+              setMenuOpen((value) => !value)
+            }
           >
             <span></span>
             <span></span>
@@ -69,18 +140,35 @@ export default function Header() {
         </div>
       </header>
 
+      {/* DARK OVERLAY */}
       <div
         className={`scrim${menuOpen ? " open" : ""}`}
-        onClick={() => setMenuOpen(false)}
+        onClick={closeMenu}
       />
 
-      <div className={`mobile-panel${menuOpen ? " open" : ""}`}>
+      {/* MOBILE MENU */}
+      <div
+        className={`mobile-panel${
+          menuOpen ? " open" : ""
+        }`}
+      >
+
+        {/* MOBILE MENU HEADER */}
         <div className="mobile-panel-head">
-          <img src={txIcon} alt="Tx Pathwing" />
+          <Link
+            to="/"
+            onClick={closeMenu}
+          >
+            <img
+              src={txIcon}
+              alt="Tx Pathwing"
+            />
+          </Link>
+
           <button
             className="mobile-close"
             aria-label="Close menu"
-            onClick={() => setMenuOpen(false)}
+            onClick={closeMenu}
           >
             <svg
               width="20"
@@ -96,27 +184,31 @@ export default function Header() {
           </button>
         </div>
 
-        {NAV_LINKS.map((label) => (
-          <Link
-            key={label}
-            className="mobile-link"
-            to={
-              label === "Events"
-                ? "/events"
-                : label === "Blog"
-                  ? "/blog"
-                  : "#"
-            }
-            onClick={() => setMenuOpen(false)}
-          >
-            {label}
-          </Link>
-        ))}
+        {/* MOBILE NAVIGATION */}
+        <nav className="mobile-navigation">
+          {NAV_LINKS.map((item) => (
+            <Link
+              key={item.path}
+              className={`mobile-link${
+                isActive(item.path) ? " active" : ""
+              }`}
+              to={item.path}
+              onClick={closeMenu}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
 
+        {/* MOBILE SIGN IN */}
         <div className="mobile-actions">
-          <a className="btn-signin" href="#">
+          <Link
+            className="btn-signin"
+            to="/login"
+            onClick={closeMenu}
+          >
             Sign in
-          </a>
+          </Link>
         </div>
       </div>
     </>
