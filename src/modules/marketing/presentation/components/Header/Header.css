@@ -246,6 +246,15 @@ body {
   transform: scaleX(1);
 }
 
+.nav-link.active {
+  color: var(--purple);
+  background: rgba(109, 43, 224, 0.06);
+}
+
+.nav-link.active::after {
+  transform: scaleX(1);
+}
+
 
 /* =========================================================
    RIGHT SIDE
@@ -479,6 +488,12 @@ body {
   color: var(--purple);
 
   padding-left: 8px;
+}
+
+.mobile-link.active {
+  color: var(--purple);
+  padding-left: 8px;
+  font-weight: 700;
 }
 
 

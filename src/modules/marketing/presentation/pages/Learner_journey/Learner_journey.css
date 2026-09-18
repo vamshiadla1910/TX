@@ -29,6 +29,46 @@
   }
 }
 
+/* 1b. Main Section Header (Top Heading Position) */
+.lj-section-header {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 56px 20px 24px;
+  text-align: center;
+}
+
+.lj-section-header .lj-main-title {
+  font-size: 32px;
+  line-height: 1.16;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: #0F172A;
+  margin: 0;
+}
+
+@media (min-width: 1024px) {
+  .lj-section-header .lj-main-title {
+    font-size: 46px;
+  }
+}
+
+.lj-section-header .lj-main-desc {
+  margin: 16px auto 0;
+  max-width: 640px;
+  font-size: 16px;
+  line-height: 26px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.lj-section-header .lj-accent-line {
+  margin: 20px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
 /* 2. Sticky Left Sidebar */
 .lj-sticky-sidebar {
   padding: 32px 20px;
@@ -120,6 +160,140 @@
   width: 4px;
   border-radius: 9999px;
   background-color: #7dd3fc;
+}
+
+/* 2b. Dynamic Active Stage Text (Left Side - No Box) */
+.lj-stage-text-wrap {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lj-stage-text-block {
+  animation: ljStageFadeSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes ljStageFadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lj-stage-text-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.lj-stage-text-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #2563eb;
+  background-color: #eff6ff;
+  border: 1px solid #dbeafe;
+  padding: 5px 14px;
+  border-radius: 9999px;
+}
+
+.lj-stage-text-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+.lj-stage-main-title {
+  font-size: 28px;
+  line-height: 1.16;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: #0F172A;
+  margin: 0 0 16px 0;
+}
+
+@media (min-width: 1024px) {
+  .lj-stage-main-title {
+    font-size: 38px;
+    line-height: 1.15;
+  }
+}
+
+.lj-stage-desc-text {
+  font-size: 16px;
+  line-height: 26px;
+  color: #475569;
+  font-weight: 500;
+  margin: 0;
+}
+
+.lj-stage-text-steps {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.lj-stage-step-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lj-stage-step-btn:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  border-color: #cbd5e1;
+}
+
+.lj-stage-step-btn.active {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border-color: #bfdbfe;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.15);
+}
+
+.lj-stage-step-btn.done {
+  color: #059669;
+  background-color: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.lj-stage-step-btn .lj-stage-step-bar {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #94a3b8;
+  transition: background-color 0.2s ease;
+}
+
+.lj-stage-step-btn.active .lj-stage-step-bar {
+  background-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.lj-stage-step-btn.done .lj-stage-step-bar {
+  background-color: #059669;
 }
 
 /* 3. Steps Column & Vertical Timeline */

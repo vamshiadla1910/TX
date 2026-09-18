@@ -1,0 +1,359 @@
+/* ─────────────────────────────────────────────────────────
+   BLOG WRITE FOR US ("Share Your Knowledge. Inspire Others.")
+────────────────────────────────────────────────────────── */
+
+.tx-wfu-section {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 1rem 0 4.5rem;
+}
+
+.tx-wfu-container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.tx-wfu-card {
+  background: #f1f7fe;
+  border: 1px solid #dcebfa;
+  border-radius: 24px;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 6px 24px -4px rgba(37, 99, 235, 0.05);
+}
+
+/* Left Content Column */
+.tx-wfu-content {
+  padding: 3rem 2rem 2.75rem 3.25rem;
+  flex: 1.25;
+  max-width: 660px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 2;
+}
+
+.tx-wfu-tagline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+}
+
+.tx-wfu-tagline-bar {
+  width: 22px;
+  height: 3px;
+  background-color: #0066ff;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.tx-wfu-tagline-text {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #475569;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tx-wfu-title {
+  font-size: 2.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.16;
+  margin: 0 0 1rem;
+  letter-spacing: -0.025em;
+}
+
+.tx-wfu-title-blue {
+  color: #0066ff;
+}
+
+.tx-wfu-desc {
+  font-size: 0.94rem;
+  color: #475569;
+  line-height: 1.55;
+  margin: 0 0 1.85rem;
+  max-width: 520px;
+}
+
+/* 3 Features Row */
+.tx-wfu-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.25rem;
+}
+
+.tx-wfu-feature {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.tx-wfu-icon-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.2rem;
+}
+
+.tx-wfu-icon-circle.icon-blue {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.tx-wfu-icon-circle.icon-pink {
+  background-color: #fce7f3;
+  color: #ec4899;
+}
+
+.tx-wfu-icon-circle.icon-green {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.tx-wfu-feature-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.tx-wfu-feature-desc {
+  font-size: 0.77rem;
+  color: #64748b;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Action Button */
+.tx-wfu-action {
+  display: flex;
+  align-items: center;
+}
+
+.tx-wfu-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #0066ff;
+  color: #ffffff;
+  padding: 0.75rem 1.85rem;
+  border-radius: 10px;
+  font-size: 0.94rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 18px -3px rgba(0, 102, 255, 0.35);
+}
+
+.tx-wfu-btn:hover {
+  background: #0052cc;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(0, 102, 255, 0.45);
+}
+
+/* Right Media Column */
+.tx-wfu-media {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  position: relative;
+  min-height: 380px;
+}
+
+.tx-wfu-img {
+  width: 100%;
+  max-width: 540px;
+  height: 100%;
+  object-fit: contain;
+  object-position: right bottom;
+  display: block;
+}
+
+/* ─────────────────────────────────────────────────────────
+   CONTRIBUTOR MODAL & FORM
+────────────────────────────────────────────────────────── */
+.tx-contributor-modal {
+  width: 92%;
+  max-width: 720px;
+  max-height: 88vh;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2.25rem;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: txModalIn 0.25s ease-out;
+}
+
+.tx-contributor-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.tx-contributor-modal-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-contributor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tx-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.15rem;
+}
+
+.tx-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tx-form-label {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.tx-form-input,
+.tx-form-select,
+.tx-form-textarea {
+  width: 100%;
+  padding: 0.68rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  font-size: 0.88rem;
+  color: #0f172a;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.tx-form-input:focus,
+.tx-form-select:focus,
+.tx-form-textarea:focus {
+  border-color: #0066ff;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.12);
+}
+
+.tx-form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.tx-contributor-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* Success Card */
+.tx-contributor-success-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  gap: 1rem;
+}
+
+.tx-contributor-success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #a7f3d0;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.15);
+}
+
+.tx-contributor-success-card h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.tx-contributor-success-card p {
+  font-size: 0.92rem;
+  color: #475569;
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 0 1rem;
+}
+
+/* Responsive */
+@media (max-width: 1080px) {
+  .tx-wfu-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tx-wfu-content {
+    max-width: 100%;
+    padding: 2.5rem 2rem 1.5rem;
+  }
+
+  .tx-wfu-media {
+    justify-content: center;
+    min-height: 320px;
+  }
+
+  .tx-wfu-img {
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 640px) {
+  .tx-wfu-content {
+    padding: 2rem 1.5rem 1.25rem;
+  }
+
+  .tx-wfu-title {
+    font-size: 1.85rem;
+  }
+
+  .tx-wfu-features {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .tx-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .tx-wfu-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
