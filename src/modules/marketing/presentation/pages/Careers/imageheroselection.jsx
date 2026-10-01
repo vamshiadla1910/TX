@@ -41,7 +41,7 @@ const HeroSelection = () => {
             className={`hero-selection__slide ${
               active === index ? "active" : ""
             }`}
-          >
+          > 
             <img src={slide.src} alt={slide.label} />
 
             <div className="hero-selection__label">

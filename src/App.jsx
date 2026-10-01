@@ -18,7 +18,7 @@ import Blog from "./modules/marketing/presentation/pages/Blog/Blog";
 import CareersHero from "./modules/marketing/presentation/pages/Careers/Careers";
 import Organization from "./modules/marketing/presentation/pages/Contact/Contact";
 import Cart from "./modules/marketing/presentation/pages/Cart/Cart";
-import CourseDetail from "./modules/marketing/presentation/pages/CourseDetails/CourseDetails";
+import CourseDetail from "./modules/marketing/presentation/pages/CourseDetails/CourseDetails.jsx";
 import Login from "./modules/marketing/presentation/components/Login/Login";
 import Events from "./modules/marketing/presentation/pages/Events/Events.jsx";
 import RegistrationForm from "./modules/marketing/presentation/components/HackathonRegistration/HackathonRegistration/RegistrationForm";
