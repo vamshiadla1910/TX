@@ -1,5 +1,4 @@
 import "./About.css";
-
 import AboutHeroSection from "./AboutHeroSection";
 import MissionSection from "./MissionSection";
 import VisionSection from "./VisionSection";
@@ -20,7 +19,7 @@ export default function About() {
 
       {/* 3. Vision */}
       <VisionSection />
-
+ 
       {/* 4. Offerings */}
       <OfferingsSection />
 

@@ -1,5 +1,4 @@
-import React from "react";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import ProgressBar from "./RegistrationCards/ProgressBar";
 import RegistrationType from "./RegistrationCards/RegistrationType";
 import TeamLeadDetails from "./RegistrationCards/TeamLeadDetails";
@@ -78,9 +77,10 @@ export default function RegistrationForm() {
     }
   };
 
-  const submit = () => {
-    const id = `TX-REG-${Math.floor(1000 + Math.random() * 9000)}`;
-    setRegistrationId(id);
+  // Accepts the ID passed from ReviewSubmit
+  const submit = (id) => {
+    const finalId = id || `TX-REG-${Math.floor(1000 + Math.random() * 9000)}`;
+    setRegistrationId(finalId);
     setCompletedSteps(prev => [...new Set([...prev, stepIndex])]);
     setCurrentStep(visibleSteps.length);
   };

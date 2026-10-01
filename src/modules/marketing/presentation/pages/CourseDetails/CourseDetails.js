@@ -295,4 +295,4 @@
     projects: ["5 Full-Length Aptitude Tests", "Live Group Discussion Simulation", "Corporate Email Portfolio"],
     skills: ["Aptitude", "Logical Reasoning", "Communication", "Campus Hiring"]
   }
-};
+};  

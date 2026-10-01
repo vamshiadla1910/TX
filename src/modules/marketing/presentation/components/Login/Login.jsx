@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   CheckCircle,
@@ -11,29 +12,28 @@ import {
   User,
   X,
 } from "lucide-react";
-import { Link } from "react-router-dom";
-
 
 import "./Login.css";
+
+// ==========================================
+// ADMIN LOGIN DETAILS
+// ==========================================
+const ADMIN_EMAIL = "tanvoxadmin@gmail.com";
+const ADMIN_PASSWORD = "tanvox12340";
 
 const Login = ({
   isOpen,
   onClose,
   initialView = "login",
   onLoginSuccess,
+  onSwitchView,
+  onAdminLogin,
 }) => {
+  const navigate = useNavigate();
+
   const [isLogin, setIsLogin] = React.useState(
     initialView === "login"
   );
-
-  React.useEffect(() => {
-    if (isOpen) {
-      setIsLogin(initialView === "login");
-      setErrors({});
-      setMessage("");
-      setMessageType("");
-    }
-  }, [isOpen, initialView]);
 
   const [form, setForm] = React.useState({
     full_name: "",
@@ -43,126 +43,118 @@ const Login = ({
     confirm_password: "",
   });
 
-  const [showPassword, setShowPassword] =
-    React.useState(false);
-
+  const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     React.useState(false);
 
-  const [loading, setLoading] =
-    React.useState(false);
+  const [errors, setErrors] = React.useState({});
+  const [message, setMessage] = React.useState("");
+  const [messageType, setMessageType] = React.useState("");
 
-  const [errors, setErrors] =
-    React.useState({});
+  // ==========================================
+  // RESET WHEN POPUP OPENS
+  // ==========================================
+  React.useEffect(() => {
+    if (isOpen) {
+      setIsLogin(initialView === "login");
+      setErrors({});
+      setMessage("");
+      setShowPassword(false);
+      setShowConfirmPassword(false);
+    }
+  }, [isOpen, initialView]);
 
-  const [message, setMessage] =
-    React.useState("");
-
-  const [messageType, setMessageType] =
-    React.useState("");
-
+  // If popup is not open, don't show anything
   if (!isOpen) {
     return null;
   }
 
-  /* =====================================================
-     CHANGE LOGIN / SIGNUP VIEW
-  ===================================================== */
-
+  // ==========================================
+  // SWITCH LOGIN / SIGNUP
+  // ==========================================
   const changeView = () => {
-    setIsLogin(!isLogin);
+    setIsLogin((prev) => {
+      const next = !prev;
+
+      if (onSwitchView) {
+        onSwitchView(next ? "login" : "signup");
+      }
+
+      return next;
+    });
 
     setErrors({});
     setMessage("");
-    setMessageType("");
-
     setShowPassword(false);
     setShowConfirmPassword(false);
   };
 
-  /* =====================================================
-     HANDLE INPUT CHANGE
-  ===================================================== */
-
+  // ==========================================
+  // INPUT CHANGE
+  // ==========================================
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setForm((previous) => ({
-      ...previous,
+    setForm((prev) => ({
+      ...prev,
       [name]: value,
     }));
 
-    setErrors((previous) => ({
-      ...previous,
+    setErrors((prev) => ({
+      ...prev,
       [name]: "",
     }));
-
-    setMessage("");
-    setMessageType("");
   };
 
-  /* =====================================================
-     VALIDATE FORM
-  ===================================================== */
-
+  // ==========================================
+  // VALIDATION
+  // ==========================================
   const validateForm = () => {
     const newErrors = {};
 
-    /* FULL NAME - SIGNUP ONLY */
-
+    // Full name - Signup only
     if (!isLogin) {
-      const fullName = form.full_name.trim();
-
-      if (!fullName) {
+      if (!form.full_name.trim()) {
         newErrors.full_name = "Full name is required";
-      } else if (fullName.length < 3) {
+      } else if (form.full_name.trim().length < 3) {
         newErrors.full_name =
           "Please enter a valid full name";
       }
     }
 
-    /* EMAIL */
-
+    // Email
     const email = form.email.trim();
 
     if (!email) {
       newErrors.email = "Email is required";
-    } else {
-      const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-      if (!emailPattern.test(email)) {
-        newErrors.email =
-          "Please enter a valid email address";
-      }
+    } else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)
+    ) {
+      newErrors.email =
+        "Please enter a valid email address";
     }
 
-    /* PHONE - SIGNUP ONLY */
-
+    // Phone - Signup only
     if (!isLogin) {
       const phone = form.phone.trim();
 
       if (!phone) {
-        newErrors.phone =
-          "Mobile number is required";
+        newErrors.phone = "Mobile number is required";
       } else if (!/^[6-9]\d{9}$/.test(phone)) {
         newErrors.phone =
           "Please enter a valid 10-digit mobile number";
       }
     }
 
-    /* PASSWORD */
-
+    // Password
     if (!form.password) {
-      newErrors.password =
-        "Password is required";
+      newErrors.password = "Password is required";
     } else if (form.password.length < 6) {
       newErrors.password =
         "Password must be at least 6 characters";
     }
 
-    /* CONFIRM PASSWORD - SIGNUP ONLY */
-
+    // Confirm password - Signup only
     if (!isLogin) {
       if (!form.confirm_password) {
         newErrors.confirm_password =
@@ -180,99 +172,125 @@ const Login = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  /* =====================================================
-     FORM SUBMIT
-  ===================================================== */
-
+  // ==========================================
+  // LOGIN / SIGNUP
+  // ==========================================
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    setMessage("");
-    setMessageType("");
-
-    const isValid = validateForm();
-
-    if (!isValid) {
+    if (!validateForm()) {
       return;
     }
 
+    const email = form.email.trim().toLowerCase();
+    const password = form.password;
+
+    // ==========================================
+    // LOGIN
+    // ==========================================
     if (isLogin) {
-      localStorage.setItem("isLoggedIn", "true");
-      if (form.email) {
-        localStorage.setItem("userEmail", form.email);
+      // ========================================
+      // ADMIN LOGIN
+      // ========================================
+      if (
+        email === ADMIN_EMAIL &&
+        password === ADMIN_PASSWORD
+      ) {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("isAdmin", "true");
+
+        // Close login popup
+        if (onClose) {
+          onClose();
+        }
+
+        // Optional parent callback
+        if (onAdminLogin) {
+          onAdminLogin();
+        }
+
+        // Open Admin Dashboard
+        navigate("/hackathon-dashboard");
+
+        return;
       }
+
+      // ========================================
+      // NORMAL USER LOGIN
+      // ========================================
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userEmail", email);
+      localStorage.removeItem("isAdmin");
+
       if (onLoginSuccess) {
         onLoginSuccess();
       }
+
       return;
     }
 
-    // Registration success -> automatically switch to Sign In view
-    localStorage.setItem("userEmail", form.email);
-    setMessage("Account created successfully! Please sign in with your password to continue.");
+    // ==========================================
+    // SIGNUP
+    // ==========================================
+    localStorage.setItem("userEmail", email);
+
+    setMessage(
+      "Account created successfully! Please sign in."
+    );
+
     setMessageType("success");
+
     setIsLogin(true);
+
+    if (onSwitchView) {
+      onSwitchView("login");
+    }
+
+    // Clear password fields
+    setForm((prev) => ({
+      ...prev,
+      password: "",
+      confirm_password: "",
+    }));
   };
 
-  /* =====================================================
-     INPUT CLASS HELPER
-  ===================================================== */
-
-  const getInputClass = (fieldName) => {
-    return errors[fieldName]
+  // ==========================================
+  // INPUT CLASS
+  // ==========================================
+  const getInputClass = (fieldName) =>
+    errors[fieldName]
       ? "login-input-box input-error"
       : "login-input-box";
-  };
 
+  // ==========================================
+  // UI
+  // ==========================================
   return (
     <div className="login-popup">
 
-      {/* =================================================
-          DARK BACKGROUND
-      ================================================= */}
-
+      {/* OVERLAY */}
       <div
         className="login-overlay"
         onClick={onClose}
       />
 
-      {/* =================================================
-          MAIN LOGIN BOX
-      ================================================= */}
-
+      {/* LOGIN BOX */}
       <div className="login-box">
 
-        {/* =================================================
-            CLOSE BUTTON
-        ================================================= */}
-
+        {/* CLOSE BUTTON */}
         <button
           type="button"
           className="login-close"
           onClick={onClose}
-          aria-label="Close"
         >
           <X size={20} />
         </button>
 
-        {/* =================================================
-            LEFT PART
-        ================================================= */}
-
+        {/* =====================================
+            LEFT SIDE
+            ===================================== */}
         <div className="login-left">
-
-          <div className="background-grid" />
-
-          <div className="glow-top" />
-          <div className="glow-bottom" />
-
-          <span className="floating-dot dot-one" />
-          <span className="floating-dot dot-two" />
-          <span className="floating-dot dot-three" />
-          <span className="floating-dot dot-four" />
-          <span className="floating-dot dot-five" />
-
-          {/* LEFT CONTENT */}
 
           <div className="login-left-content">
 
@@ -295,42 +313,11 @@ const Login = ({
             </h2>
 
             <p>
-              Access your courses, track your
-              progress and continue learning
-              from anywhere.
+              Access your courses, track your progress
+              and continue learning from anywhere.
             </p>
 
           </div>
-
-          {/* LEARNING VISUAL */}
-
-          <div className="learning-box">
-
-            <div className="learning-orbit orbit-large" />
-            <div className="learning-orbit orbit-small" />
-
-            <span className="orbit-dot orbit-dot-one" />
-            <span className="orbit-dot orbit-dot-two" />
-            <span className="orbit-dot orbit-dot-three" />
-
-            <div className="learning-item course-item">
-              <CheckCircle size={15} />
-              <span>Courses</span>
-            </div>
-
-            <div className="learning-item progress-item">
-              <CheckCircle size={15} />
-              <span>Progress</span>
-            </div>
-
-            <div className="learning-item skills-item">
-              <CheckCircle size={15} />
-              <span>Skills</span>
-            </div>
-
-          </div>
-
-          {/* STATS */}
 
           <div className="login-stats">
 
@@ -357,24 +344,17 @@ const Login = ({
 
         </div>
 
-        {/* =================================================
-            RIGHT PART
-        ================================================= */}
-
+        {/* =====================================
+            RIGHT SIDE
+            ===================================== */}
         <div
-          className={`login-right ${isLogin
-            ? "login-view"
-            : "signup-view"
-            }`}
+          className={`login-right ${
+            isLogin ? "login-view" : "signup-view"
+          }`}
         >
 
           {/* HEADER */}
-
           <div className="login-header">
-
-            <div className="mobile-brand">
-              <ShieldCheck size={20} />
-            </div>
 
             <span className="login-label">
               {isLogin
@@ -397,42 +377,31 @@ const Login = ({
           </div>
 
           {/* MESSAGE */}
-
           {message && (
             <div
               className={`login-message ${messageType}`}
             >
-              {messageType === "success" ? (
-                <CheckCircle size={17} />
-              ) : (
-                <X size={17} />
-              )}
-
+              <CheckCircle size={17} />
               <span>{message}</span>
             </div>
           )}
 
-          {/* =================================================
-              FORM
-          ================================================= */}
-
+          {/* FORM */}
           <form
             className="login-form"
             onSubmit={handleSubmit}
             noValidate
           >
 
-            {/* FULL NAME */}
-
+            {/* =================================
+                FULL NAME
+                ================================= */}
             {!isLogin && (
               <div className="login-field">
 
                 <div
-                  className={getInputClass(
-                    "full_name"
-                  )}
+                  className={getInputClass("full_name")}
                 >
-
                   <User
                     size={18}
                     className="input-icon"
@@ -444,14 +413,7 @@ const Login = ({
                     placeholder="Full name"
                     value={form.full_name}
                     onChange={handleChange}
-                    autoComplete="name"
-                    className={
-                      errors.full_name
-                        ? "has-error"
-                        : ""
-                    }
                   />
-
                 </div>
 
                 {errors.full_name && (
@@ -463,14 +425,14 @@ const Login = ({
               </div>
             )}
 
-            {/* EMAIL */}
-
+            {/* =================================
+                EMAIL
+                ================================= */}
             <div className="login-field">
 
               <div
                 className={getInputClass("email")}
               >
-
                 <Mail
                   size={18}
                   className="input-icon"
@@ -482,14 +444,7 @@ const Login = ({
                   placeholder="Email address"
                   value={form.email}
                   onChange={handleChange}
-                  autoComplete="email"
-                  className={
-                    errors.email
-                      ? "has-error"
-                      : ""
-                  }
                 />
-
               </div>
 
               {errors.email && (
@@ -500,15 +455,15 @@ const Login = ({
 
             </div>
 
-            {/* PHONE */}
-
+            {/* =================================
+                PHONE
+                ================================= */}
             {!isLogin && (
               <div className="login-field">
 
                 <div
                   className={getInputClass("phone")}
                 >
-
                   <Phone
                     size={18}
                     className="input-icon"
@@ -520,16 +475,9 @@ const Login = ({
                     placeholder="Mobile number"
                     value={form.phone}
                     onChange={handleChange}
-                    autoComplete="tel"
                     maxLength={10}
                     inputMode="numeric"
-                    className={
-                      errors.phone
-                        ? "has-error"
-                        : ""
-                    }
                   />
-
                 </div>
 
                 {errors.phone && (
@@ -541,16 +489,14 @@ const Login = ({
               </div>
             )}
 
-            {/* PASSWORD */}
-
+            {/* =================================
+                PASSWORD
+                ================================= */}
             <div className="login-field">
 
               <div
-                className={getInputClass(
-                  "password"
-                )}
+                className={getInputClass("password")}
               >
-
                 <Lock
                   size={18}
                   className="input-icon"
@@ -566,30 +512,13 @@ const Login = ({
                   placeholder="Password"
                   value={form.password}
                   onChange={handleChange}
-                  autoComplete={
-                    isLogin
-                      ? "current-password"
-                      : "new-password"
-                  }
-                  className={
-                    errors.password
-                      ? "has-error"
-                      : ""
-                  }
                 />
 
                 <button
                   type="button"
                   className="password-toggle"
                   onClick={() =>
-                    setShowPassword(
-                      !showPassword
-                    )
-                  }
-                  aria-label={
-                    showPassword
-                      ? "Hide password"
-                      : "Show password"
+                    setShowPassword(!showPassword)
                   }
                 >
                   {showPassword ? (
@@ -609,21 +538,9 @@ const Login = ({
 
             </div>
 
-            {/* FORGOT PASSWORD */}
-
-            {isLogin && (
-              <div className="forgot-password">
-                <Link
-                  to="/forgot-password"
-                  onClick={onClose}
-                >
-                  Forgot password?
-                </Link>
-              </div>
-            )}
-
-            {/* CONFIRM PASSWORD */}
-
+            {/* =================================
+                CONFIRM PASSWORD
+                ================================= */}
             {!isLogin && (
               <div className="login-field">
 
@@ -632,7 +549,6 @@ const Login = ({
                     "confirm_password"
                   )}
                 >
-
                   <CheckCircle
                     size={18}
                     className="input-icon"
@@ -646,16 +562,8 @@ const Login = ({
                     }
                     name="confirm_password"
                     placeholder="Confirm password"
-                    value={
-                      form.confirm_password
-                    }
+                    value={form.confirm_password}
                     onChange={handleChange}
-                    autoComplete="new-password"
-                    className={
-                      errors.confirm_password
-                        ? "has-error"
-                        : ""
-                    }
                   />
 
                   <button
@@ -665,11 +573,6 @@ const Login = ({
                       setShowConfirmPassword(
                         !showConfirmPassword
                       )
-                    }
-                    aria-label={
-                      showConfirmPassword
-                        ? "Hide confirm password"
-                        : "Show confirm password"
                     }
                   >
                     {showConfirmPassword ? (
@@ -690,36 +593,29 @@ const Login = ({
               </div>
             )}
 
-            {/* SUBMIT */}
-
+            {/* =================================
+                SUBMIT BUTTON
+                ================================= */}
             <button
               type="submit"
               className="login-button"
-              disabled={loading}
             >
-
               <span>
-                {loading
-                  ? isLogin
-                    ? "Signing in..."
-                    : "Creating account..."
-                  : isLogin
-                    ? "Sign in"
-                    : "Create account"}
+                {isLogin
+                  ? "Sign in"
+                  : "Create account"}
               </span>
 
-              {!loading && (
-                <span className="button-arrow">
-                  <ArrowRight size={17} />
-                </span>
-              )}
-
+              <span className="button-arrow">
+                <ArrowRight size={17} />
+              </span>
             </button>
 
           </form>
 
-          {/* SWITCH */}
-
+          {/* =================================
+              SWITCH LOGIN / SIGNUP
+              ================================= */}
           <div className="login-switch">
 
             <span>
@@ -740,14 +636,12 @@ const Login = ({
           </div>
 
           {/* SECURITY */}
-
           <p className="login-security">
             <ShieldCheck size={14} />
             Your information is securely protected.
           </p>
 
         </div>
-
       </div>
     </div>
   );

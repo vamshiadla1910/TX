@@ -1,0 +1,675 @@
+/* =====================================================
+   FINAL RESULT PAGE
+===================================================== */
+
+.final-result-page {
+  min-height: 100vh;
+  background: #0c0f14;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-bottom: 30px;
+}
+
+
+/* =====================================================
+   TOP HEADER
+===================================================== */
+
+.final-top-header {
+  width: 1115px;
+  max-width: calc(100% - 30px);
+  margin: 0 auto;
+
+  min-height: 53px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.final-page-title {
+  margin: 0;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  color: #ffffff;
+}
+
+.final-page-title span {
+  color: #ffffff;
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+.final-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.final-nav-btn {
+  background: #0d1118;
+
+  border: 1px solid #272d37;
+
+  color: #cdd2da;
+
+  border-radius: 20px;
+
+  padding: 8px 13px;
+
+  font-size: 10px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.final-nav-btn:hover {
+  border-color: #626a78;
+}
+
+.final-nav-btn.active {
+  background: #ffffff;
+
+  color: #16181c;
+
+  border-color: #ffffff;
+}
+
+
+/* =====================================================
+   MAIN DASHBOARD
+===================================================== */
+
+.final-dashboard {
+  width: 1115px;
+  max-width: calc(100% - 30px);
+
+  margin: 0 auto;
+
+  padding: 28px;
+
+  border-radius: 20px;
+
+  border: 1px solid #292e39;
+
+  background:
+    radial-gradient(
+      circle at 95% 0%,
+      rgba(126, 80, 80, 0.25),
+      transparent 35%
+    ),
+    #171a22;
+}
+
+
+/* =====================================================
+   DASHBOARD HEADER
+===================================================== */
+
+.final-dashboard-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 21px;
+}
+
+.final-heading-wrapper {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.final-trophy {
+  width: 33px;
+  height: 33px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #ffb000;
+
+  color: #171717;
+
+  font-size: 17px;
+}
+
+.final-heading-wrapper h2 {
+  margin: 0;
+
+  font-size: 15px;
+
+  font-weight: 700;
+}
+
+.final-heading-wrapper p {
+  margin: 3px 0 0;
+
+  color: #9da5b3;
+
+  font-size: 9px;
+}
+
+
+/* =====================================================
+   EXPORT BUTTON
+===================================================== */
+
+.export-csv-btn {
+  border: none;
+
+  border-radius: 10px;
+
+  background: #f6e8e8;
+
+  color: #272328;
+
+  padding: 9px 15px;
+
+  font-size: 10px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.export-csv-btn:hover {
+  background: #ffffff;
+
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   SUMMARY GRID
+===================================================== */
+
+.final-summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr
+    1fr;
+
+  gap: 13px;
+
+  margin-bottom: 27px;
+}
+
+
+/* =====================================================
+   SUMMARY CARD
+===================================================== */
+
+.final-summary-card {
+  min-height: 154px;
+
+  padding: 18px;
+
+  border-radius: 16px;
+
+  border: 1px solid #303641;
+
+  background: rgba(24, 27, 36, 0.8);
+}
+
+.winner-card {
+  border-color: #aa7900;
+}
+
+
+/* =====================================================
+   SUMMARY LABEL
+===================================================== */
+
+.summary-label {
+  margin-bottom: 16px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+}
+
+.winner-label {
+  color: #ffbf00;
+}
+
+.runner-label {
+  color: #20b4ff;
+}
+
+
+/* =====================================================
+   TEAM NAME
+===================================================== */
+
+.final-summary-card h3 {
+  margin: 0 0 6px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+}
+
+.summary-team-info {
+  margin: 0;
+
+  color: #b2b8c2;
+
+  font-size: 9px;
+}
+
+.winner-info {
+  color: #ffc21a;
+}
+
+
+/* =====================================================
+   SCORE
+===================================================== */
+
+.summary-score {
+  margin-top: 21px;
+
+  font-size: 22px;
+
+  font-weight: 700;
+}
+
+.summary-score span {
+  margin-left: 5px;
+
+  color: #d9a600;
+
+  font-size: 8px;
+
+  font-weight: 400;
+}
+
+.runner-card .summary-score span {
+  color: #a8b0bc;
+}
+
+
+/* =====================================================
+   FINAL STATS
+===================================================== */
+
+.stats-title {
+  margin-bottom: 12px;
+
+  color: #7f8796;
+
+  font-size: 9px;
+
+  letter-spacing: 1px;
+}
+
+.stat-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+
+  color: #aeb5c0;
+
+  font-size: 10px;
+}
+
+.stat-row strong {
+  color: #ffffff;
+
+  font-size: 10px;
+}
+
+
+/* =====================================================
+   LEADERBOARD WRAPPER
+===================================================== */
+
+.leaderboard-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+
+  border: 1px solid #252a34;
+
+  border-radius: 13px;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.leaderboard-table {
+  width: 100%;
+
+  min-width: 850px;
+
+  border-collapse: collapse;
+}
+
+
+/* =====================================================
+   TABLE HEADER
+===================================================== */
+
+.leaderboard-table thead {
+  background: #11141a;
+}
+
+.leaderboard-table th {
+  padding: 11px 16px;
+
+  text-align: left;
+
+  color: #747d8d;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+}
+
+
+/* =====================================================
+   TABLE BODY
+===================================================== */
+
+.leaderboard-table td {
+  padding: 11px 16px;
+
+  border-top: 1px solid #242831;
+
+  color: #f0f2f5;
+
+  font-size: 10px;
+}
+
+.leaderboard-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.leaderboard-table tbody tr:hover {
+  background: #1b1e26;
+}
+
+
+/* =====================================================
+   RANK
+===================================================== */
+
+.rank-cell {
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   TEAM
+===================================================== */
+
+.team-cell strong {
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.team-cell span {
+  margin-left: 7px;
+
+  color: #9299a5;
+
+  font-size: 9px;
+}
+
+
+/* =====================================================
+   SCORES
+===================================================== */
+
+.scores-cell {
+  font-weight: 600;
+
+  letter-spacing: 1px;
+}
+
+
+/* =====================================================
+   TOTAL
+===================================================== */
+
+.total-cell {
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   STATUS BADGES
+===================================================== */
+
+.status-badge {
+  display: inline-block;
+
+  padding: 4px 8px;
+
+  border-radius: 12px;
+
+  font-size: 8px;
+
+  white-space: nowrap;
+}
+
+
+/* Winner */
+
+.winner-status {
+  color: #00e49a;
+
+  background: rgba(0, 220, 145, 0.12);
+
+  border: 1px solid #007b58;
+}
+
+
+/* R2 */
+
+.qualified-status {
+  color: #ffbd00;
+
+  background: rgba(255, 174, 0, 0.12);
+
+  border: 1px solid #8c6200;
+}
+
+
+/* Runner */
+
+.runner-status {
+  color: #16b9ff;
+
+  background: rgba(0, 172, 255, 0.12);
+
+  border: 1px solid #006b91;
+}
+
+
+/* Finalist */
+
+.finalist-status {
+  color: #00cce5;
+
+  background: rgba(0, 199, 219, 0.12);
+
+  border: 1px solid #006b76;
+}
+
+
+/* R1 */
+
+.r1-status {
+  color: #b78cff;
+
+  background: rgba(135, 75, 255, 0.12);
+
+  border: 1px solid #55369b;
+}
+
+
+/* Eliminated */
+
+.eliminated-status {
+  color: #ff5757;
+
+  background: rgba(255, 55, 55, 0.12);
+
+  border: 1px solid #883232;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.action-buttons {
+  display: flex;
+
+  gap: 4px;
+}
+
+.action-buttons button {
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 5px 9px;
+
+  font-size: 8px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+
+/* Winner */
+
+.winner-action-btn {
+  background: #ffab00;
+
+  color: #111111;
+}
+
+
+/* Runner-up */
+
+.runner-action-btn {
+  background: #0da8e8;
+
+  color: #ffffff;
+}
+
+
+.action-buttons button:hover {
+  opacity: 0.9;
+
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .final-top-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    padding: 15px 0;
+  }
+
+  .final-nav {
+    width: 100%;
+
+    overflow-x: auto;
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .final-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .final-dashboard-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .export-csv-btn {
+    align-self: flex-end;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .final-page-title {
+    font-size: 14px;
+
+    line-height: 1.5;
+  }
+
+  .final-dashboard {
+    padding: 18px;
+  }
+
+  .final-dashboard-header {
+    margin-bottom: 18px;
+  }
+
+  .final-heading-wrapper h2 {
+    font-size: 13px;
+  }
+
+  .final-heading-wrapper p {
+    font-size: 8px;
+  }
+
+  .final-summary-card {
+    min-height: 140px;
+  }
+
+}

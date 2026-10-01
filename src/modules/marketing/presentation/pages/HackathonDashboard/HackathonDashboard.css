@@ -1,0 +1,673 @@
+/* =========================================================
+   HACKATHON DASHBOARD - LIGHT THEME
+   ========================================================= */
+
+.hackathon-dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f9fc;
+  color: #172554;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.hd-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: 280px;
+
+  background: #ffffff;
+  border-right: 1px solid #e5eaf2;
+
+  display: flex;
+  flex-direction: column;
+
+  z-index: 40;
+
+  transition: transform 0.3s ease;
+  transform: translateX(0);
+
+  box-shadow: 4px 0 20px rgba(30, 64, 175, 0.04);
+}
+
+/* =========================================================
+   SIDEBAR HEADER
+   ========================================================= */
+
+.hd-sidebar-header {
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 0 24px;
+
+  border-bottom: 1px solid #eef2f7;
+}
+
+.hd-logo {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 12px;
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #4f46e5
+  );
+
+  display: grid;
+  place-items: center;
+
+  color: #ffffff;
+
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.22);
+}
+
+.hd-brand {
+  min-width: 0;
+}
+
+.hd-brand-title {
+  font-weight: 800;
+  font-size: 15px;
+
+  color: #172554;
+
+  letter-spacing: -0.02em;
+}
+
+.hd-brand-sub {
+  margin-top: 3px;
+
+  font-size: 11px;
+
+  color: #64748b;
+}
+
+.hd-mobile-close {
+  margin-left: auto;
+
+  display: none;
+
+  padding: 8px;
+
+  border-radius: 8px;
+
+  background: #f1f5f9;
+
+  color: #334155;
+
+  border: 1px solid #e2e8f0;
+
+  cursor: pointer;
+}
+
+.hd-mobile-close:hover {
+  background: #e2e8f0;
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.hd-nav {
+  flex: 1;
+
+  padding: 22px 16px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  overflow-y: auto;
+}
+
+.hd-nav-item {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 12px 13px;
+
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  text-align: left;
+
+  border: none;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+
+  color: #52637f;
+
+  background: transparent;
+}
+
+.hd-nav-item:hover {
+  color: #1d4ed8;
+
+  background: #f1f5ff;
+
+  transform: translateX(2px);
+}
+
+.hd-nav-active {
+  background: linear-gradient(
+    135deg,
+    #eaf2ff,
+    #e4edff
+  ) !important;
+
+  color: #155eef !important;
+
+  box-shadow: none;
+
+  font-weight: 700;
+}
+
+.hd-nav-icon {
+  width: 19px;
+  height: 19px;
+
+  flex-shrink: 0;
+}
+
+.hd-nav-label {
+  flex: 1;
+}
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.hd-badge {
+  min-width: 28px;
+
+  font-size: 11px;
+
+  padding: 4px 8px;
+
+  border-radius: 999px;
+
+  font-weight: 700;
+
+  text-align: center;
+}
+
+/* Violet */
+.hd-badge-violet {
+  background: #f1e8ff;
+  color: #7c3aed;
+}
+
+/* Amber */
+.hd-badge-amber {
+  background: #fff3d6;
+  color: #d97706;
+}
+
+/* Emerald */
+.hd-badge-emerald {
+  background: #dff8ee;
+  color: #059669;
+}
+
+.hd-badge-active {
+  background: rgba(21, 94, 239, 0.1) !important;
+  color: #155eef !important;
+}
+
+/* =========================================================
+   SIDEBAR FOOTER
+   ========================================================= */
+
+.hd-sidebar-footer {
+  padding: 16px;
+
+  border-top: 1px solid #eef2f7;
+}
+
+.hd-user-card {
+  border-radius: 14px;
+
+  background: #f8fafc;
+
+  border: 1px solid #edf1f6;
+
+  padding: 12px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+}
+
+.hd-user-avatar {
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #4f46e5
+  );
+
+  display: grid;
+  place-items: center;
+
+  color: #ffffff;
+
+  font-weight: 700;
+  font-size: 14px;
+
+  flex-shrink: 0;
+
+  box-shadow: 0 5px 12px rgba(79, 70, 229, 0.2);
+}
+
+.hd-user-info {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.hd-user-email {
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #1e293b;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.hd-user-role {
+  margin-top: 3px;
+
+  font-size: 11px;
+
+  color: #64748b;
+}
+
+.hd-logout-btn {
+  padding: 8px;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  color: #64748b;
+
+  cursor: pointer;
+
+  display: grid;
+  place-items: center;
+
+  transition: all 0.2s ease;
+}
+
+.hd-logout-btn:hover {
+  background: #eef4ff;
+
+  color: #155eef;
+
+  border-color: #c9d9ff;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.hd-main {
+  flex: 1;
+
+  margin-left: 280px;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 80% 10%,
+      rgba(219, 234, 254, 0.35),
+      transparent 28%
+    ),
+    #f8fafc;
+}
+
+@media (max-width: 1024px) {
+  .hd-main {
+    margin-left: 0;
+  }
+}
+
+/* =========================================================
+   MOBILE TOPBAR
+   ========================================================= */
+
+.hd-mobile-topbar {
+  display: none;
+
+  height: 64px;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 0 16px;
+
+  border-bottom: 1px solid #e5eaf2;
+
+  background: #ffffff;
+}
+
+.hd-menu-btn {
+  padding: 9px;
+
+  border-radius: 10px;
+
+  background: #f1f5f9;
+
+  color: #334155;
+
+  border: 1px solid #e2e8f0;
+
+  cursor: pointer;
+
+  display: grid;
+  place-items: center;
+}
+
+.hd-menu-btn:hover {
+  background: #e8eef7;
+}
+
+.hd-mobile-brand {
+  font-weight: 800;
+
+  color: #172554;
+
+  font-size: 15px;
+}
+
+/* =========================================================
+   EMPTY CONTENT AREA
+   ========================================================= */
+
+.hd-empty-wrapper {
+  padding: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh;
+}
+
+.hd-empty-box {
+  width: 100%;
+
+  max-width: 900px;
+
+  min-height: 500px;
+
+  border-radius: 24px;
+
+  border: 2px dashed #d5e2f5;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  padding: 70px 48px;
+
+  text-align: center;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-shadow:
+    0 15px 45px rgba(30, 64, 175, 0.04);
+}
+
+/* =========================================================
+   EMPTY ICON
+   ========================================================= */
+
+.hd-empty-icon {
+  width: 80px;
+  height: 80px;
+
+  margin: 0 auto 28px;
+
+  border-radius: 22px;
+
+  background: linear-gradient(
+    135deg,
+    #e9f2ff,
+    #dceaff
+  );
+
+  display: grid;
+
+  place-items: center;
+
+  color: #6383ae;
+
+  border: 1px solid #dbe8fa;
+}
+
+/* =========================================================
+   EMPTY TITLE
+   ========================================================= */
+
+.hd-empty-title {
+  margin: 0;
+
+  font-size: 32px;
+
+  font-weight: 800;
+
+  color: #142650;
+
+  text-transform: capitalize;
+
+  letter-spacing: -0.03em;
+}
+
+/* =========================================================
+   EMPTY TEXT
+   ========================================================= */
+
+.hd-empty-text {
+  max-width: 500px;
+
+  font-size: 16px;
+
+  line-height: 1.7;
+
+  color: #52637f;
+
+  margin: 12px auto 0;
+}
+
+/* =========================================================
+   EMPTY TAG
+   ========================================================= */
+
+.hd-empty-tag {
+  margin-top: 28px;
+
+  font-size: 13px;
+
+  padding: 9px 16px;
+
+  border-radius: 9999px;
+
+  background: #e8f1ff;
+
+  color: #155eef;
+
+  border: 1px solid #d4e4ff;
+
+  display: inline-flex;
+
+  align-items: center;
+}
+
+/* =========================================================
+   MOBILE OVERLAY
+   ========================================================= */
+
+.hd-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(15, 23, 42, 0.25);
+
+  backdrop-filter: blur(2px);
+
+  z-index: 30;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+
+  .hd-sidebar {
+    transform: translateX(-100%);
+
+    box-shadow: 10px 0 40px rgba(15, 23, 42, 0.12);
+  }
+
+  .hd-sidebar.hd-sidebar-open {
+    transform: translateX(0);
+  }
+
+  .hd-mobile-close {
+    display: grid;
+  }
+
+  .hd-mobile-topbar {
+    display: flex;
+  }
+
+  .hd-empty-wrapper {
+    min-height: calc(100vh - 64px);
+
+    padding: 30px;
+  }
+
+  .hd-empty-box {
+    min-height: 460px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  .hd-mobile-topbar {
+    height: 60px;
+
+    padding: 0 14px;
+  }
+
+  .hd-empty-wrapper {
+    padding: 18px;
+  }
+
+  .hd-empty-box {
+    min-height: 430px;
+
+    border-radius: 20px;
+
+    padding: 40px 22px;
+  }
+
+  .hd-empty-icon {
+    width: 68px;
+    height: 68px;
+
+    border-radius: 18px;
+
+    margin-bottom: 22px;
+  }
+
+  .hd-empty-title {
+    font-size: 26px;
+  }
+
+  .hd-empty-text {
+    font-size: 14px;
+
+    max-width: 320px;
+  }
+
+  .hd-empty-tag {
+    font-size: 11px;
+
+    padding: 8px 13px;
+  }
+
+  .hd-sidebar {
+    width: 280px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+  .hd-empty-box {
+    padding: 32px 16px;
+  }
+
+  .hd-empty-title {
+    font-size: 23px;
+  }
+
+  .hd-empty-text {
+    font-size: 13px;
+  }
+}

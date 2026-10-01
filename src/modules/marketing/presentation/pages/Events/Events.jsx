@@ -1,8 +1,4 @@
 import { useState } from "react";
-import hackathonImg from "../../../../../assets/premium_hackathon_trophy.png";
-import hackathonimg2 from "../../../../../assets/Hackathon_2.jpg";
-import bootcampImg from "../../../../../assets/bootcamp_3d_illustration.png";
-import workshopImg from "../../../../../assets/workshop_lightbulb_idea.png";
 import { useNavigate } from "react-router-dom";
 import "./Events.css";
 import { events } from "./events";
@@ -22,10 +18,6 @@ export default function Events() {
 
     return matchesType && matchesMode;
   });
-
-  const handleRegister = (event) => {
-    alert(`Registration for ${event.title}`);
-  };
 
   return (
     <div className="events-page">

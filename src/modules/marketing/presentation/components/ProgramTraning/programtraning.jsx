@@ -111,19 +111,7 @@ const ProgramsSection = () => {
       aria-label="Our Training Programs"
     >
       <div className="pt-showcase-container">
-        {/* Section Header */}
-        {/* <div className="pt-showcase-header">
-          <h2 className="pt-showcase-title">
-            Build Skills. <br />
-            <span>Launch Your Career.</span>
-          </h2>
-          <p className="pt-showcase-subtitle">
-            Practical programs designed to give you real-world skills, industry
-            <br />
-            exposure, and the confidence to take your next career step.
-          </p>
-        </div> */}
-
+        
         {/* Main Content Area */}
         <div className="pt-showcase-body">
           {/* Left: Indicators */}

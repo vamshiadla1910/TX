@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+import { useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -19,12 +19,15 @@ import CareersHero from "./modules/marketing/presentation/pages/Careers/Careers"
 import Organization from "./modules/marketing/presentation/pages/Contact/Contact";
 import Cart from "./modules/marketing/presentation/pages/Cart/Cart";
 import CourseDetail from "./modules/marketing/presentation/pages/CourseDetails/CourseDetails.jsx";
-import Login from "./modules/marketing/presentation/components/Login/Login";
-import Events from "./modules/marketing/presentation/pages/Events/Events.jsx";
-import RegistrationForm from "./modules/marketing/presentation/components/HackathonRegistration/HackathonRegistration/RegistrationForm";
 
-// Add this import only when Checkout.jsx exists
-// import Checkout from "./modules/marketing/presentation/pages/Checkout/Checkout";
+import Login from "./modules/marketing/presentation/components/Login/Login";
+import Signin from "./modules/marketing/presentation/components/Login/signin";
+
+import RegistrationForm from "./modules/marketing/presentation/components/HackathonRegistration/RegistrationForm";
+import Events from "./modules/marketing/presentation/pages/Events/Events.jsx";
+
+// Hackathon Dashboard
+import HackathonDashboard from "./modules/marketing/presentation/pages/HackathonDashboard/HackathonDashboard.jsx";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -37,11 +40,17 @@ function ScrollToTop() {
 }
 
 function AppLayout() {
+  const location = useLocation();
+
+  // Don't show normal website Header/Footer on admin dashboard
+  const isHackathonDashboard =
+    location.pathname === "/hackathon-dashboard";
+
   return (
     <>
       <ScrollToTop />
 
-      <Header />
+      {!isHackathonDashboard && <Header />}
 
       <Routes>
         {/* Home */}
@@ -55,19 +64,47 @@ function AppLayout() {
 
         {/* Other pages */}
         <Route path="/events" element={<Events />} />
-        <Route path="/careers" element={<CareersHero />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/learner-journey" element={<LearnerJourney />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Organization/>}/>
-        <Route path="/login" element={<Login />} />
-        <Route path="/cart" element={<Cart/>} />
-        <Route path="/contact" element={<Organization />} />
 
-        <Route path="/registration" element={<RegistrationForm />} />
+        <Route path="/careers" element={<CareersHero />} />
+
+        <Route path="/blog" element={<Blog />} />
+
+        <Route
+          path="/learner-journey"
+          element={<LearnerJourney />}
+        />
+
+        <Route path="/about" element={<About />} />
+
+        <Route
+          path="/contact"
+          element={<Organization />}
+        />
+
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/Signin" element={<Signin />} />
+
+        <Route
+          path="/cart"
+          element={<Cart />}
+        />
+
+        <Route
+          path="/registration"
+          element={<RegistrationForm />}
+        />
+
+        {/* =====================================
+            HACKATHON ADMIN DASHBOARD
+            ===================================== */}
+        <Route
+          path="/hackathon-dashboard"
+          element={<HackathonDashboard />}
+        />
 
         {/* Checkout - enable when Checkout.jsx exists */}
-        {/* 
+        {/*
         <Route
           path="/checkout/:id"
           element={<Checkout />}
@@ -75,7 +112,7 @@ function AppLayout() {
         */}
       </Routes>
 
-      <Footer />
+      {!isHackathonDashboard && <Footer />}
     </>
   );
 }
