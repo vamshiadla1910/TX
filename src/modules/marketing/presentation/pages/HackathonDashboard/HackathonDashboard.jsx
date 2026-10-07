@@ -13,6 +13,7 @@ import {
   X
 } from "lucide-react";
 import Overview from "./Overview";
+import Reports from "./Reports";
 import "./HackathonDashboard.css";
 
 const navItems = [
@@ -195,6 +196,12 @@ const HackathonDashboard = () => {
 
           <div className="hd-content">
             <Overview />
+          </div>
+
+        ) : active === "reports" ? (
+
+          <div className="hd-content">
+            <Reports />
           </div>
 
         ) : (
