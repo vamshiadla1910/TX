@@ -11,7 +11,7 @@ import {
   CheckCircle2,
   XCircle
 } from "lucide-react";
-import { getTeams } from "./HackethonApi";
+import { getTeams, saveAttendance, getLocalAttendanceMap } from "./HackethonApi";
 import "./Overview.css";
 
 const normalize = (value) =>
@@ -45,30 +45,39 @@ const getField = (team, names) => {
   return partialKey ? team[partialKey] : "";
 };
 
+const getRegistration = (team) =>
+  getField(team, [
+    "Registration ID",
+    "Registration Number",
+    "Registration No",
+    "Reg No",
+    "Team ID"
+  ]);
+
+const getAttendance = (team) => {
+  const regId = getRegistration(team);
+  const localMap = getLocalAttendanceMap();
+  if (regId && localMap[String(regId).trim()]) {
+    return localMap[String(regId).trim()];
+  }
+  const sheetAtt = getField(team, [
+    "Attendance",
+    "Attendance Status",
+    "Attendance_Status",
+    "attendance"
+  ]);
+  const norm = normalize(sheetAtt);
+  if (["present", "attended"].includes(norm)) return "Present";
+  if (["absent"].includes(norm)) return "Absent";
+  return "Pending";
+};
+
 const isPresent = (team) => {
-  const value = normalize(
-    getField(team, [
-      "Present",
-      "Attendance",
-      "Team Present",
-      "Attendance Status",
-      "Presence"
-    ])
-  );
-  return ["yes", "present", "true", "1", "attended"].includes(value);
+  return normalize(getAttendance(team)) === "present";
 };
 
 const isAbsent = (team) => {
-  const value = normalize(
-    getField(team, [
-      "Present",
-      "Attendance",
-      "Team Present",
-      "Attendance Status",
-      "Presence"
-    ])
-  );
-  return ["no", "absent", "false", "0", "notpresent", "notattended"].includes(value);
+  return normalize(getAttendance(team)) === "absent";
 };
 
 const isQualified = (team, round) => {
@@ -89,6 +98,7 @@ const Overview = () => {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [processingId, setProcessingId] = useState(null);
 
   const loadTeams = async () => {
     try {
@@ -106,7 +116,45 @@ const Overview = () => {
 
   useEffect(() => {
     loadTeams();
+
+    const handleAttendanceChange = () => {
+      loadTeams();
+    };
+
+    window.addEventListener("hackathon_attendance_changed", handleAttendanceChange);
+    return () => {
+      window.removeEventListener("hackathon_attendance_changed", handleAttendanceChange);
+    };
   }, []);
+
+  const handleMarkPresent = async (team) => {
+    const regId = getRegistration(team);
+    if (!regId) {
+      alert("Registration ID missing for team.");
+      return;
+    }
+
+    try {
+      setProcessingId(regId);
+      await saveAttendance(regId, "Present");
+      setTeams((currentTeams) =>
+        currentTeams.map((t) => {
+          if (getRegistration(t) === regId) {
+            return {
+              ...t,
+              Attendance: "Present"
+            };
+          }
+          return t;
+        })
+      );
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Failed to mark attendance.");
+    } finally {
+      setProcessingId(null);
+    }
+  };
 
   const total = teams.length;
   const present = teams.filter(isPresent).length;
@@ -275,6 +323,7 @@ const Overview = () => {
                   <th>Registration No</th>
                   <th>Team Lead</th>
                   <th>Attendance</th>
+                  <th>Action</th>
                   <th>Round 1</th>
                   <th>Round 2</th>
                   <th>Round 3</th>
@@ -283,13 +332,7 @@ const Overview = () => {
 
               <tbody>
                 {recentTeams.map((team, index) => {
-                  const registration = getField(team, [
-                    "Registration Number",
-                    "Registration No",
-                    "Reg No",
-                    "Registration ID",
-                    "Team ID"
-                  ]);
+                  const registration = getRegistration(team);
 
                   const lead = getField(team, [
                     "Team Lead",
@@ -305,8 +348,11 @@ const Overview = () => {
                     ? "Absent"
                     : "Pending";
 
+                  const teamIsPresent = isPresent(team);
+                  const isProcessing = processingId === registration;
+
                   return (
-                    <tr key={team.id || index}>
+                    <tr key={registration || index}>
                       <td>{index + 1}</td>
 
                       <td>
@@ -336,6 +382,24 @@ const Overview = () => {
                           )}
                           {attendance}
                         </span>
+                      </td>
+
+                      <td>
+                        {teamIsPresent ? (
+                          <button className="overview-action-btn added" disabled>
+                            <CheckCircle2 size={14} />
+                            Added
+                          </button>
+                        ) : (
+                          <button
+                            className="overview-action-btn present"
+                            disabled={isProcessing}
+                            onClick={() => handleMarkPresent(team)}
+                          >
+                            <UserCheck size={14} />
+                            {isProcessing ? "Adding..." : "Present"}
+                          </button>
+                        )}
                       </td>
 
                       <td>
