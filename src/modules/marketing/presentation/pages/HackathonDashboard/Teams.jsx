@@ -1,31 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { Download, Filter, Check, X } from "lucide-react";
-import { getTeams, saveAttendance } from "./HackethonApi";
+import { Download, Filter, Check, X, Clock3 } from "lucide-react";
+import { getTeams, saveAttendance, getLocalAttendanceMap } from "./HackethonApi";
 import "./Teams.css";
 
 const normalize = (value) =>
   String(value ?? "")
     .trim()
     .toLowerCase()
-    .replace(/[\s_-]+/g, "");
+    .replace(/[\s_.-]+/g, "");
 
 const getField = (team, names) => {
-  const keys = Object.keys(team || {});
+  if (!team) return "";
+
+  // 1. Direct exact key match
+  for (const name of names) {
+    if (
+      team[name] !== undefined &&
+      team[name] !== null &&
+      String(team[name]).trim() !== ""
+    ) {
+      return String(team[name]).trim();
+    }
+  }
+
+  // 2. Normalized key match across all keys in team
+  const keys = Object.keys(team);
   const normalizedNames = names.map(normalize);
 
-  const exactKey = keys.find((key) => normalizedNames.includes(normalize(key)));
+  for (const key of keys) {
+    const val = team[key];
+    if (val !== undefined && val !== null && String(val).trim() !== "") {
+      const normKey = normalize(key);
+      if (normalizedNames.some((n) => normKey === n || normKey.includes(n) || n.includes(normKey))) {
+        return String(val).trim();
+      }
+    }
+  }
 
-  if (exactKey) return team[exactKey];
-
-  const partialKey = keys.find((key) => {
-    const normalizedKey = normalize(key);
-
-    return normalizedNames.some(
-      (name) => normalizedKey.includes(name) || name.includes(normalizedKey),
-    );
-  });
-
-  return partialKey ? team[partialKey] : "";
+  return "";
 };
 
 const getRegistration = (team) =>
@@ -39,8 +51,19 @@ const getRegistration = (team) =>
 
 const getTeamName = (team) => getField(team, ["Team Name", "Team"]);
 
-const getTeamLead = (team) =>
-  getField(team, [
+const getTeamLead = (team) => {
+  if (!team) return "-";
+  if (typeof team.lead === "string" && team.lead.trim()) return team.lead.trim();
+  if (typeof team.lead === "object" && team.lead !== null) {
+    if (team.lead.fullName) return team.lead.fullName;
+    if (team.lead.name) return team.lead.name;
+  }
+  if (typeof team.student === "object" && team.student !== null) {
+    if (team.student.fullName) return team.student.fullName;
+    if (team.student.name) return team.student.name;
+  }
+
+  const val = getField(team, [
     "Team Lead",
     "Team Leader",
     "Team Lead Name",
@@ -49,38 +72,73 @@ const getTeamLead = (team) =>
     "Leader Name",
     "Full Name",
     "Participant Name",
+    "lead_fullName",
+    "student_fullName",
+    "lead_name",
+    "student_name"
   ]);
+
+  if (val) return val;
+
+  const members = getField(team, ["Team Members", "Members", "members"]);
+  if (members) {
+    const firstMember = members.split(",")[0];
+    if (firstMember && firstMember.trim()) return firstMember.trim();
+  }
+
+  return "-";
+};
 
 const getMembers = (team) =>
   getField(team, ["Team Members", "Members", "Team Member"]);
 
 const getTechnology = (team) =>
-  getField(team, ["Technologies", "Technology", "Tech Stack", "Tech"]);
+  getField(team, [
+    "Technologies",
+    "Technology",
+    "Tech Stack",
+    "Tech",
+    "technology_skills",
+    "technology_domains"
+  ]);
 
 const getChallenge = (team) =>
-  getField(team, ["Challenge Title", "Challenge", "Problem Statement"]);
-
-const getAttendance = (team) =>
   getField(team, [
-    "Attendance",
-    "Present",
-    "Team Present",
-    "Attendance Status",
-    "Presence",
+    "Challenge Title",
+    "Challenge",
+    "Problem Statement",
+    "idea_projectTitle",
+    "idea_title",
+    "challenge_challengeTitle",
+    "challenge_title"
   ]);
+
+const getAttendance = (team) => {
+  const regId = getRegistration(team);
+  const localMap = getLocalAttendanceMap();
+  if (regId && localMap[String(regId).trim()]) {
+    return localMap[String(regId).trim()];
+  }
+  const sheetAtt = getField(team, [
+    "Attendance",
+    "Attendance Status",
+    "Attendance_Status",
+    "attendance"
+  ]);
+  const norm = normalize(sheetAtt);
+  if (["present", "attended"].includes(norm)) return "Present";
+  if (["absent"].includes(norm)) return "Absent";
+  return "Pending";
+};
 
 const isPresent = (team) => {
   const value = normalize(getAttendance(team));
-
-  return ["present", "yes", "true", "1", "attended"].includes(value);
+  return value === "present";
 };
 
 const isAbsent = (team) => {
   const value = normalize(getAttendance(team));
-
-  return ["absent", "no", "false", "0", "notpresent", "notattended"].includes(
-    value,
-  );
+  return value === "absent";
 };
 
 const Teams = () => {
@@ -328,6 +386,8 @@ const Teams = () => {
                         {attendance === "Present" && <Check size={14} />}
 
                         {attendance === "Absent" && <X size={14} />}
+
+                        {attendance === "Pending" && <Clock3 size={14} />}
 
                         {attendance}
                       </span>
