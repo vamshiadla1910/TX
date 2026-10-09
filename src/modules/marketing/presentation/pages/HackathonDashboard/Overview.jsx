@@ -28,6 +28,7 @@ const Overview = () => {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [processingId, setProcessingId] = useState(null);
 
   const loadTeams = async () => {
     try {
@@ -64,6 +65,35 @@ const Overview = () => {
       window.removeEventListener("round3Updated", handleUpdate);
     };
   }, []);
+
+  const handleMarkPresent = async (team) => {
+    const regId = getRegistration(team);
+    if (!regId) {
+      alert("Registration ID missing for team.");
+      return;
+    }
+
+    try {
+      setProcessingId(regId);
+      await saveAttendance(regId, "Present");
+      setTeams((currentTeams) =>
+        currentTeams.map((t) => {
+          if (getRegistration(t) === regId) {
+            return {
+              ...t,
+              Attendance: "Present"
+            };
+          }
+          return t;
+        })
+      );
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Failed to mark attendance.");
+    } finally {
+      setProcessingId(null);
+    }
+  };
 
   const total = teams.length;
 
@@ -298,6 +328,7 @@ const Overview = () => {
                   <th>Registration ID</th>
                   <th>Team Lead</th>
                   <th>Attendance</th>
+                  <th>Action</th>
                   <th>Round 1</th>
                   <th>Round 2</th>
                   <th>Round 3</th>
@@ -350,6 +381,9 @@ const Overview = () => {
                   const r3 = getRoundStatus(team, 3);
                   const finalStatus = getFinalStatus(team);
 
+                  const teamIsPresent = isPresent(team);
+                  const isProcessing = processingId === registration;
+
                   return (
                     <tr key={regId || index}>
                       <td>{index + 1}</td>
@@ -382,6 +416,24 @@ const Overview = () => {
 
                           {attendance}
                         </span>
+                      </td>
+
+                      <td>
+                        {teamIsPresent ? (
+                          <button className="overview-action-btn added" disabled>
+                            <CheckCircle2 size={14} />
+                            Added
+                          </button>
+                        ) : (
+                          <button
+                            className="overview-action-btn present"
+                            disabled={isProcessing}
+                            onClick={() => handleMarkPresent(team)}
+                          >
+                            <UserCheck size={14} />
+                            {isProcessing ? "Adding..." : "Present"}
+                          </button>
+                        )}
                       </td>
 
                       <td>

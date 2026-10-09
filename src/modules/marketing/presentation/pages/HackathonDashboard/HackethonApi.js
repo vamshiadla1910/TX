@@ -356,6 +356,31 @@ export async function getTeams() {
     method: "GET",
     redirect: "follow"
   });
+export function getLocalAttendanceMap() {
+  try {
+    return JSON.parse(localStorage.getItem("tx_hackathon_attendance") || "{}");
+  } catch {
+    return {};
+  }
+}
+
+export function setLocalAttendanceMap(registrationId, attendance) {
+  try {
+    const map = getLocalAttendanceMap();
+    map[String(registrationId).trim()] = attendance;
+    localStorage.setItem("tx_hackathon_attendance", JSON.stringify(map));
+    window.dispatchEvent(new CustomEvent("hackathon_attendance_changed", { detail: { registrationId, attendance } }));
+  } catch (err) {
+    console.error("Failed to store local attendance", err);
+  }
+}
+
+export async function saveAttendance(
+  registrationId,
+  attendance
+) {
+  // Store locally immediately for responsive local state sync
+  setLocalAttendanceMap(registrationId, attendance);
 
   const list = data?.teams || data?.registrations || (Array.isArray(data) ? data : []);
   return Array.isArray(list) ? list : [];

@@ -462,3 +462,33 @@
     font-size: 27px;
   }
 }
+
+.overview-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.overview-action-btn.present {
+  background: #1764d8;
+  color: #ffffff;
+  border-color: #1764d8;
+}
+
+.overview-action-btn.present:hover {
+  background: #124eb3;
+}
+
+.overview-action-btn.added {
+  background: #e6f8ef;
+  color: #0c8b5b;
+  border-color: #b7eed3;
+  cursor: default;
+}
