@@ -16,7 +16,7 @@ import StudentReviews from "../StudentReviews/StudentReviews";
 import Programtraning from "../../components/ProgramTraning/programtraning";
 import InternshipSection from "../../components/Internship/Internship";
 import Contact from "../Contact/ContactForm";
-
+ 
 const Home = () => {
   return (
     <>
@@ -28,30 +28,31 @@ const Home = () => {
       <WhoWeAre />
       {/* Delivery Modes Section */}
       <OnePlatform />
-
+ 
       < Programtraning />
 
       <Mode />
 
       < InternshipSection/>
-
+ 
       {/* Courses Section */}
       <Courses />
-      
-      <HiringPartners /> 
-
+     
+      <HiringPartners />
+ 
       {/* CTA / Credential Verification */}
       <CTA />
-
+ 
  
       <StudentReviews/>
-
+ 
       {/* FAQ Section */}
       <FAQ />
-  
+ 
     </>
-    
+   
   );
 }
-
+ 
 export default Home;
+ 

@@ -1,0 +1,239 @@
+.round2-page {
+  width: 100%;
+  padding: 8px 0 30px;
+  box-sizing: border-box;
+}
+
+.round2-card {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e3e3e8;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(30, 30, 50, 0.04);
+}
+
+.round2-table-header {
+  min-height: 68px;
+  display: grid;
+
+  grid-template-columns:
+    1.25fr
+    1.25fr
+    2fr
+    1.35fr
+    1.15fr
+    1.35fr;
+
+  align-items: center;
+
+  padding: 0 32px;
+
+  background: #4d6adc;
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+}
+
+.round2-row {
+  min-height: 82px;
+
+  display: grid;
+
+  grid-template-columns:
+    1.25fr
+    1.25fr
+    2fr
+    1.35fr
+    1.15fr
+    1.35fr;
+
+  align-items: center;
+
+  padding: 0 32px;
+
+  border-bottom: 1px solid #eeeeef;
+
+  background: #ffffff;
+
+  transition:
+    background 0.2s ease;
+}
+
+.round2-row:hover {
+  background: #fafaff;
+}
+
+.round2-registration {
+  color: #20212a;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.round2-lead {
+  color: #343540;
+  font-size: 14px;
+}
+
+.round2-project {
+  color: #161720;
+  font-size: 15px;
+  font-weight: 600;
+  padding-right: 20px;
+}
+
+.round2-score-cell {
+  min-width: 0;
+}
+
+.round2-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  color: #20212a;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+}
+
+.round2-score strong {
+  color: #111217;
+  font-weight: 800;
+}
+
+.round2-not-scored {
+  color: #9292a0;
+  font-size: 14px;
+}
+
+.round2-status-cell {
+  display: flex;
+  align-items: center;
+}
+
+.round2-status {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 30px;
+
+  padding: 0 14px;
+
+  border-radius: 18px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.round2-status.presented {
+  color: #4f94ed;
+
+  background: #e9f3ff;
+
+  border: 1px solid #b9d7ff;
+}
+
+.round2-status.r2-qualified {
+  color: #9273ee;
+
+  background: #f0eaff;
+
+  border: 1px solid #cebaff;
+}
+
+.round2-status.eliminated {
+  color: #ee7474;
+
+  background: #ffe7e7;
+
+  border: 1px solid #ffb8b8;
+}
+
+.round2-status.requires-clarification {
+  color: #c48720;
+
+  background: #fff5dc;
+
+  border: 1px solid #f3d38a;
+}
+
+.round2-screening {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.round2-evaluate-button,
+.round2-edit-button {
+  height: 38px;
+
+  padding: 0 17px;
+
+  border-radius: 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #e1e2e8;
+
+  color: #15151d;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    all 0.2s ease;
+
+  white-space: nowrap;
+}
+
+.round2-evaluate-button:hover,
+.round2-edit-button:hover {
+  border-color: #b9a2ff;
+
+  background: #faf8ff;
+
+  box-shadow:
+    0 4px 14px
+    rgba(133, 99, 226, 0.12);
+}
+
+.round2-empty {
+  min-height: 180px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #888895;
+
+  font-size: 15px;
+}
+
+@media (max-width: 1100px) {
+  .round2-card {
+    overflow-x: auto;
+  }
+
+  .round2-table-header,
+  .round2-row {
+    min-width: 1050px;
+  }
+}
+
+@media (max-width: 650px) {
+  .round2-table-header,
+  .round2-row {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

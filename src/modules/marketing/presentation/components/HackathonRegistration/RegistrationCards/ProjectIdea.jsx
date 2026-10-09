@@ -4,7 +4,7 @@ import FormCard from "./FormCard";
 const fields = [
   ["title", "Project / Solution Title", "Project title"],
   ["beneficiaries", "Target Users / Beneficiaries", "Who will use it?"],
-  ["problem", "Problem You Intend to Solve", "Problem statement"],
+  ["problem", "Problem statement", "Problem statement"],
   ["solution", "Proposed Solution – Brief Description", "Brief solution"],
   ["outcome", "Expected Outcome", "Expected result"],
   ["stack", "Proposed Technology Stack", "Technology stack"]

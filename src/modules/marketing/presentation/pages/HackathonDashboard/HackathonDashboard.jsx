@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Round1 from "./Round1";
 import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -14,7 +15,10 @@ import {
 } from "lucide-react";
 import Overview from "./Overview";
 import Reports from "./Reports";
+import Teams from "./Teams";
 import "./HackathonDashboard.css";
+import Round2 from "./Round2";
+import Round3 from "./Round3";
 
 const navItems = [
   {
@@ -58,19 +62,18 @@ const navItems = [
 const HackathonDashboard = () => {
   const [active, setActive] = useState("dashboard");
   const [mobileOpen, setMobileOpen] = useState(false);
+
   const navigate = useNavigate();
 
   return (
     <div className="hackathon-dashboard-wrapper">
 
-      {/* SIDEBAR */}
       <aside
         className={`hd-sidebar ${
           mobileOpen ? "hd-sidebar-open" : ""
         }`}
       >
 
-        {/* SIDEBAR HEADER */}
         <div className="hd-sidebar-header">
 
           <div className="hd-logo">
@@ -96,7 +99,6 @@ const HackathonDashboard = () => {
 
         </div>
 
-        {/* NAVIGATION */}
         <nav className="hd-nav">
 
           {navItems.map((item) => {
@@ -138,7 +140,6 @@ const HackathonDashboard = () => {
 
         </nav>
 
-        {/* USER CARD */}
         <div className="hd-sidebar-footer">
 
           <div className="hd-user-card">
@@ -159,8 +160,9 @@ const HackathonDashboard = () => {
 
             </div>
 
-            <button className="hd-logout-btn"
-            onClick={() => navigate("/")}
+            <button
+              className="hd-logout-btn"
+              onClick={() => navigate("/")}
             >
               <LogOut size={16} />
             </button>
@@ -171,10 +173,8 @@ const HackathonDashboard = () => {
 
       </aside>
 
-      {/* MAIN */}
       <div className="hd-main">
 
-        {/* MOBILE TOPBAR */}
         <div className="hd-mobile-topbar">
 
           <button
@@ -190,64 +190,89 @@ const HackathonDashboard = () => {
 
         </div>
 
-        {/* CONTENT */}
-
-        {active === "dashboard" ? (
-
+        {active === "dashboard" && (
           <div className="hd-content">
             <Overview />
           </div>
+        )}
 
-        ) : active === "reports" ? (
+        
 
+        {active === "reports" && (
           <div className="hd-content">
             <Reports />
           </div>
+        )}
 
-        ) : (
+        
+        {active === "teams" && (
+          <div className="hd-content">
+            <Teams />
+          </div>
+        )}
 
-          <div className="hd-empty-wrapper">
+        {active === "round1" && (
+          <div className="hd-content">
+            <Round1 />
+          </div>
+        )}
+        {active === "round2" && (
+  <div className="hd-content">
+    <Round2 />
+  </div>
+)}
 
-            <div className="hd-empty-box">
+{active === "round3" && (
+  <div className="hd-content">
+    <Round3 />
+  </div>
+)}
 
-              <div className="hd-empty-icon">
+        {active !== "dashboard" &&
+          active !== "teams" &&
+          active !== "round1" &&
+          active !== "round2" &&
+          active !== "round3" &&
+          active !== "reports" && (
+            <div className="hd-empty-wrapper">
 
-                {(() => {
+              <div className="hd-empty-box">
 
-                  const ActiveIcon =
-                    navItems.find(
-                      (item) => item.id === active
-                    )?.icon;
+                <div className="hd-empty-icon">
 
-                  return ActiveIcon ? (
-                    <ActiveIcon size={32} />
-                  ) : null;
+                  {(() => {
 
-                })()}
+                    const ActiveIcon =
+                      navItems.find(
+                        (item) => item.id === active
+                      )?.icon;
 
-              </div>
+                    return ActiveIcon ? (
+                      <ActiveIcon size={32} />
+                    ) : null;
 
-              <h2 className="hd-empty-title">
-                {active}
-              </h2>
+                  })()}
 
-              <p className="hd-empty-text">
-                Empty screen - {active} page content will go here
-              </p>
+                </div>
 
-              <div className="hd-empty-tag">
-                Left sidebar navigation working
+                <h2 className="hd-empty-title">
+                  {active}
+                </h2>
+
+                <p className="hd-empty-text">
+                  Empty screen - {active} page content will go here
+                </p>
+
+                <div className="hd-empty-tag">
+                  Left sidebar navigation working
+                </div>
+
               </div>
 
             </div>
-
-          </div>
-
-        )}
+          )}
 
       </div>
-
-      {/* MOBILE OVERLAY */}
 
       {mobileOpen && (
         <div

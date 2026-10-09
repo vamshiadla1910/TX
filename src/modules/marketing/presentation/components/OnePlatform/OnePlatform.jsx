@@ -1,4 +1,9 @@
 import React from "react";
+import CreatorsImage from "./assets/Creators_OP.jpg";
+import CompaniesImage from "./assets/Companies_OP.jpg";
+import OrganizationImage from "./assets/Organization_OP.jpg";
+import IndividualImage from "./assets/Individual_OP.jpg";
+
 import "./OnePlatform.css";
 
 const cards = [
@@ -15,7 +20,7 @@ const cards = [
       "1:1 career mentorship",
     ],
     btn: "See the learner console →",
-    img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop&q=80",
+    img: IndividualImage,
   },
   {
     id: "02",
@@ -29,8 +34,8 @@ const cards = [
       "Faculty co-teaching tools",
       "Accredited certification stack",
     ],
-    btn: "Explore for institutions →",
-    img: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&h=400&fit=crop&q=80",
+    btn: "Explore for Organizations →",
+    img: OrganizationImage,
   },
   {
     id: "03",
@@ -45,7 +50,7 @@ const cards = [
       "Custom corporate academies",
     ],
     btn: "View corporate solutions →",
-    img: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&h=400&fit=crop&q=80",
+    img: CompaniesImage,
   },
   {
     id: "04",
@@ -60,7 +65,7 @@ const cards = [
       "Live cohort & community tools",
     ],
     btn: "Start teaching today →",
-    img: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=600&h=400&fit=crop&q=80",
+    img: CreatorsImage,
   },
 ];
 

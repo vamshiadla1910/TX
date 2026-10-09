@@ -3,17 +3,17 @@
   background: #ffffff;
   color: #172033;
 }
-
+ 
 .organization-page *,
 .organization-page *::before,
 .organization-page *::after {
   box-sizing: border-box;
 }
-
+ 
 .organization-section-heading {
   margin-bottom: 55px;
 }
-
+ 
 .organization-section-label {
   display: block;
   margin-bottom: 16px;
@@ -23,7 +23,7 @@
   letter-spacing: 1.8px;
   text-align: center;
 }
-
+ 
 .organization-section-heading h2 {
   margin: 0 0 18px;
   color: #172033;
@@ -32,11 +32,11 @@
   font-weight: 750;
   text-align: center;
 }
-
+ 
 .organization-section-heading h2 span {
   color: #1769e0;
 }
-
+ 
 .organization-section-heading p {
   max-width: 800px;
   margin: 0 auto;
@@ -45,23 +45,23 @@
   line-height: 1.75;
   text-align: center;
 }
-
+ 
 .centered-heading {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
 }
-
+ 
 .organization-information {
   padding: 30px 8%;
 }
-
+ 
 .organization-information-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
-
+ 
 .information-card {
   min-height: 250px;
   padding: 30px;
@@ -77,29 +77,29 @@
   animation-fill-mode: both;
   animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
-
+ 
 .information-card:nth-child(1) {
   animation-name: card-one-enter;
 }
-
+ 
 .information-card:nth-child(2) {
   animation-name: card-two-enter;
 }
-
+ 
 .information-card:nth-child(3) {
   animation-name: card-three-enter;
 }
-
+ 
 .information-card:nth-child(4) {
   animation-name: card-four-enter;
 }
-
+ 
 .information-card:hover {
   border-color: #c7daf5;
   transform: translateY(-5px);
   box-shadow: 0 18px 40px rgba(36, 69, 112, 0.08);
 }
-
+ 
 .information-icon {
   width: 45px;
   height: 45px;
@@ -113,76 +113,76 @@
   font-size: 12px;
   font-weight: 800;
 }
-
+ 
 .information-card h3 {
   margin: 0 0 12px;
   color: #172033;
   font-size: 21px;
 }
-
+ 
 .information-card p {
   margin: 0;
   color: #687487;
   font-size: 14px;
   line-height: 1.75;
 }
-
+ 
 @keyframes card-one-enter {
   0% {
     transform: translateX(calc(31.5vw + 7.5px));
   }
-
+ 
   100% {
     transform: translateX(0);
   }
 }
-
+ 
 @keyframes card-two-enter {
   0% {
     transform: translateX(calc(10.5vw + 2.5px));
   }
-
+ 
   100% {
     transform: translateX(0);
   }
 }
-
+ 
 @keyframes card-three-enter {
   0% {
     transform: translateX(calc(-10.5vw - 2.5px));
   }
-
+ 
   100% {
     transform: translateX(0);
   }
 }
-
+ 
 @keyframes card-four-enter {
   0% {
     transform: translateX(calc(-31.5vw - 7.5px));
   }
-
+ 
   100% {
     transform: translateX(0);
   }
 }
-
+ 
 .institutional-pathway {
   padding: 70px 6% 10px;
   background: #ffffff;
 }
-
+ 
 .institutional-pathway .organization-section-heading {
   margin-bottom: 65px;
 }
-
+ 
 .pathway-roadmap {
   position: relative;
   width: min(1250px, 100%);
   height: 450px;
   margin: 0 auto;
 }
-
+ 
 .pathway-roadmap-line {
   position: absolute;
   inset: 0;
@@ -192,14 +192,14 @@
   z-index: 1;
   pointer-events: none;
 }
-
+ 
 .pathway-line-base {
   fill: none;
   stroke: #d9e8fb;
   stroke-width: 5;
   stroke-linecap: round;
 }
-
+ 
 .pathway-line-flow {
   fill: none;
   stroke: #70a9f7;
@@ -208,13 +208,13 @@
   stroke-dasharray: 9 13;
   animation: pathway-flow 2.5s linear infinite;
 }
-
+ 
 @keyframes pathway-flow {
   to {
     stroke-dashoffset: -44;
   }
 }
-
+ 
 .pathway-card {
   position: absolute;
   z-index: 3;
@@ -233,13 +233,13 @@
     box-shadow 0.3s ease,
     border-color 0.3s ease;
 }
-
+ 
 .pathway-card:hover {
   transform: translateY(-8px) scale(1.02);
   border-color: #c7daf5;
   box-shadow: 0 22px 45px rgba(44, 82, 128, 0.16);
 }
-
+ 
 .pathway-card-icon {
   flex: 0 0 48px;
   width: 48px;
@@ -249,7 +249,7 @@
   justify-content: center;
   border-radius: 50%;
 }
-
+ 
 .pathway-card-icon svg {
   width: 25px;
   height: 25px;
@@ -259,259 +259,259 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
+ 
 .pathway-card-content {
   min-width: 0;
 }
-
+ 
 .pathway-card-number {
   display: block;
   margin-bottom: 2px;
   font-size: 12px;
   font-weight: 800;
 }
-
+ 
 .pathway-card h3 {
   margin: 0 0 6px;
   color: #172033;
   font-size: 17px;
   font-weight: 750;
 }
-
+ 
 .pathway-card p {
   margin: 0;
   color: #718096;
   font-size: 12px;
   line-height: 1.55;
 }
-
+ 
 .pathway-step-one {
   top: 40px;
   left: 0;
 }
-
+ 
 .pathway-step-two {
   top: 250px;
   left: 18%;
 }
-
+ 
 .pathway-step-three {
   top: 40px;
   left: 39%;
 }
-
+ 
 .pathway-step-four {
   top: 250px;
   left: 56%;
 }
-
+ 
 .pathway-step-five {
   top: 40px;
   left: 79%;
 }
-
+ 
 .pathway-step-six {
   top: 250px;
   right: -2%;
 }
-
+ 
 .pathway-step-one .pathway-card-icon {
   color: #1769e0;
   background: #eaf3ff;
 }
-
+ 
 .pathway-step-one .pathway-card-number {
   color: #1769e0;
 }
-
+ 
 .pathway-step-two .pathway-card-icon {
   color: #16b86a;
   background: #e9fbf2;
 }
-
+ 
 .pathway-step-two .pathway-card-number {
   color: #16b86a;
 }
-
+ 
 .pathway-step-three .pathway-card-icon {
   color: #8064df;
   background: #f1edff;
 }
-
+ 
 .pathway-step-three .pathway-card-number {
   color: #8064df;
 }
-
+ 
 .pathway-step-four .pathway-card-icon {
   color: #f49a27;
   background: #fff4e5;
 }
-
+ 
 .pathway-step-four .pathway-card-number {
   color: #f49a27;
 }
-
+ 
 .pathway-step-five .pathway-card-icon {
   color: #ec4f83;
   background: #fff0f6;
 }
-
+ 
 .pathway-step-five .pathway-card-number {
   color: #ec4f83;
 }
-
+ 
 .pathway-step-six .pathway-card-icon {
   color: #12b8b5;
   background: #e9fbfb;
 }
-
+ 
 .pathway-step-six .pathway-card-number {
   color: #12b8b5;
 }
-
+ 
 .form-section {
   min-height: 300px;
   padding: 60px 8%;
 }
-
+ 
 @media (max-width: 1100px) {
   .organization-information,
   .institutional-pathway {
     padding-left: 6%;
     padding-right: 6%;
   }
-
+ 
   .organization-information-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
+ 
   .pathway-roadmap {
     height: 650px;
   }
-
+ 
   .pathway-roadmap-line {
     display: none;
   }
-
+ 
   .pathway-card {
     width: calc(50% - 15px);
   }
-
+ 
   .pathway-step-one {
     top: 0;
     left: 0;
   }
-
+ 
   .pathway-step-two {
     top: 130px;
     left: auto;
     right: 0;
   }
-
+ 
   .pathway-step-three {
     top: 260px;
     left: 0;
   }
-
+ 
   .pathway-step-four {
     top: 390px;
     left: auto;
     right: 0;
   }
-
+ 
   .pathway-step-five {
     top: 520px;
     left: 0;
   }
-
+ 
   .pathway-step-six {
     top: 650px;
     right: 0;
   }
 }
-
+ 
 @media (max-width: 768px) {
   .organization-information,
   .institutional-pathway {
     padding-top: 70px;
     padding-bottom: 70px;
   }
-
+ 
   .organization-section-heading {
     margin-bottom: 40px;
   }
-
+ 
   .organization-information-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
+ 
   .institutional-pathway .organization-section-heading {
     margin-bottom: 45px;
   }
-
+ 
   .pathway-roadmap {
     height: 780px;
   }
-
+ 
   .pathway-card {
     width: 80%;
     min-height: 105px;
   }
-
+ 
   .pathway-step-one {
     top: 0;
     left: 0;
   }
-
+ 
   .pathway-step-two {
     top: 135px;
     right: 0;
   }
-
+ 
   .pathway-step-three {
     top: 270px;
     left: 0;
   }
-
+ 
   .pathway-step-four {
     top: 405px;
     right: 0;
   }
-
+ 
   .pathway-step-five {
     top: 540px;
     left: 0;
   }
-
+ 
   .pathway-step-six {
     top: 675px;
     right: 0;
   }
 }
-
+ 
 @media (max-width: 468px) {
   .organization-information,
   .institutional-pathway {
     padding-left: 20px;
     padding-right: 20px;
   }
-
+ 
   .organization-section-heading h2 {
     font-size: 35px;
   }
-
+ 
   .organization-section-heading p {
     font-size: 15px;
   }
-
+ 
   .organization-information-grid {
     grid-template-columns: 1fr;
   }
-
+ 
   .information-card {
     min-height: 250px;
   }
-
+ 
   .pathway-roadmap {
     height: auto;
     display: flex;
@@ -519,7 +519,7 @@
     gap: 22px;
     padding-left: 12px;
   }
-
+ 
   .pathway-roadmap-line {
     display: block;
     top: 0;
@@ -528,12 +528,12 @@
     height: 100%;
     overflow: visible;
   }
-
+ 
   .pathway-line-base,
   .pathway-line-flow {
     display: none;
   }
-
+ 
   .pathway-roadmap::before {
     content: "";
     position: absolute;
@@ -544,7 +544,7 @@
     border-radius: 10px;
     background: #d9e8fb;
   }
-
+ 
   .pathway-roadmap::after {
     content: "";
     position: absolute;
@@ -556,14 +556,14 @@
     background: #70a9f7;
     animation: mobile-pathway-flow 2.5s linear infinite;
   }
-
+ 
   .pathway-card {
     position: relative;
     inset: auto;
     width: calc(100% - 45px);
     margin-left: 45px;
   }
-
+ 
   .pathway-card::before {
     content: "";
     position: absolute;
@@ -574,45 +574,46 @@
     background: #ffffff;
     border: 3px solid #70a9f7;
   }
-
+ 
   .pathway-card-icon {
     flex-basis: 44px;
     width: 44px;
     height: 44px;
   }
-
+ 
   .pathway-card h3 {
     font-size: 16px;
   }
-
+ 
   .pathway-card p {
     font-size: 12px;
   }
-
+ 
   .form-section {
     padding-left: 20px;
     padding-right: 20px;
   }
 }
-
+ 
 @keyframes mobile-pathway-flow {
   from {
     transform: translateY(0);
   }
-
+ 
   to {
     transform: translateY(500px);
   }
 }
-
+ 
 @media (prefers-reduced-motion: reduce) {
   .information-card,
   .pathway-line-flow,
   .pathway-roadmap::after {
     animation: none;
   }
-
+ 
   .pathway-card {
     transition: none;
   }
 }
+ 

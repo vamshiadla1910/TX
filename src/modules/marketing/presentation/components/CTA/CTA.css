@@ -9,7 +9,7 @@
 /* Container & Layout */
 .verify-section {
   background: white;
-  padding: 70px 24px 30px;
+  padding: 40px 24px 30px;
   transition: background 0.4s ease, border-color 0.4s ease, color 0.4s ease;
   position: relative;
   overflow: hidden;

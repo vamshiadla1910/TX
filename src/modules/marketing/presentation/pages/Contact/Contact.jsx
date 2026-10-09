@@ -1,7 +1,7 @@
 import React from "react";
 import "./Contact.css";
 import ContactForm from "./ContactForm";
-
+ 
 const pathwayData = [
   {
     number: "01",
@@ -75,7 +75,7 @@ const pathwayData = [
     )
   }
 ];
-
+ 
 const Organization = () => {
   return (
     <main className="organization-page">
@@ -84,13 +84,13 @@ const Organization = () => {
           <span className="organization-section-label">
             WHO WE CONNECT
           </span>
-
+ 
           <h2>
             Connecting Organizations
             <br />
             with <span>Emerging Talent</span>
           </h2>
-
+ 
           <p>
             TX Pathwing creates a bridge between learners, organizations,
             and industry. Organizations can connect with skilled students
@@ -99,46 +99,46 @@ const Organization = () => {
             collaboration.
           </p>
         </div>
-
+ 
         <div className="organization-information-grid">
           <article className="information-card">
             <div className="information-icon">01</div>
-
+ 
             <h3>Learners</h3>
-
+ 
             <p>
               Collaborate on industry-oriented learning, training,
               internships, and career opportunities.
             </p>
           </article>
-
+ 
           <article className="information-card">
             <div className="information-icon">02</div>
-
+ 
             <h3>Organizations</h3>
-
+ 
             <p>
               Connect with a growing talent and learning ecosystem
               through meaningful institutional opportunities.
             </p>
           </article>
-
+ 
           <article className="information-card">
             <div className="information-icon">03</div>
-
+ 
             <h3>Companies</h3>
-
+ 
             <p>
               Discover opportunities to engage with emerging
               technology professionals and skilled learners.
             </p>
           </article>
-
+ 
           <article className="information-card">
             <div className="information-icon">04</div>
-
+ 
             <h3>Industry Partners</h3>
-
+ 
             <p>
               Create meaningful training, mentoring, internship,
               and hiring connections.
@@ -146,25 +146,25 @@ const Organization = () => {
           </article>
         </div>
       </section>
-
+ 
       <section className="institutional-pathway">
         <div className="organization-section-heading centered-heading">
           <span className="organization-section-label">
             INDUSTRIAL PATHWAY
           </span>
-
+ 
           <h2>
             A Pathway from Learning
             <br />
             to <span>Industry</span>
           </h2>
-
+ 
           <p>
             Connect organizations with learners through a structured
             journey from collaboration to real-world industry exposure.
           </p>
         </div>
-
+ 
         <div className="pathway-roadmap">
           <svg
             className="pathway-roadmap-line"
@@ -181,7 +181,7 @@ const Organization = () => {
                  C 830 315, 850 105, 955 105
                  C 1060 105, 1080 315, 1140 315"
             />
-
+ 
             <path
               className="pathway-line-flow"
               d="M 92 105
@@ -192,7 +192,7 @@ const Organization = () => {
                  C 1060 105, 1080 315, 1140 315"
             />
           </svg>
-
+ 
           {pathwayData.map((step) => (
             <article
               key={step.number}
@@ -201,14 +201,14 @@ const Organization = () => {
               <div className="pathway-card-icon">
                 {step.icon}
               </div>
-
+ 
               <div className="pathway-card-content">
                 <span className="pathway-card-number">
                   {step.number}
                 </span>
-
+ 
                 <h3>{step.title}</h3>
-
+ 
                 <p>{step.description}</p>
               </div>
             </article>
@@ -216,9 +216,10 @@ const Organization = () => {
         </div>
       </section>
       <ContactForm />
-
+ 
     </main>
   );
 };
-
+ 
 export default Organization;
+ 

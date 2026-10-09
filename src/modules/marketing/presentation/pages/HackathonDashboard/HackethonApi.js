@@ -1,51 +1,184 @@
 const API_URL =
   "https://script.google.com/macros/s/AKfycbwTZFWh7k2pDyKaIp9euVTs19DvnE1lxQ16HMNk8l36OjXBgcnBnI-1rtYDBhkWUp4/exec";
 
-export async function getHackathonData() {
-  try {
-    console.log("Calling Google Sheets API...");
 
-    const response = await fetch(API_URL, {
+export async function getTeams() {
+  const response = await fetch(
+    `${API_URL}?action=getTeams`,
+    {
       method: "GET",
       redirect: "follow",
       cache: "no-store"
-    });
-
-    console.log("API status:", response.status);
-
-    if (!response.ok) {
-      throw new Error(
-        `Google Sheets API returned ${response.status}`
-      );
     }
+  );
 
-    const text = await response.text();
+  const text =
+    await response.text();
 
-    console.log("Google Sheets response:", text);
+  let data;
 
-    if (!text) {
-      throw new Error("Google Sheets returned an empty response");
-    }
-
-    const data = JSON.parse(text);
-
-    console.log("Parsed Google Sheets data:", data);
-
-    if (data.status !== "success") {
-      throw new Error(
-        data.message || "Google Sheets API returned an error"
-      );
-    }
-
-    return data;
-  } catch (error) {
-    console.error("Google Sheets API Error:", error);
-    throw error;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error(
+      "Invalid response from Google Apps Script."
+    );
   }
+
+  if (data.status !== "success") {
+    throw new Error(
+      data.message ||
+      "Failed to load teams."
+    );
+  }
+
+  return data.teams || [];
 }
 
-export async function getTeams() {
-  const data = await getHackathonData();
 
-  return data.registrations || [];
+export async function getRound1Teams() {
+  const response = await fetch(
+    `${API_URL}?action=getRound1`,
+    {
+      method: "GET",
+      redirect: "follow",
+      cache: "no-store"
+    }
+  );
+
+  const text =
+    await response.text();
+
+  let data;
+
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error(
+      "Invalid Round1 response from Google Apps Script."
+    );
+  }
+
+  if (data.status !== "success") {
+    throw new Error(
+      data.message ||
+      "Failed to load Round1 teams."
+    );
+  }
+
+  return data.round1 || [];
+}
+
+
+export async function saveAttendance(
+  registrationId,
+  attendance
+) {
+
+  const payload = {
+    action: "saveAttendance",
+    registrationId,
+    attendance
+  };
+
+  const response = await fetch(
+    API_URL,
+    {
+      method: "POST",
+      redirect: "follow",
+      headers: {
+        "Content-Type":
+          "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        formData:
+          JSON.stringify(payload)
+      })
+    }
+  );
+
+  const text =
+    await response.text();
+
+  let data;
+
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error(
+      "Invalid response from Google Apps Script."
+    );
+  }
+
+  if (data.status !== "success") {
+    throw new Error(
+      data.message ||
+      "Failed to save attendance."
+    );
+  }
+
+  return data;
+}
+
+
+export async function saveRound1Evaluation(
+  registrationId,
+  innovation,
+  technical,
+  presentation,
+  total,
+  comments,
+  status
+) {
+
+  const payload = {
+    action:
+      "saveRound1Evaluation",
+
+    registrationId,
+    innovation,
+    technical,
+    presentation,
+    total,
+    comments,
+    status
+  };
+
+  const response = await fetch(
+    API_URL,
+    {
+      method: "POST",
+      redirect: "follow",
+      headers: {
+        "Content-Type":
+          "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams({
+        formData:
+          JSON.stringify(payload)
+      })
+    }
+  );
+
+  const text =
+    await response.text();
+
+  let data;
+
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error(
+      "Invalid response from Google Apps Script."
+    );
+  }
+
+  if (data.status !== "success") {
+    throw new Error(
+      data.message ||
+      "Failed to save Round1 evaluation."
+    );
+  }
+
+  return data;
 }

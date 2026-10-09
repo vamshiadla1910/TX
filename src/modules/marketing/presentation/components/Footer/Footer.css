@@ -147,3 +147,16 @@
     flex-direction: column;
   }
 }
+.footer-social-row{
+  padding-left:6%;
+  padding-top: 20px;
+}
+.footer-social-row a{
+   color: #4f5bd5;
+  padding-left: 25px;
+
+}
+.footer-social-row a :hover{
+  color: #16161c;
+  text-decoration: underline;
+}

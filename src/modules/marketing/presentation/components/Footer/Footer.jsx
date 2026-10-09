@@ -1,5 +1,6 @@
 import React from "react";
 import txIcon from "../../../../../assets/tx-icon.jpg";
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 import "./Footer.css";
 
 const FOOTER_COLUMNS = [
@@ -97,6 +98,36 @@ export default function Footer({
           ))}
         </nav>
       </div>
+      <div className="footer-social-row">
+            {[
+              {
+                Icon: FaFacebook,
+                link: "https://www.facebook.com/share/1a3pcCH8kK/",
+              },
+              {
+                Icon: FaTwitter,
+                link: "https://x.com/tanvox2025",
+              },
+              {
+                Icon: FaLinkedin,
+                link: "https://www.linkedin.com/company/tx-path-wing/",
+              },
+              {
+                Icon: FaInstagram,
+                link: "https://www.instagram.com/tx_pathwing/",
+              },
+            ].map(({ Icon, link }, i) => (
+              <a
+                key={i}
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-social-btn"
+              >
+                <Icon size={25} />
+              </a>
+            ))}
+          </div>
 
       <div className="tx-footer-bottom">
         <p>

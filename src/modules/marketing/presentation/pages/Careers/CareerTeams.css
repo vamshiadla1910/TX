@@ -149,3 +149,9 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/*media mobile screen  320px*/
+.career-teams-section {
+padding: 1.5rem;
+}

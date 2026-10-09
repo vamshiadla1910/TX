@@ -151,3 +151,31 @@
     right: 4px;
   }
 }
+
+@media (max-width: 320px) {
+.banner-slide {
+  width:80%;
+  height: 60%;
+  border-radius: 2px;
+}
+
+.banner-slide img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+
+}
+
+.banner-arrow {
+top: 30%;
+width: 20px;
+height: 30px;
+}
+   .banner-window {
+    margin: 30px auto 0;
+}
+.mp-hero h1 {
+        font-size: 18px;
+    }
+
+}

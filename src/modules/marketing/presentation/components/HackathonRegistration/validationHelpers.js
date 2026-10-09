@@ -41,7 +41,6 @@ export const validateAlphaOnly = (val, label) => {
 
 export const validateDateNotPast = (dateStr, label = "Date") => {
   if (!dateStr || !dateStr.trim()) return `${label} is required`;
-  // Get local date string YYYY-MM-DD
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -54,7 +53,6 @@ export const validateDateNotPast = (dateStr, label = "Date") => {
 
 export const validateDateNotFuture = (dateStr, label = "Date") => {
   if (!dateStr || !dateStr.trim()) return `${label} is required`;
-  // Get local date string YYYY-MM-DD
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, '0');

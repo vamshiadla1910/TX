@@ -5,7 +5,7 @@
   background: #fcfcff;
   background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
   background-size: 24px 24px;
-  padding: 30px 0 80px;
+  padding: 30px 0 30px;
   font-family: Inter, system-ui, sans-serif;
   user-select: none;
   /* Prevents that blue selection highlight you saw */
