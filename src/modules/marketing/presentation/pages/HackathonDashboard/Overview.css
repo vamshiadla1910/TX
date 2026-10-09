@@ -310,13 +310,42 @@
   background: #fff3dc;
 }
 
-.qualified {
+.qualified,
+.status-qualified {
   color: #0b9060;
+  background: #e6f8ef;
   font-weight: 700;
 }
 
-.not-qualified {
-  color: #8a97a8;
+.status-eligible {
+  color: #553c9a;
+  background: #f3ebff;
+  font-weight: 700;
+}
+
+.not-qualified,
+.status-notqualified,
+.status-notselected {
+  color: #e53e3e;
+  background: #fff5f5;
+  font-weight: 600;
+}
+
+.status-noteligible {
+  color: #718096;
+  background: #edf2f7;
+  font-weight: 600;
+}
+
+.status-finalist {
+  color: #b7791f;
+  background: #fefcbf;
+  font-weight: 750;
+}
+
+.status-pending {
+  color: #bd7300;
+  background: #fff3dc;
   font-weight: 600;
 }
 

@@ -1,417 +1,158 @@
 import React, { useEffect, useState } from "react";
 import {
-  getRound1Teams,
+  RefreshCw,
+  Users,
+  Search,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  Award,
+  School,
+  FileText,
+  SlidersHorizontal
+} from "lucide-react";
+import {
   getTeams,
-  getLocalAttendanceMap,
-  saveRound1Evaluation
+  updateRound1,
+  getRegistrationId,
+  getTeamName,
+  getTeamLead,
+  getCollege,
+  getProjectTitle,
+  getAttendance,
+  getRoundStatus,
+  getJudgeRemarks,
+  normalize
 } from "./HackethonApi";
 import EvaluationModal from "./EvaluationModal/EvaluationModal";
 import "./Round1.css";
 
-const normalize = (value) =>
-  String(value ?? "")
-    .trim()
-    .toLowerCase()
-    .replace(/[\s_.-]+/g, "");
-
-const getField = (team, fields) => {
-  if (!team) return "";
-
-  // 1. Direct exact key match
-  for (const field of fields) {
-    if (
-      team[field] !== undefined &&
-      team[field] !== null &&
-      String(team[field]).trim() !== ""
-    ) {
-      return String(team[field]).trim();
-    }
-  }
-
-  // 2. Normalized key match across all keys in team
-  const keys = Object.keys(team);
-  const normalizedFields = fields.map(normalize);
-
-  for (const key of keys) {
-    const val = team[key];
-    if (val !== undefined && val !== null && String(val).trim() !== "") {
-      const normKey = normalize(key);
-      if (normalizedFields.some((f) => normKey === f || normKey.includes(f) || f.includes(normKey))) {
-        return String(val).trim();
-      }
-    }
-  }
-
-  return "";
-};
-
-const getRegistrationId = (team) =>
-  getField(team, [
-    "Registration ID",
-    "registrationId",
-    "Registration Number",
-    "Registration No",
-    "Reg No",
-    "id"
-  ]);
-
-const getTeamLead = (team) => {
-  if (!team) return "-";
-
-  // 1. Direct object properties
-  if (typeof team.lead === "string" && team.lead.trim()) return team.lead.trim();
-  if (typeof team.lead === "object" && team.lead !== null) {
-    if (team.lead.fullName) return team.lead.fullName;
-    if (team.lead.name) return team.lead.name;
-  }
-  if (typeof team.student === "object" && team.student !== null) {
-    if (team.student.fullName) return team.student.fullName;
-    if (team.student.name) return team.student.name;
-  }
-
-  // 2. Known key priority check
-  const priorityKeys = [
-    "Team Lead", "Team_Lead", "Team Leader", "Team_Leader",
-    "Team Lead Name", "Team_Lead_Name", "Team Leader Name", "Team_Leader_Name",
-    "Lead Name", "Lead_Name", "Leader Name", "Leader_Name",
-    "Lead / Student Full Name", "Participant / Team Leader Name",
-    "Participant Name", "Participant_Name", "Full Name", "Full_Name",
-    "lead_fullName", "student_fullName", "lead_name", "student_name",
-    "leadFullName", "studentFullName", "leadName", "studentName",
-    "Name", "name", "Lead", "lead"
-  ];
-
-  for (const k of priorityKeys) {
-    if (team[k] !== undefined && team[k] !== null && String(team[k]).trim() !== "" && String(team[k]).trim() !== "-") {
-      return String(team[k]).trim();
-    }
-  }
-
-  // 3. Dynamic key scan for keys containing lead, leader, student, participant, fullname, or name
-  const keys = Object.keys(team);
-  for (const key of keys) {
-    const kLower = key.toLowerCase();
-    if (
-      kLower.includes("college") ||
-      kLower.includes("project") ||
-      kLower.includes("challenge") ||
-      kLower.includes("title") ||
-      kLower.includes("tech") ||
-      kLower.includes("department") ||
-      kLower.includes("course") ||
-      kLower.includes("file") ||
-      kLower.includes("id") ||
-      kLower.includes("status") ||
-      kLower.includes("score")
-    ) {
-      continue;
-    }
-
-    if (
-      kLower.includes("lead") ||
-      kLower.includes("leader") ||
-      kLower.includes("student") ||
-      kLower.includes("participant") ||
-      kLower.includes("fullname") ||
-      kLower.includes("name")
-    ) {
-      const val = team[key];
-      if (val !== undefined && val !== null && String(val).trim() !== "" && String(val).trim() !== "-") {
-        return String(val).trim();
-      }
-    }
-  }
-
-  // 4. Fallback: First member from members field
-  const membersVal = getField(team, ["Team Members", "Members", "members", "team_members"]);
-  if (membersVal) {
-    const first = membersVal.split(",")[0];
-    if (first && first.trim()) return first.trim();
-  }
-
-  return "-";
-};
-
-const getProjectTitle = (team) => {
-  if (!team) return "Untitled Project";
-  if (typeof team.project === "string" && team.project.trim()) return team.project.trim();
-  if (typeof team.project === "object" && team.project?.title) return team.project.title;
-
-  const val = getField(team, [
-    "Project Title",
-    "Project / Solution Title",
-    "idea_projectTitle",
-    "idea_title",
-    "challenge_challengeTitle",
-    "challenge_title",
-    "Team Name",
-    "Team",
-    "Challenge Title",
-    "Project",
-    "Title"
-  ]);
-
-  return val || "Untitled Project";
-};
-
-const getTechnology = (team) => {
-  if (!team) return "-";
-  if (typeof team.technology === "string" && team.technology.trim()) return team.technology.trim();
-
-  const val = getField(team, [
-    "Technology",
-    "Technologies",
-    "technology_skills",
-    "technology_domains",
-    "Tech Stack",
-    "Tech",
-    "Technologies / Languages",
-    "Selected Tech Domains",
-    "Technology / Skill Domains",
-    "Skills"
-  ]);
-
-  return val || "-";
-};
-
-const isPresent = (team) => {
-  const regId = getRegistrationId(team);
-  const localMap = getLocalAttendanceMap();
-  if (regId && localMap[String(regId).trim()]) {
-    const val = normalize(localMap[String(regId).trim()]);
-    if (["present", "yes", "true", "1", "attended"].includes(val)) return true;
-    if (["absent", "no", "false", "0", "notpresent", "notattended"].includes(val)) return false;
-  }
-  const attVal = normalize(
-    getField(team, [
-      "Attendance",
-      "Present",
-      "Team Present",
-      "Attendance Status",
-      "Presence"
-    ])
-  );
-  return ["present", "yes", "true", "1", "attended"].includes(attVal);
-};
-
-const hasEvaluation = (team) => {
-  return (
-    (team?.["Innovation"] !== undefined && team?.["Innovation"] !== "") ||
-    (team?.["total"] !== undefined && team?.["total"] !== "") ||
-    (team?.["Total"] !== undefined && team?.["Total"] !== "") ||
-    Boolean(team?.Evaluation)
-  );
-};
-
 const Round1 = () => {
   const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [savingId, setSavingId] = useState("");
+  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [notification, setNotification] = useState("");
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
-
-  const [selectedTeam, setSelectedTeam] =
-    useState(null);
-
-  const [evaluationOpen, setEvaluationOpen] =
-    useState(false);
-
-  useEffect(() => {
-    loadRound1();
-
-    const handleAttendanceChange = () => {
-      loadRound1();
-    };
-
-    window.addEventListener("hackathon_attendance_changed", handleAttendanceChange);
-    return () => {
-      window.removeEventListener("hackathon_attendance_changed", handleAttendanceChange);
-    };
-  }, []);
-
-  const loadRound1 = async () => {
+  const loadTeams = async () => {
     try {
       setLoading(true);
       setError("");
-
-      let r1Teams = [];
-      let mainTeams = [];
-
-      try {
-        const r1Data = await getRound1Teams();
-        if (Array.isArray(r1Data)) r1Teams = r1Data;
-      } catch (err) {
-        console.warn("getRound1Teams failed, falling back to getTeams:", err);
-      }
-
-      try {
-        const teamsData = await getTeams();
-        if (Array.isArray(teamsData)) mainTeams = teamsData;
-      } catch (err) {
-        console.warn("getTeams failed in Round1 load:", err);
-      }
-
-      // Map mainTeams by registrationId for fast lookup
-      const mainTeamMap = new Map();
-      for (const t of mainTeams) {
-        const id = getRegistrationId(t);
-        if (id) mainTeamMap.set(id, t);
-      }
-
-      const mergedList = [];
-      const processedIds = new Set();
-
-      for (const r1Item of r1Teams) {
-        const id = getRegistrationId(r1Item);
-        const mainItem = id ? mainTeamMap.get(id) : null;
-        const merged = { ...(mainItem || {}), ...r1Item };
-
-        if (mainItem) {
-          const mainLead = getTeamLead(mainItem);
-          const r1Lead = getTeamLead(r1Item);
-          if (mainLead && mainLead !== "-" && (r1Lead === "-" || !r1Lead)) {
-            merged["Team Lead"] = mainLead;
-            merged["lead_fullName"] = mainLead;
-          }
-        }
-
-        mergedList.push(merged);
-        if (id) processedIds.add(id);
-      }
-
-      for (const mainItem of mainTeams) {
-        const id = getRegistrationId(mainItem);
-        if (id && !processedIds.has(id)) {
-          mergedList.push(mainItem);
-        }
-      }
-
-      // Filter ONLY present teams
-      const presentTeams = mergedList.filter((team) => {
-        const regId = getRegistrationId(team);
-        const lead = getTeamLead(team);
-        if (!regId && lead === "-") return false;
-        return isPresent(team);
-      });
-
-      // Merge saved local evaluations
-      const savedEvals = JSON.parse(
-        localStorage.getItem("tx_hackathon_round1_evaluations") || "{}"
-      );
-
-      const enrichedTeams = presentTeams.map((team) => {
-        const regId = getRegistrationId(team);
-        if (regId && savedEvals[regId]) {
-          const ev = savedEvals[regId];
-          return {
-            ...team,
-            Innovation: ev.scores?.innovation ?? ev.innovation ?? 0,
-            Technical: ev.scores?.technical ?? ev.technical ?? 0,
-            Presentation: ev.scores?.feasibility ?? ev.presentation ?? 0,
-            Total: ev.total ?? 0,
-            Status:
-              ev.decision === "QUALIFIED"
-                ? "R1 QUALIFIED"
-                : ev.decision === "NOT_QUALIFIED"
-                ? "ELIMINATED"
-                : "REQUIRES CLARIFICATION",
-            Evaluation: ev
-          };
-        }
-        return team;
-      });
-
-      setTeams(enrichedTeams);
+      const data = await getTeams();
+      setTeams(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
-
-      setError(
-        err.message ||
-          "Failed to load Round 1 teams."
-      );
+      setError(err.message || "Unable to load Round 1 teams");
     } finally {
       setLoading(false);
     }
   };
 
-  const openEvaluation = (team) => {
-    setSelectedTeam(team);
-    setEvaluationOpen(true);
-  };
+  useEffect(() => {
+    loadTeams();
 
-  const closeEvaluation = () => {
-    setEvaluationOpen(false);
-    setSelectedTeam(null);
-  };
+    const handleUpdate = () => {
+      loadTeams();
+    };
 
-  const handleReviewEvaluation = (
-    evaluation
-  ) => {
-    const registrationId = evaluation.registrationId;
+    window.addEventListener("attendanceUpdated", handleUpdate);
+    window.addEventListener("round1Updated", handleUpdate);
+
+    return () => {
+      window.removeEventListener("attendanceUpdated", handleUpdate);
+      window.removeEventListener("round1Updated", handleUpdate);
+    };
+  }, []);
+
+  // CRITICAL RULE: Round 1 displays ONLY teams where Attendance === "Present"
+  const eligibleTeams = teams.filter((t) => getAttendance(t) === "Present");
+
+  const filteredTeams = eligibleTeams.filter((team) => {
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
+    const regId = getRegistrationId(team).toLowerCase();
+    const teamName = getTeamName(team).toLowerCase();
+    const lead = getTeamLead(team).toLowerCase();
+    const college = getCollege(team).toLowerCase();
+    const project = getProjectTitle(team).toLowerCase();
+
+    return (
+      regId.includes(q) ||
+      teamName.includes(q) ||
+      lead.includes(q) ||
+      college.includes(q) ||
+      project.includes(q)
+    );
+  });
+
+  const handleDecision = async (team, decisionStatus) => {
+    const regId = getRegistrationId(team);
+    if (!regId) return;
 
     try {
-      const savedEvals = JSON.parse(
-        localStorage.getItem("tx_hackathon_round1_evaluations") || "{}"
-      );
-      savedEvals[registrationId] = evaluation;
-      localStorage.setItem(
-        "tx_hackathon_round1_evaluations",
-        JSON.stringify(savedEvals)
-      );
-    } catch (e) {
-      console.error(e);
+      setSavingId(regId);
+      setNotification("");
+
+      const existingRemarks = getJudgeRemarks(team);
+      await updateRound1(regId, decisionStatus, existingRemarks);
+
+      await loadTeams();
+      window.dispatchEvent(new Event("round1Updated"));
+
+      setNotification(`Team ${regId} marked as ${decisionStatus}.`);
+      setTimeout(() => setNotification(""), 4000);
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Failed to update Round 1 decision.");
+    } finally {
+      setSavingId("");
     }
+  };
 
-    saveRound1Evaluation(
-      registrationId,
-      evaluation.scores?.innovation || 0,
-      evaluation.scores?.technical || 0,
-      evaluation.scores?.feasibility || 0,
-      evaluation.total,
-      evaluation.comments,
-      evaluation.decision
-    ).catch((e) => console.warn("Background saveRound1Evaluation error:", e));
+  const handleEvaluationSubmit = async (evaluation) => {
+    try {
+      const regId = evaluation.registrationId;
+      setSavingId(regId);
 
-    setTeams((currentTeams) =>
-      currentTeams.map((team) => {
-        if (
-          getRegistrationId(team) !==
-          registrationId
-        ) {
-          return team;
-        }
+      const decisionStatus =
+        evaluation.decision === "QUALIFIED"
+          ? "Qualified"
+          : evaluation.decision === "NOT_QUALIFIED"
+          ? "Not Qualified"
+          : "Qualified";
 
-        return {
-          ...team,
+      await updateRound1(regId, decisionStatus, evaluation.comments, {
+        understanding: evaluation.scores?.understanding ?? "",
+        relevance: evaluation.scores?.relevance ?? "",
+        innovation: evaluation.scores?.innovation ?? "",
+        feasibility: evaluation.scores?.feasibility ?? "",
+        technical: evaluation.scores?.technical ?? "",
+        total: evaluation.total ?? ""
+      });
 
-          Innovation: evaluation.scores?.innovation || 0,
-          Technical: evaluation.scores?.technical || 0,
-          Presentation: evaluation.scores?.feasibility || 0,
-          Total: evaluation.total,
-          Evaluation: evaluation,
+      setSelectedTeam(null);
+      await loadTeams();
+      window.dispatchEvent(new Event("round1Updated"));
 
-          Status:
-            evaluation.decision ===
-            "QUALIFIED"
-              ? "R1 QUALIFIED"
-              : evaluation.decision ===
-                "NOT_QUALIFIED"
-              ? "ELIMINATED"
-              : "REQUIRES CLARIFICATION"
-        };
-      })
-    );
-
-    closeEvaluation();
+      setNotification(`Round 1 evaluation for ${regId} saved successfully.`);
+      setTimeout(() => setNotification(""), 4000);
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Unable to save evaluation.");
+    } finally {
+      setSavingId("");
+    }
   };
 
   if (loading) {
     return (
       <div className="round1-page">
         <div className="round1-loading">
-          Loading Round 1 teams...
+          <RefreshCw className="round1-spin" size={32} />
+          <h3>Loading Round 1</h3>
+          <p>Verifying present teams from Google Sheets...</p>
         </div>
       </div>
     );
@@ -420,223 +161,307 @@ const Round1 = () => {
   if (error) {
     return (
       <div className="round1-page">
-
         <div className="round1-error">
-
-          <h3>
-            Unable to load Round 1
-          </h3>
-
-          <p>
-            {error}
-          </p>
-
-          <button
-            onClick={loadRound1}
-          >
-            Try Again
+          <AlertCircle size={45} color="#dc2626" />
+          <h3>Unable to load Round 1</h3>
+          <p>{error}</p>
+          <button onClick={loadTeams}>
+            <RefreshCw size={17} /> Try Again
           </button>
-
         </div>
-
       </div>
     );
   }
 
+  const qualifiedCount = eligibleTeams.filter((t) => getRoundStatus(t, 1) === "Qualified").length;
+  const notQualifiedCount = eligibleTeams.filter((t) => getRoundStatus(t, 1) === "Not Qualified").length;
+  const pendingCount = eligibleTeams.filter((t) => getRoundStatus(t, 1) === "Eligible").length;
+
   return (
     <div className="round1-page">
-
-      <div className="round1-card">
-
-        <div className="round1-table-header">
-
-          <div>
-            REGISTRATION ID
-          </div>
-
-          <div>
-            TEAM LEAD
-          </div>
-
-          <div>
-            PROJECT TITLE
-          </div>
-
-          <div>
-            SCORES
-          </div>
-
-          <div>
-            STATUS
-          </div>
-
-          <div>
-            SCREENING
-          </div>
-
+      <div className="round1-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
+        <div>
+          <p className="round1-eyebrow" style={{ margin: "0 0 6px", fontSize: "12px", fontWeight: 700, color: "#64748b", letterSpacing: "1px" }}>
+            HACKATHON EVALUATION
+          </p>
+          <h1 style={{ margin: 0, fontSize: "28px", color: "#1e293b", fontWeight: 750 }}>Round 1 Evaluation</h1>
+          <p style={{ margin: "6px 0 0", color: "#64748b", fontSize: "14px" }}>
+            Only teams marked <strong>Present</strong> appear in Round 1. Qualified teams advance to Round 2.
+          </p>
         </div>
 
-        {teams.length === 0 ? (
-
-          <div className="round1-empty">
-            No present teams available
-            for Round 1.
-          </div>
-
-        ) : (
-
-          teams.map(
-            (team, index) => {
-
-              const registrationId =
-                getRegistrationId(
-                  team
-                );
-
-              const teamLead =
-                getTeamLead(team);
-
-              const projectTitle =
-                getProjectTitle(team);
-
-              const technology =
-                getTechnology(team);
-
-              const status =
-                team["Status"] ||
-                "PRESENTED";
-
-              const evaluated =
-                hasEvaluation(team);
-
-              return (
-                <div
-                  className="round1-row"
-                  key={
-                    registrationId ||
-                    `round1-${index}`
-                  }
-                >
-
-                  <div className="round1-registration">
-
-                    <strong>
-                      {registrationId ||
-                        "-"}
-                    </strong>
-
-                  </div>
-
-                  <div className="round1-lead">
-
-                    {teamLead}
-
-                  </div>
-
-                  <div className="round1-project">
-
-                    <strong>
-                      {projectTitle}
-                    </strong>
-
-                  </div>
-
-                  <div className="round1-score-cell">
-
-                    {evaluated ? (
-
-                      <div className="round1-score-card">
-
-                        <span>
-                          {team[
-                            "Innovation"
-                          ]}
-                          /
-                          {team[
-                            "Technical"
-                          ]}
-                          /
-                          {team[
-                            "Presentation"
-                          ]}
-                        </span>
-
-                        <strong>
-                          =
-                          {" "}
-                          {team[
-                            "Total"
-                          ]}
-                        </strong>
-
-                      </div>
-
-                    ) : (
-
-                      <span className="round1-not-scored">
-                        Not scored
-                      </span>
-
-                    )}
-
-                  </div>
-
-                  <div className="round1-status-cell">
-
-                    <span
-                      className={`round1-status ${String(
-                        status
-                      )
-                        .toLowerCase()
-                        .replace(
-                          /\s+/g,
-                          "-"
-                        )}`}
-                    >
-                      {status}
-                    </span>
-
-                  </div>
-
-                  <div className="round1-screening">
-
-                    <button
-                      className={
-                        evaluated
-                          ? "round1-edit-button"
-                          : "round1-setup-button"
-                      }
-                      onClick={() =>
-                        openEvaluation(
-                          team
-                        )
-                      }
-                    >
-                      {evaluated
-                        ? "Edit Screening"
-                        : "Evaluation Setup"}
-                    </button>
-
-                  </div>
-
-                </div>
-              );
-            }
-          )
-        )}
-
+        <button
+          onClick={loadTeams}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "10px 16px",
+            background: "#fff",
+            border: "1px solid #cbd5e1",
+            borderRadius: "10px",
+            color: "#4f46e5",
+            fontWeight: 600,
+            cursor: "pointer"
+          }}
+        >
+          <RefreshCw size={16} /> Refresh
+        </button>
       </div>
 
-      <EvaluationModal
-        isOpen={evaluationOpen}
-        onClose={closeEvaluation}
-        team={selectedTeam}
-        round={1}
-        onReview={
-          handleReviewEvaluation
-        }
-      />
+      {notification && (
+        <div
+          style={{
+            marginBottom: "16px",
+            padding: "10px 16px",
+            background: "#ecfdf5",
+            border: "1px solid #a7f3d0",
+            borderRadius: "8px",
+            color: "#065f46",
+            fontSize: "14px",
+            fontWeight: 600
+          }}
+        >
+          ✓ {notification}
+        </div>
+      )}
 
+      {/* Summary Metrics */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", marginBottom: "20px" }}>
+        <div style={{ padding: "16px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#4f46e5" }}>
+            <Users size={18} />
+            <span style={{ fontSize: "13px", fontWeight: 600, color: "#64748b" }}>Eligible (Present)</span>
+          </div>
+          <strong style={{ fontSize: "24px", color: "#1e293b", marginTop: "6px", display: "block" }}>{eligibleTeams.length}</strong>
+        </div>
+
+        <div style={{ padding: "16px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#16a34a" }}>
+            <CheckCircle2 size={18} />
+            <span style={{ fontSize: "13px", fontWeight: 600, color: "#64748b" }}>Qualified → Round 2</span>
+          </div>
+          <strong style={{ fontSize: "24px", color: "#16a34a", marginTop: "6px", display: "block" }}>{qualifiedCount}</strong>
+        </div>
+
+        <div style={{ padding: "16px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#dc2626" }}>
+            <XCircle size={18} />
+            <span style={{ fontSize: "13px", fontWeight: 600, color: "#64748b" }}>Not Qualified</span>
+          </div>
+          <strong style={{ fontSize: "24px", color: "#dc2626", marginTop: "6px", display: "block" }}>{notQualifiedCount}</strong>
+        </div>
+
+        <div style={{ padding: "16px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#d97706" }}>
+            <Award size={18} />
+            <span style={{ fontSize: "13px", fontWeight: 600, color: "#64748b" }}>Awaiting Decision</span>
+          </div>
+          <strong style={{ fontSize: "24px", color: "#d97706", marginTop: "6px", display: "block" }}>{pendingCount}</strong>
+        </div>
+      </div>
+
+      {/* Toolbar Search */}
+      <div style={{ marginBottom: "20px", position: "relative" }}>
+        <Search size={18} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "#94a3b8" }} />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search Round 1 teams by ID, Name, Lead, College, or Project..."
+          style={{
+            width: "100%",
+            boxSizing: "border-box",
+            padding: "11px 14px 11px 40px",
+            border: "1px solid #cbd5e1",
+            borderRadius: "10px",
+            fontSize: "14px",
+            outline: "none"
+          }}
+        />
+      </div>
+
+      {filteredTeams.length === 0 ? (
+        <div style={{ padding: "60px 20px", textAlign: "center", background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px", color: "#64748b" }}>
+          <Users size={48} style={{ margin: "0 auto 12px", opacity: 0.5 }} />
+          <h3 style={{ margin: "0 0 6px", color: "#1e293b" }}>
+            {eligibleTeams.length === 0 ? "No Present Teams for Round 1" : "No matching teams"}
+          </h3>
+          <p style={{ margin: 0, fontSize: "14px" }}>
+            {eligibleTeams.length === 0
+              ? "Mark a team Present in the Team Verification section to make it eligible for Round 1."
+              : "Try adjusting your search query."}
+          </p>
+        </div>
+      ) : (
+        <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px", overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "1150px" }}>
+            <thead>
+              <tr style={{ background: "#4f46e5", color: "#fff", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <th style={{ padding: "16px", textAlign: "left" }}>#</th>
+                <th style={{ padding: "16px", textAlign: "left" }}>Registration ID</th>
+                
+                <th style={{ padding: "16px", textAlign: "left" }}>Team Lead</th>
+                <th style={{ padding: "16px", textAlign: "left" }}>College / Organization</th>
+                <th style={{ padding: "16px", textAlign: "left" }}>Project Name</th>
+                <th style={{ padding: "16px", textAlign: "center" }}>Attendance</th>
+                <th style={{ padding: "16px", textAlign: "center" }}>Round 1 Status</th>
+                <th style={{ padding: "16px", textAlign: "left" }}>Judge Remarks</th>
+                <th style={{ padding: "16px", textAlign: "center" }}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTeams.map((team, index) => {
+                const regId = getRegistrationId(team) || `REG-${index + 1}`;
+               
+                const lead = getTeamLead(team);
+                const college = getCollege(team);
+                const project = getProjectTitle(team);
+                const attendance = getAttendance(team);
+                const r1Status = getRoundStatus(team, 1);
+                const remarks = getJudgeRemarks(team);
+                const isSaving = savingId === regId;
+
+                return (
+                  <tr key={regId || index} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                    <td style={{ padding: "16px", color: "#64748b" }}>{index + 1}</td>
+                    <td style={{ padding: "16px", fontWeight: 700, color: "#4f46e5" }}>{regId}</td>
+                    
+                    <td style={{ padding: "16px", color: "#334155" }}>{lead}</td>
+                    <td style={{ padding: "16px", color: "#64748b" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <School size={14} />
+                        <span>{college}</span>
+                      </div>
+                    </td>
+                    <td style={{ padding: "16px", color: "#334155" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px", maxWidth: "200px" }}>
+                        <FileText size={14} color="#64748b" />
+                        <span style={{ fontSize: "13px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {project}
+                        </span>
+                      </div>
+                    </td>
+                    <td style={{ padding: "16px", textAlign: "center" }}>
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "4px",
+                          padding: "4px 10px",
+                          background: "#ecfdf5",
+                          color: "#16a34a",
+                          borderRadius: "20px",
+                          fontSize: "12px",
+                          fontWeight: 700
+                        }}
+                      >
+                        <CheckCircle2 size={13} /> {attendance}
+                      </span>
+                    </td>
+                    <td style={{ padding: "16px", textAlign: "center" }}>
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          padding: "5px 12px",
+                          borderRadius: "20px",
+                          fontSize: "12px",
+                          fontWeight: 700,
+                          background:
+                            r1Status === "Qualified"
+                              ? "#ecfdf5"
+                              : r1Status === "Not Qualified"
+                              ? "#fef2f2"
+                              : "#f5f3ff",
+                          color:
+                            r1Status === "Qualified"
+                              ? "#16a34a"
+                              : r1Status === "Not Qualified"
+                              ? "#dc2626"
+                              : "#6d28d9"
+                        }}
+                      >
+                        {r1Status}
+                      </span>
+                    </td>
+                    <td style={{ padding: "16px", color: "#64748b", fontSize: "13px", maxWidth: "180px" }}>
+                      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "block" }}>
+                        {remarks || "—"}
+                      </span>
+                    </td>
+                    <td style={{ padding: "16px", textAlign: "center" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
+                        <button
+                          disabled={isSaving}
+                          onClick={() => handleDecision(team, "Qualified")}
+                          style={{
+                            padding: "6px 12px",
+                            background: r1Status === "Qualified" ? "#16a34a" : "#fff",
+                            color: r1Status === "Qualified" ? "#fff" : "#16a34a",
+                            border: "1px solid #16a34a",
+                            borderRadius: "6px",
+                            fontSize: "12px",
+                            fontWeight: 700,
+                            cursor: isSaving ? "not-allowed" : "pointer"
+                          }}
+                        >
+                          Qualified
+                        </button>
+
+                        <button
+                          disabled={isSaving}
+                          onClick={() => handleDecision(team, "Not Qualified")}
+                          style={{
+                            padding: "6px 12px",
+                            background: r1Status === "Not Qualified" ? "#dc2626" : "#fff",
+                            color: r1Status === "Not Qualified" ? "#fff" : "#dc2626",
+                            border: "1px solid #dc2626",
+                            borderRadius: "6px",
+                            fontSize: "12px",
+                            fontWeight: 700,
+                            cursor: isSaving ? "not-allowed" : "pointer"
+                          }}
+                        >
+                          Not Qualified
+                        </button>
+
+                        <button
+                          disabled={isSaving}
+                          onClick={() => setSelectedTeam(team)}
+                          title="Detailed Evaluation Rubric"
+                          style={{
+                            padding: "6px 10px",
+                            background: "#f8fafc",
+                            border: "1px solid #cbd5e1",
+                            borderRadius: "6px",
+                            color: "#475569",
+                            fontSize: "12px",
+                            cursor: isSaving ? "not-allowed" : "pointer"
+                          }}
+                        >
+                          <SlidersHorizontal size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {selectedTeam && (
+        <EvaluationModal
+          isOpen={Boolean(selectedTeam)}
+          round={1}
+          team={selectedTeam}
+          onClose={() => setSelectedTeam(null)}
+          onReview={handleEvaluationSubmit}
+          onSubmit={handleEvaluationSubmit}
+        />
+      )}
     </div>
   );
 };

@@ -180,7 +180,7 @@ export default function WhoWeAre() {
                                 type="organization"
                                 title="For Organizations"
                                 subtitle="Custom LMS Solutions"
-                               image={Training}
+                                image={Training}
                                 points={organizationPoints}
                             />
 
@@ -197,7 +197,6 @@ export default function WhoWeAre() {
                     </div>
                 </div>
             </section>
-
         </>
     );
 }

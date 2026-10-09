@@ -505,6 +505,20 @@
     color: #fff;
 }
 
+.offering-purple h3,
+.offering-blue h3,
+.offering-green h3,
+.offering-pink h3 {
+    color: #ffffff;
+}
+
+.offering-purple p,
+.offering-blue p,
+.offering-green p,
+.offering-pink p {
+    color: #f1f5f9;
+}
+
 .offering-purple .offering-icon,
 .offering-blue .offering-icon,
 .offering-green .offering-icon,

@@ -46,11 +46,12 @@ function getField(team, names, fallback = "-") {
 }
 
 function EvaluationModal({
-  isOpen,
+  isOpen = true,
   onClose,
   team,
   round = 1,
-  onReview
+  onReview,
+  onSubmit
 }) {
   const [scores, setScores] = useState({
     understanding: 0,
@@ -186,8 +187,9 @@ function EvaluationModal({
       decision
     };
 
-    if (onReview) {
-      onReview(evaluation);
+    const cb = onReview || onSubmit;
+    if (cb) {
+      cb(evaluation);
     }
   };
 

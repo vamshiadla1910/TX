@@ -28,6 +28,8 @@ import Events from "./modules/marketing/presentation/pages/Events/Events.jsx";
 
 // Hackathon Dashboard
 import HackathonDashboard from "./modules/marketing/presentation/pages/HackathonDashboard/HackathonDashboard.jsx";
+// Student Dashboard
+import Dashboard from "./modules/marketing/presentation/pages/StudentDashboard/Dashboard/Dashboard.jsx";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -102,7 +104,8 @@ function AppLayout() {
           path="/hackathon-dashboard"
           element={<HackathonDashboard />}
         />
-
+        {/* Student Dashboard routes */}
+        <Route path="/dashboard" element={<Dashboard />}/>
         {/* Checkout - enable when Checkout.jsx exists */}
         {/*
         <Route

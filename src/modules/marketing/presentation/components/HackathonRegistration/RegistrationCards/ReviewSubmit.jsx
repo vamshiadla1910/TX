@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import FormCard from "./FormCard";
-
-// Paste your Apps Script Web App URL ending in /exec here:
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGwnCM94klP0kXUGHDy-iq3s1-PQiRc1blIQstYfCJbslldyVMp1Nz47WpnyUkfgY/exec";
+// Form-encoded registration submission via HackethonApi
+import { saveRegistration } from "../../../pages/HackathonDashboard/HackethonApi";
 
 function value(val) {
   if (val === undefined || val === null || val === "") return "Not provided";
@@ -24,37 +23,41 @@ export default function ReviewSubmit({ data, sectionIndexes, onBack, onSubmit, o
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleFinalSubmit = async () => {
-    setSubmitting(true);
-    setErrorMessage("");
+ const handleFinalSubmit = async () => {
+  if (submitting) return;
 
-    const newRegId = `TX-REG-${Math.floor(1000 + Math.random() * 9000)}`;
+  setSubmitting(true);
+  setErrorMessage("");
+
+  const newRegId = `TX2026${Math.floor(100 + Math.random() * 900)}`;
+
+  try {
+    const response = await saveRegistration(data, newRegId);
+
+    if (!response || response.status !== "success") {
+      throw new Error(
+        response?.message || "Failed to save registration."
+      );
+    }
+
+    const savedRegistrationId = response.registrationId || newRegId;
 
     try {
-      const payloadString = JSON.stringify({
-        registrationId: newRegId,
-        data: data
-      });
+      window.dispatchEvent(new Event("registrationUpdated"));
+    } catch (_) {}
 
-      // Using URLSearchParams guarantees payload reaches Apps Script
-      const params = new URLSearchParams();
-      params.append("formData", payloadString);
+    onSubmit(savedRegistrationId);
+  } catch (err) {
+    console.error("Submission error:", err);
 
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: params
-      });
-
-      // Advance to Success screen
-      onSubmit(newRegId);
-    } catch (err) {
-      console.error("Submission error:", err);
-      setErrorMessage("Could not record registration to Google Sheet. Please check your network and script deployment permissions.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
+    setErrorMessage(
+      err?.message ||
+        "Could not record registration to Google Sheet. Please check your network and try again."
+    );
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <FormCard
