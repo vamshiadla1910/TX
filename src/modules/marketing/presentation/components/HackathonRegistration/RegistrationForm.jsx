@@ -94,8 +94,6 @@ export default function RegistrationForm() {
 
   const edit = index => setCurrentStep(index);
 
-  
-
   let content;
   if (currentStep >= visibleSteps.length) {
     content = <Success registrationId={registrationId} onRestart={restart} />;
@@ -141,13 +139,12 @@ export default function RegistrationForm() {
 
   return (
     <main className="page">
-      <div className="pageHeader" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
+      <div className="pageHeader">
         <div>
           <span className="eyebrow">TXPathWing Hackathon 2026</span>
           <h1>Complete Your Registration</h1>
           <p>Enter your details section by section and review the complete information before submitting.</p>
         </div>
-        
       </div>
 
       <ProgressBar

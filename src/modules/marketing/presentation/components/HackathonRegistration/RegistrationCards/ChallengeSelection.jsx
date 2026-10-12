@@ -12,12 +12,6 @@ export default function ChallengeSelection({ data, update, onNext, onBack }) {
     if (!data.category) {
       errs.category = "Please select a challenge category.";
     }
-    if (!data.challengeId?.trim()) {
-      errs.challengeId = "Preferred Challenge ID is required.";
-    }
-    if (!data.challengeTitle?.trim()) {
-      errs.challengeTitle = "Preferred Challenge Title is required.";
-    }
     return errs;
   };
 
@@ -25,13 +19,6 @@ export default function ChallengeSelection({ data, update, onNext, onBack }) {
     update({ category });
     if (errors.category) {
       setErrors(prev => ({ ...prev, category: "" }));
-    }
-  };
-
-  const handleChange = (key, value) => {
-    update({ [key]: value });
-    if (errors[key]) {
-      setErrors(prev => ({ ...prev, [key]: "" }));
     }
   };
 
@@ -47,10 +34,10 @@ export default function ChallengeSelection({ data, update, onNext, onBack }) {
   const hasErrors = attempted && Object.keys(errors).some(k => errors[k]);
 
   return (
-    <FormCard title="Challenge Selection" description="Select the challenge category and your preferred challenge.">
+    <FormCard title="Challenge Selection" description="Select the challenge category for your participation.">
       {hasErrors && (
         <div className="formErrorMessage">
-          ⚠️ Please select a category and fill in the challenge details.
+          ⚠️ Please select a challenge category.
         </div>
       )}
 
@@ -73,28 +60,6 @@ export default function ChallengeSelection({ data, update, onNext, onBack }) {
           ))}
         </div>
         {errors.category && <span className="errorText">⚠️ {errors.category}</span>}
-      </div>
-
-      <div className="formGrid topSpace">
-        <div className={`field ${errors.challengeId ? "hasError" : ""}`}>
-          <label>Preferred Challenge ID *</label>
-          <input
-            value={data.challengeId || ""}
-            placeholder="e.g. CH-014"
-            onChange={e => handleChange("challengeId", e.target.value)}
-          />
-          {errors.challengeId && <span className="errorText">⚠️ {errors.challengeId}</span>}
-        </div>
-
-        <div className={`field ${errors.challengeTitle ? "hasError" : ""}`}>
-          <label>Preferred Challenge Title *</label>
-          <input
-            value={data.challengeTitle || ""}
-            placeholder="Challenge title"
-            onChange={e => handleChange("challengeTitle", e.target.value)}
-          />
-          {errors.challengeTitle && <span className="errorText">⚠️ {errors.challengeTitle}</span>}
-        </div>
       </div>
 
       <div className="notice warning">Final allocation is subject to organizer guidelines, availability, screening and event requirements.</div>

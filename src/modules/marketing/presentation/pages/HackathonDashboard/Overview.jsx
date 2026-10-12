@@ -4,37 +4,62 @@ import {
   UserCheck,
   UserX,
   Clock3,
-  Timer,
-  CheckCircle2,
   Trophy,
   Medal,
+  Award,
   RefreshCw,
-  XCircle,
-  Sparkles
+  CheckCircle2,
+  XCircle
 } from "lucide-react";
 import {
   getTeams,
-  getRegistrationId,
-  getTeamName,
-  getTeamLead,
-  getAttendance,
-  getRoundStatus,
-  getFinalStatus,
-  normalize
+  getRound1Teams,
+  getRound2Teams,
+  getRound3Teams,
+  saveAttendance,
+  getLocalAttendanceMap
 } from "./HackethonApi";
+import {
+  getRegistrationId,
+  getTeamLead,
+  getField,
+  normalize
+} from "./dashboardHelpers";
 import "./Overview.css";
+
+const getLocalMap = (key) => {
+  try {
+    return JSON.parse(localStorage.getItem(key) || "{}");
+  } catch {
+    return {};
+  }
+};
 
 const Overview = () => {
   const [teams, setTeams] = useState([]);
+  const [r1SheetTeams, setR1SheetTeams] = useState([]);
+  const [r2SheetTeams, setR2SheetTeams] = useState([]);
+  const [r3SheetTeams, setR3SheetTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [processingId, setProcessingId] = useState(null);
 
-  const loadTeams = async () => {
+  const loadAllData = async () => {
     try {
       setLoading(true);
       setError("");
-      const data = await getTeams();
-      setTeams(Array.isArray(data) ? data : []);
+
+      const [mainRes, r1Res, r2Res, r3Res] = await Promise.all([
+        getTeams().catch(() => []),
+        getRound1Teams().catch(() => []),
+        getRound2Teams().catch(() => []),
+        getRound3Teams().catch(() => [])
+      ]);
+
+      setTeams(Array.isArray(mainRes) ? mainRes : []);
+      setR1SheetTeams(Array.isArray(r1Res) ? r1Res : []);
+      setR2SheetTeams(Array.isArray(r2Res) ? r2Res : []);
+      setR3SheetTeams(Array.isArray(r3Res) ? r3Res : []);
     } catch (err) {
       console.error(err);
       setError(err.message || "Unable to load dashboard data");
@@ -44,60 +69,119 @@ const Overview = () => {
   };
 
   useEffect(() => {
-    loadTeams();
-
-    const handleUpdate = () => {
-      loadTeams();
-    };
-
-    window.addEventListener("attendanceUpdated", handleUpdate);
-    window.addEventListener("registrationUpdated", handleUpdate);
-    window.addEventListener("round1Updated", handleUpdate);
-    window.addEventListener("round2Updated", handleUpdate);
-    window.addEventListener("round3Updated", handleUpdate);
-
+    loadAllData();
+    const handleDataChange = () => loadAllData();
+    window.addEventListener("hackathon_attendance_changed", handleDataChange);
+    window.addEventListener("hackathon_evaluation_changed", handleDataChange);
     return () => {
-      window.removeEventListener("attendanceUpdated", handleUpdate);
-      window.removeEventListener("registrationUpdated", handleUpdate);
-      window.removeEventListener("round1Updated", handleUpdate);
-      window.removeEventListener("round2Updated", handleUpdate);
-      window.removeEventListener("round3Updated", handleUpdate);
+      window.removeEventListener("hackathon_attendance_changed", handleDataChange);
+      window.removeEventListener("hackathon_evaluation_changed", handleDataChange);
     };
   }, []);
 
+  const handleMarkPresent = async (team) => {
+    const regId = getRegistrationId(team);
+    if (!regId) return alert("Registration ID missing for team.");
+
+    try {
+      setProcessingId(regId);
+      await saveAttendance(regId, "Present");
+      loadAllData();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Failed to mark attendance.");
+    } finally {
+      setProcessingId(null);
+    }
+  };
+
+  const attendanceMap = getLocalAttendanceMap();
+  const r1Evals = getLocalMap("tx_hackathon_round1_evaluations");
+  const r2Evals = getLocalMap("tx_hackathon_round2_evaluations");
+  const r3Evals = getLocalMap("tx_hackathon_round3_evaluations");
+
+  const isTeamPresent = (team) => {
+    const regId = String(getRegistrationId(team) || "").trim();
+    if (regId && attendanceMap[regId]) {
+      const norm = normalize(attendanceMap[regId]);
+      if (["present", "yes", "true", "1", "attended"].includes(norm)) return true;
+      if (["absent", "no", "false", "0", "notpresent"].includes(norm)) return false;
+    }
+    if (r1SheetTeams.some((t) => String(getRegistrationId(t)).trim() === regId)) return true;
+    const sheetAtt = normalize(getField(team, ["Attendance", "Attendance Status", "attendance"]));
+    return ["present", "attended", "yes"].includes(sheetAtt);
+  };
+
+  const isTeamAbsent = (team) => {
+    const regId = String(getRegistrationId(team) || "").trim();
+    if (regId && attendanceMap[regId]) return normalize(attendanceMap[regId]) === "absent";
+    const sheetAtt = normalize(getField(team, ["Attendance", "Attendance Status", "attendance"]));
+    return sheetAtt === "absent";
+  };
+
+  const getR1Status = (regId) => {
+    if (!regId) return "Pending";
+    const cleanId = String(regId).trim();
+    if (r1Evals[cleanId]) {
+      const dec = normalize(r1Evals[cleanId].decision || r1Evals[cleanId].status);
+      if (["qualified", "r1qualified", "pass"].includes(dec)) return "Qualified";
+      if (["not_qualified", "eliminated"].includes(dec)) return "Eliminated";
+    }
+    const r1Row = r1SheetTeams.find((t) => String(getRegistrationId(t)).trim() === cleanId);
+    if (r1Row) {
+      const st = normalize(getField(r1Row, ["Status", "status"]));
+      if (["qualified", "r1qualified", "pass"].includes(st)) return "Qualified";
+      if (["eliminated", "not_qualified"].includes(st)) return "Eliminated";
+    }
+    if (r2SheetTeams.some((t) => String(getRegistrationId(t)).trim() === cleanId)) return "Qualified";
+    return "Pending";
+  };
+
+  const getR2Status = (regId) => {
+    if (!regId) return "Pending";
+    const cleanId = String(regId).trim();
+    if (r2Evals[cleanId]) {
+      const dec = normalize(r2Evals[cleanId].decision || r2Evals[cleanId].status);
+      if (["qualified", "r2qualified", "pass"].includes(dec)) return "Qualified";
+      if (["not_qualified", "eliminated"].includes(dec)) return "Eliminated";
+    }
+    const r2Row = r2SheetTeams.find((t) => String(getRegistrationId(t)).trim() === cleanId);
+    if (r2Row) {
+      const st = normalize(getField(r2Row, ["Status", "status"]));
+      if (["qualified", "r2qualified", "pass"].includes(st)) return "Qualified";
+      if (["eliminated", "not_qualified"].includes(st)) return "Eliminated";
+    }
+    if (r3SheetTeams.some((t) => String(getRegistrationId(t)).trim() === cleanId)) return "Qualified";
+    if (getR1Status(cleanId) === "Qualified") return "Pending";
+    return "—";
+  };
+
+  const getR3Status = (regId) => {
+    if (!regId) return "Pending";
+    const cleanId = String(regId).trim();
+    if (r3Evals[cleanId]) {
+      const dec = normalize(r3Evals[cleanId].decision || r3Evals[cleanId].status);
+      if (["qualified", "r3qualified", "pass"].includes(dec)) return "Finalist";
+      if (["not_qualified", "eliminated"].includes(dec)) return "Eliminated";
+    }
+    const r3Row = r3SheetTeams.find((t) => String(getRegistrationId(t)).trim() === cleanId);
+    if (r3Row) {
+      const st = normalize(getField(r3Row, ["Status", "status"]));
+      if (["qualified", "r3qualified", "pass"].includes(st)) return "Finalist";
+      if (["eliminated", "not_qualified"].includes(st)) return "Eliminated";
+    }
+    if (getR2Status(cleanId) === "Qualified" || r3SheetTeams.some((t) => String(getRegistrationId(t)).trim() === cleanId)) return "Pending";
+    return "—";
+  };
+
   const total = teams.length;
+  const present = teams.filter(isTeamPresent).length;
+  const absent = teams.filter(isTeamAbsent).length;
+  const pending = Math.max(total - present - absent, 0);
 
-  const present = teams.filter(
-    (t) => getAttendance(t) === "Present"
-  ).length;
-
-  const absent = teams.filter(
-    (t) => getAttendance(t) === "Absent"
-  ).length;
-
-  const pending = teams.filter(
-    (t) => getAttendance(t) === "Pending"
-  ).length;
-
-  const round1Eligible = teams.filter(
-    (t) => getAttendance(t) === "Present"
-  ).length;
-
-  const round1Qualified = teams.filter(
-    (t) => getRoundStatus(t, 1) === "Qualified"
-  ).length;
-
-  const round2Qualified = teams.filter(
-    (t) => getRoundStatus(t, 2) === "Qualified"
-  ).length;
-
-  const round3Qualified = teams.filter(
-    (t) => getRoundStatus(t, 3) === "Qualified"
-  ).length;
-
-  const finalists = teams.filter(
-    (t) => getFinalStatus(t) === "Finalist"
-  ).length;
+  const round1Qualified = teams.filter((t) => getR1Status(getRegistrationId(t)) === "Qualified").length;
+  const round2Qualified = teams.filter((t) => getR2Status(getRegistrationId(t)) === "Qualified").length;
+  const round3Finalists = teams.filter((t) => getR3Status(getRegistrationId(t)) === "Finalist" || r3SheetTeams.some((r3) => String(getRegistrationId(r3)).trim() === String(getRegistrationId(t)).trim())).length;
 
   const recentTeams = teams.slice(0, 15);
 
@@ -107,7 +191,7 @@ const Overview = () => {
         <div className="overview-loading">
           <RefreshCw className="overview-spin" size={32} />
           <h3>Loading Dashboard</h3>
-          <p>Fetching hackathon data from Google Sheets...</p>
+          <p>Fetching hackathon data across Round 1, 2, and 3...</p>
         </div>
       </div>
     );
@@ -120,9 +204,8 @@ const Overview = () => {
           <XCircle size={45} />
           <h3>Unable to load dashboard</h3>
           <p>{error}</p>
-          <button onClick={loadTeams}>
-            <RefreshCw size={17} />
-            Try Again
+          <button onClick={loadAllData}>
+            <RefreshCw size={17} /> Try Again
           </button>
         </div>
       </div>
@@ -136,151 +219,67 @@ const Overview = () => {
           <p className="overview-eyebrow">HACKATHON OVERVIEW</p>
           <h1>Dashboard</h1>
           <p className="overview-description">
-            Live statistics and team progress synced directly with Google
-            Sheets.
+            Monitor team registration, attendance, and evaluation progress across Round 1, Round 2, and Round 3.
           </p>
         </div>
-
-        <button className="overview-refresh" onClick={loadTeams}>
-          <RefreshCw size={17} />
-          Refresh
+        <button className="overview-refresh" onClick={loadAllData}>
+          <RefreshCw size={17} /> Refresh
         </button>
       </div>
 
       <div className="overview-stat-grid">
-        <div className="overview-stat-card">
-          <div className="overview-stat-icon blue">
-            <Users size={23} />
+        {[
+          { icon: Users, color: "blue", label: "Total Teams", val: total, sub: "Registered teams" },
+          { icon: UserCheck, color: "green", label: "Present", val: present, sub: "Teams attended" },
+          { icon: UserX, color: "red", label: "Absent", val: absent, sub: "Teams not present" },
+          { icon: Clock3, color: "orange", label: "Pending", val: pending, sub: "Attendance pending" }
+        ].map((item, i) => (
+          <div key={i} className="overview-stat-card">
+            <div className={`overview-stat-icon ${item.color}`}>
+              <item.icon size={23} />
+            </div>
+            <div className="overview-stat-content">
+              <span>{item.label}</span>
+              <strong>{item.val}</strong>
+              <small>{item.sub}</small>
+            </div>
           </div>
-
-          <div className="overview-stat-content">
-            <span>Total Teams</span>
-            <strong>{total}</strong>
-            <small>Registered teams</small>
-          </div>
-        </div>
-
-        <div className="overview-stat-card">
-          <div className="overview-stat-icon green">
-            <UserCheck size={23} />
-          </div>
-
-          <div className="overview-stat-content">
-            <span>Present</span>
-            <strong>{present}</strong>
-            <small>Teams attended</small>
-          </div>
-        </div>
-
-        <div className="overview-stat-card">
-          <div className="overview-stat-icon red">
-            <UserX size={23} />
-          </div>
-
-          <div className="overview-stat-content">
-            <span>Absent</span>
-            <strong>{absent}</strong>
-            <small>Teams not present</small>
-          </div>
-        </div>
-
-        <div className="overview-stat-card">
-          <div className="overview-stat-icon orange">
-            <Clock3 size={23} />
-          </div>
-
-          <div className="overview-stat-content">
-            <span>Pending Verification</span>
-            <strong>{pending}</strong>
-            <small>Awaiting check-in</small>
-          </div>
-        </div>
+        ))}
       </div>
 
       <div className="overview-section-title">
         <div>
           <h2>Evaluation Progress</h2>
-          <p>Real-time qualification status across rounds</p>
+          <p>Current qualification status by round</p>
         </div>
       </div>
 
-      <div
-        className="overview-round-grid"
-        style={{
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))"
-        }}
-      >
-        <div className="overview-round-card">
-          <div className="round-icon violet">
-            <Timer size={22} />
+      <div className="overview-round-grid">
+        {[
+          { icon: Trophy, color: "violet", label: "Round 1", val: round1Qualified, sub: "Qualified for R2" },
+          { icon: Medal, color: "amber", label: "Round 2", val: round2Qualified, sub: "Qualified for R3" },
+          { icon: Award, color: "emerald", label: "Round 3", val: round3Finalists, sub: "Finalists" }
+        ].map((item, i) => (
+          <div key={i} className="overview-round-card">
+            <div className={`round-icon ${item.color}`}>
+              <item.icon size={22} />
+            </div>
+            <div>
+              <span>{item.label}</span>
+              <strong>{item.val}</strong>
+              <small>{item.sub}</small>
+            </div>
           </div>
-
-          <div>
-            <span>Round 1 Eligible</span>
-            <strong>{round1Eligible}</strong>
-            <small>Marked Present</small>
-          </div>
-        </div>
-
-        <div className="overview-round-card">
-          <div className="round-icon violet">
-            <CheckCircle2 size={22} />
-          </div>
-
-          <div>
-            <span>Round 1 Qualified</span>
-            <strong>{round1Qualified}</strong>
-            <small>Passed Round 1</small>
-          </div>
-        </div>
-
-        <div className="overview-round-card">
-          <div className="round-icon amber">
-            <Medal size={22} />
-          </div>
-
-          <div>
-            <span>Round 2 Qualified</span>
-            <strong>{round2Qualified}</strong>
-            <small>Passed Round 2</small>
-          </div>
-        </div>
-
-        <div className="overview-round-card">
-          <div className="round-icon emerald">
-            <Trophy size={22} />
-          </div>
-
-          <div>
-            <span>Round 3 Qualified</span>
-            <strong>{round3Qualified}</strong>
-            <small>Passed Round 3</small>
-          </div>
-        </div>
-
-        <div className="overview-round-card">
-          <div className="round-icon emerald">
-            <Sparkles size={22} />
-          </div>
-
-          <div>
-            <span>Finalists</span>
-            <strong>{finalists}</strong>
-            <small>Selected Finalists</small>
-          </div>
-        </div>
+        ))}
       </div>
 
       <div className="overview-table-card">
         <div className="overview-table-header">
           <div>
             <h2>Teams Overview</h2>
-            <p>Latest registered teams and their current status</p>
+            <p>Latest registered teams and multi-round qualification status</p>
           </div>
-
-          <div className="overview-total-badge">
-            {total} Teams
-          </div>
+          <div className="overview-total-badge">{total} Teams</div>
         </div>
 
         {recentTeams.length === 0 ? (
@@ -295,132 +294,76 @@ const Overview = () => {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Registration ID</th>
+                  <th>Registration No</th>
                   <th>Team Lead</th>
                   <th>Attendance</th>
+                  <th>Action</th>
                   <th>Round 1</th>
                   <th>Round 2</th>
                   <th>Round 3</th>
-                  <th>Final Status</th>
                 </tr>
               </thead>
-
               <tbody>
                 {recentTeams.map((team, index) => {
-                  const regId =
-                    getRegistrationId(team) || `REG-${index + 1}`;
-
+                  const registration = getRegistrationId(team);
                   const lead = getTeamLead(team);
+                  const teamPresent = isTeamPresent(team);
+                  const teamAbsent = isTeamAbsent(team);
+                  const attendance = teamPresent ? "Present" : teamAbsent ? "Absent" : "Pending";
+                  const isProcessing = processingId === registration;
 
-                  let leadName = "—";
-
-                  if (
-                    typeof lead === "object" &&
-                    lead !== null
-                  ) {
-                    leadName =
-                      lead.fullName ||
-                      lead.name ||
-                      lead.student_fullName ||
-                      "—";
-                  } else if (typeof lead === "string") {
-                    const text = lead.trim();
-
-                    try {
-                      const parsed = JSON.parse(text);
-
-                      leadName =
-                        parsed?.fullName ||
-                        parsed?.name ||
-                        parsed?.student_fullName ||
-                        "—";
-                    } catch {
-                      const match = text.match(
-                        /["']?(?:name|fullName|student_fullName)["']?\s*:\s*["']?([^"|,\n}]+)["']?/i
-                      );
-
-                      leadName =
-                        match?.[1]?.trim() || text;
-                    }
-                  }
-
-                  const attendance = getAttendance(team);
-                  const r1 = getRoundStatus(team, 1);
-                  const r2 = getRoundStatus(team, 2);
-                  const r3 = getRoundStatus(team, 3);
-                  const finalStatus = getFinalStatus(team);
+                  const r1Status = getR1Status(registration);
+                  const r2Status = getR2Status(registration);
+                  const r3Status = getR3Status(registration);
 
                   return (
-                    <tr key={regId || index}>
+                    <tr key={registration || index}>
                       <td>{index + 1}</td>
-
                       <td>
                         <span className="registration-number">
-                          {regId}
+                          {registration || `REG-${index + 1}`}
                         </span>
                       </td>
-
-                      <td>{leadName}</td>
-
                       <td>
-                        <span
-                          className={`status-pill attendance-${normalize(
-                            attendance
-                          )}`}
-                        >
-                          {attendance === "Present" && (
-                            <CheckCircle2 size={14} />
-                          )}
-
-                          {attendance === "Absent" && (
-                            <XCircle size={14} />
-                          )}
-
-                          {attendance === "Pending" && (
-                            <Clock3 size={14} />
-                          )}
-
+                        <strong>{lead || "—"}</strong>
+                      </td>
+                      <td>
+                        <span className={`status-pill attendance-${normalize(attendance)}`}>
+                          {attendance === "Present" && <CheckCircle2 size={14} />}
+                          {attendance === "Absent" && <XCircle size={14} />}
+                          {attendance === "Pending" && <Clock3 size={14} />}
                           {attendance}
                         </span>
                       </td>
-
                       <td>
-                        <span
-                          className={`status-pill status-${normalize(
-                            r1
-                          )}`}
-                        >
-                          {r1}
+                        {teamPresent ? (
+                          <button className="overview-action-btn added" disabled>
+                            <CheckCircle2 size={14} /> Added
+                          </button>
+                        ) : (
+                          <button
+                            className="overview-action-btn present"
+                            disabled={isProcessing}
+                            onClick={() => handleMarkPresent(team)}
+                          >
+                            <UserCheck size={14} />
+                            {isProcessing ? "Adding..." : "Present"}
+                          </button>
+                        )}
+                      </td>
+                      <td>
+                        <span className={r1Status === "Qualified" ? "qualified" : r1Status === "Eliminated" ? "not-qualified" : ""}>
+                          {r1Status}
                         </span>
                       </td>
-
                       <td>
-                        <span
-                          className={`status-pill status-${normalize(
-                            r2
-                          )}`}
-                        >
-                          {r2}
+                        <span className={r2Status === "Qualified" ? "qualified" : r2Status === "Eliminated" ? "not-qualified" : ""}>
+                          {r2Status}
                         </span>
                       </td>
-
                       <td>
-                        <span
-                          className={`status-pill status-${normalize(
-                            r3
-                          )}`}
-                        >
-                          {r3}
-                        </span>
-                      </td>
-
-                      <td>
-                        <span
-                          className={`status-pill status-${normalize(
-                            finalStatus
-                          )}`}
-                        >
-                          {finalStatus}
+                        <span className={r3Status === "Finalist" || r3Status === "Qualified" ? "qualified" : r3Status === "Eliminated" ? "not-qualified" : ""}>
+                          {r3Status}
                         </span>
                       </td>
                     </tr>

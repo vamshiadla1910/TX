@@ -104,7 +104,7 @@ export default function Experience({ data, update, onNext, onBack }) {
         )}
 
         <div className="field full">
-          <label>Previous Hackathon / Project Experience</label>
+          <label>if Yes, Previous Hackathon / Project Experience</label>
           <textarea
             value={data.previousExperience || ""}
             placeholder="Brief experience summary"

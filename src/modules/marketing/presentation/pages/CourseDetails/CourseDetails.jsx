@@ -444,7 +444,9 @@ export default function CourseDetail() {
               )}
             </div>
  
-            <button type="button" className="buy-btn">
+            <button type="button" className="buy-btn"
+            onClick={() => navigate("/dashboard")}
+            >
               Enroll Now — {course.price}
             </button>
             <button type="button" className="cart-btn">

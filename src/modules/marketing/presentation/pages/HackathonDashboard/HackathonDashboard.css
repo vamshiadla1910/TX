@@ -62,8 +62,9 @@
 
   background: linear-gradient(
     135deg,
-    #6366f1,
-    #4f46e5
+    #6d2be0,
+    #2f7cf6,
+    #26d6e9
   );
 
   display: grid;
@@ -71,7 +72,7 @@
 
   color: #ffffff;
 
-  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.22);
+  box-shadow: 0 8px 18px rgba(109, 43, 224, 0.28);
 }
 
 .hd-brand {
@@ -82,7 +83,7 @@
   font-weight: 800;
   font-size: 15px;
 
-  color: #172554;
+  color: #140b2b;
 
   letter-spacing: -0.02em;
 }
@@ -92,7 +93,8 @@
 
   font-size: 11px;
 
-  color: #64748b;
+  color: #6d2be0;
+  font-weight: 600;
 }
 
 .hd-mobile-close {
@@ -166,9 +168,9 @@
 }
 
 .hd-nav-item:hover {
-  color: #1d4ed8;
+  color: #6d2be0;
 
-  background: #f1f5ff;
+  background: rgba(109, 43, 224, 0.08);
 
   transform: translateX(2px);
 }
@@ -176,11 +178,13 @@
 .hd-nav-active {
   background: linear-gradient(
     135deg,
-    #eaf2ff,
-    #e4edff
+    rgba(109, 43, 224, 0.12),
+    rgba(38, 214, 233, 0.12)
   ) !important;
 
-  color: #155eef !important;
+  color: #6d2be0 !important;
+
+  border-left: 3px solid #6d2be0;
 
   box-shadow: none;
 

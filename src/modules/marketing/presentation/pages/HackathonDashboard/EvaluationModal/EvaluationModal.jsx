@@ -1,58 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { getRegistrationId, getTeamLead, getProjectTitle } from "../dashboardHelpers";
 import "./EvaluationModal.css";
 
 const criteria = [
-  {
-    key: "understanding",
-    label: "Problem Understanding",
-    max: 25
-  },
-  {
-    key: "relevance",
-    label: "Problem Relevance",
-    max: 15
-  },
-  {
-    key: "innovation",
-    label: "Innovation & Creativity",
-    max: 25
-  },
-  {
-    key: "feasibility",
-    label: "Solution Feasibility",
-    max: 20
-  },
-  {
-    key: "technical",
-    label: "Technical Approach",
-    max: 15
-  }
+  { key: "understanding", label: "Problem Understanding", max: 25 },
+  { key: "relevance", label: "Problem Relevance", max: 15 },
+  { key: "innovation", label: "Innovation & Creativity", max: 25 },
+  { key: "feasibility", label: "Solution Feasibility", max: 20 },
+  { key: "technical", label: "Technical Approach", max: 15 }
 ];
 
-function getField(team, names, fallback = "-") {
-  if (!team) return fallback;
-
-  for (const name of names) {
-    if (
-      team[name] !== undefined &&
-      team[name] !== null &&
-      String(team[name]).trim() !== ""
-    ) {
-      return team[name];
-    }
-  }
-
-  return fallback;
-}
-
-function EvaluationModal({
-  isOpen = true,
-  onClose,
-  team,
-  round = 1,
-  onReview,
-  onSubmit
-}) {
+function EvaluationModal({ isOpen, onClose, team, round = 1, onReview }) {
   const [scores, setScores] = useState({
     understanding: 0,
     relevance: 0,
@@ -65,98 +23,32 @@ function EvaluationModal({
   const [decision, setDecision] = useState("");
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add(
-        "evaluation-modal-open"
-      );
-    } else {
-      document.body.classList.remove(
-        "evaluation-modal-open"
-      );
-    }
-
-    return () => {
-      document.body.classList.remove(
-        "evaluation-modal-open"
-      );
-    };
+    if (isOpen) document.body.classList.add("evaluation-modal-open");
+    else document.body.classList.remove("evaluation-modal-open");
+    return () => document.body.classList.remove("evaluation-modal-open");
   }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
-
-    setScores({
-      understanding: 0,
-      relevance: 0,
-      innovation: 0,
-      feasibility: 0,
-      technical: 0
-    });
-
+    setScores({ understanding: 0, relevance: 0, innovation: 0, feasibility: 0, technical: 0 });
     setComments("");
     setDecision("");
   }, [isOpen, team]);
 
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen) return null;
 
-  const registrationId = getField(team, [
-    "Registration ID",
-    "registrationId",
-    "id"
-  ]);
+  const registrationId = getRegistrationId(team);
+  const teamLead = getTeamLead(team);
+  const projectTitle = getProjectTitle(team);
 
-  const teamLead = getField(team, [
-    "Team Lead",
-    "teamLead",
-    "lead",
-    "Lead"
-  ]);
+  const total = criteria.reduce((sum, c) => sum + Number(scores[c.key] || 0), 0);
 
-  const projectTitle = getField(team, [
-    "Project Title",
-    "projectTitle",
-    "project"
-  ], "Untitled Project");
-
-  const total = criteria.reduce(
-    (sum, criterion) =>
-      sum + Number(scores[criterion.key] || 0),
-    0
-  );
-
-  const handleScoreChange = (
-    key,
-    value,
-    max
-  ) => {
-    if (value === "") {
-      setScores((current) => ({
-        ...current,
-        [key]: ""
-      }));
-      return;
-    }
-
-    let numberValue = Number(value);
-
-    if (Number.isNaN(numberValue)) {
-      numberValue = 0;
-    }
-
-    if (numberValue < 0) {
-      numberValue = 0;
-    }
-
-    if (numberValue > max) {
-      numberValue = max;
-    }
-
-    setScores((current) => ({
-      ...current,
-      [key]: numberValue
-    }));
+  const handleScoreChange = (key, value, max) => {
+    if (value === "") return setScores((curr) => ({ ...curr, [key]: "" }));
+    let num = Number(value);
+    if (Number.isNaN(num) || num < 0) num = 0;
+    if (num > max) num = max;
+    setScores((curr) => ({ ...curr, [key]: num }));
   };
 
   const handleSubmit = () => {
@@ -165,70 +57,42 @@ function EvaluationModal({
       registrationId,
       teamLead,
       projectTitle,
+      innovation: Number(scores.innovation || 0),
+      technical: Number(scores.technical || 0),
+      presentation: Number(scores.understanding || 0) + Number(scores.relevance || 0) + Number(scores.feasibility || 0),
       scores: {
-        understanding: Number(
-          scores.understanding || 0
-        ),
-        relevance: Number(
-          scores.relevance || 0
-        ),
-        innovation: Number(
-          scores.innovation || 0
-        ),
-        feasibility: Number(
-          scores.feasibility || 0
-        ),
-        technical: Number(
-          scores.technical || 0
-        )
+        understanding: Number(scores.understanding || 0),
+        relevance: Number(scores.relevance || 0),
+        innovation: Number(scores.innovation || 0),
+        feasibility: Number(scores.feasibility || 0),
+        technical: Number(scores.technical || 0)
       },
       total,
       comments,
       decision
     };
-
-    const cb = onReview || onSubmit;
-    if (cb) {
-      cb(evaluation);
-    }
+    if (onReview) onReview(evaluation);
   };
 
   return (
     <div
       className="evaluation-modal-overlay"
-      onMouseDown={(event) => {
-        if (
-          event.target === event.currentTarget
-        ) {
-          onClose();
-        }
-      }}
+      onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
         className="evaluation-modal"
         role="dialog"
         aria-modal="true"
         aria-labelledby="evaluation-title"
-        onMouseDown={(event) =>
-          event.stopPropagation()
-        }
+        onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="evaluation-modal-header">
           <div>
-            <h2 id="evaluation-title">
-              Round {round} — Evaluation
-            </h2>
-
-            <p>
-              Evaluate the team performance.
-            </p>
+            <h2 id="evaluation-title">Round {round} — Evaluation</h2>
+            <p>Evaluate the team performance.</p>
           </div>
-
           <div className="evaluation-header-right">
-            <span className="evaluation-present">
-              Present
-            </span>
-
+            <span className="evaluation-present">Present</span>
             <button
               type="button"
               className="evaluation-close-button"
@@ -247,12 +111,10 @@ function EvaluationModal({
               <span>Registration ID</span>
               <strong>{registrationId}</strong>
             </div>
-
             <div className="evaluation-info-card">
               <span>Team Lead</span>
               <strong>{teamLead}</strong>
             </div>
-
             <div className="evaluation-info-card">
               <span>Project</span>
               <strong>{projectTitle}</strong>
@@ -260,145 +122,65 @@ function EvaluationModal({
           </div>
 
           <section className="evaluation-section">
-            <h3>
-              Evaluation — Total 100 Marks
-            </h3>
-
+            <h3>Evaluation — Total 100 Marks</h3>
             <div className="evaluation-criteria">
-              {criteria.map((criterion) => (
-                <div
-                  className="evaluation-criterion"
-                  key={criterion.key}
-                >
-                  <div className="evaluation-criterion-name">
-                    {criterion.label}
-                  </div>
-
-                  <div className="evaluation-max">
-                    / {criterion.max}
-                  </div>
-
+              {criteria.map((c) => (
+                <div className="evaluation-criterion" key={c.key}>
+                  <div className="evaluation-criterion-name">{c.label}</div>
+                  <div className="evaluation-max">/ {c.max}</div>
                   <input
                     type="number"
                     min="0"
-                    max={criterion.max}
-                    value={
-                      scores[criterion.key]
-                    }
-                    onChange={(event) =>
-                      handleScoreChange(
-                        criterion.key,
-                        event.target.value,
-                        criterion.max
-                      )
-                    }
+                    max={c.max}
+                    value={scores[c.key]}
+                    onChange={(e) => handleScoreChange(c.key, e.target.value, c.max)}
                   />
                 </div>
               ))}
             </div>
-
             <div className="evaluation-total">
               <strong>TOTAL</strong>
-
-              <strong>
-                {total} / 100
-              </strong>
+              <strong>{total} / 100</strong>
             </div>
           </section>
 
           <section className="evaluation-section">
             <h3>Comments</h3>
-
             <textarea
               value={comments}
-              onChange={(event) =>
-                setComments(
-                  event.target.value
-                )
-              }
+              onChange={(e) => setComments(e.target.value)}
               placeholder="Enter additional comments..."
             />
           </section>
 
           <section className="evaluation-section">
             <h3>Decision</h3>
-
             <div className="evaluation-decisions">
-              <label>
-                <input
-                  type="radio"
-                  name={`decision-${registrationId}`}
-                  value="QUALIFIED"
-                  checked={
-                    decision === "QUALIFIED"
-                  }
-                  onChange={(event) =>
-                    setDecision(
-                      event.target.value
-                    )
-                  }
-                />
-
-                <span>Qualified</span>
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  name={`decision-${registrationId}`}
-                  value="NOT_QUALIFIED"
-                  checked={
-                    decision ===
-                    "NOT_QUALIFIED"
-                  }
-                  onChange={(event) =>
-                    setDecision(
-                      event.target.value
-                    )
-                  }
-                />
-
-                <span>Not Qualified</span>
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  name={`decision-${registrationId}`}
-                  value="CLARIFICATION"
-                  checked={
-                    decision ===
-                    "CLARIFICATION"
-                  }
-                  onChange={(event) =>
-                    setDecision(
-                      event.target.value
-                    )
-                  }
-                />
-
-                <span>
-                  Requires Clarification
-                </span>
-              </label>
+              {[
+                { val: "QUALIFIED", label: "Qualified" },
+                { val: "NOT_QUALIFIED", label: "Not Qualified" },
+                { val: "CLARIFICATION", label: "Requires Clarification" }
+              ].map((item) => (
+                <label key={item.val}>
+                  <input
+                    type="radio"
+                    name={`decision-${registrationId}`}
+                    value={item.val}
+                    checked={decision === item.val}
+                    onChange={(e) => setDecision(e.target.value)}
+                  />
+                  <span>{item.label}</span>
+                </label>
+              ))}
             </div>
           </section>
         </div>
 
         <div className="evaluation-modal-footer">
-          <button
-            type="button"
-            className="evaluation-cancel-button"
-            onClick={onClose}
-          >
+          <button type="button" className="evaluation-cancel-button" onClick={onClose}>
             Cancel
           </button>
-
-          <button
-            type="button"
-            className="evaluation-review-button"
-            onClick={handleSubmit}
-          >
+          <button type="button" className="evaluation-review-button" onClick={handleSubmit}>
             Submit Evaluation
           </button>
         </div>
