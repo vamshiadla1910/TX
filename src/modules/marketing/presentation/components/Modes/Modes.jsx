@@ -5,7 +5,7 @@ import {
   MonitorSmartphone,
 } from "lucide-react";
 
-import "./modes.css";
+import "./Modes.css";
 
 const benefits = [
   {
