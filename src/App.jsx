@@ -33,6 +33,9 @@ import Dashboard from "./modules/marketing/presentation/pages/StudentDashboard/D
 import Assessments from "./modules/marketing/presentation/pages/StudentDashboard/Assessments/Assessments.jsx";
 import Certificates from "./modules/marketing/presentation/pages/StudentDashboard/Certificates/Certificates.jsx";
 
+// Platform Admin Dashboard
+import AdminDashboard from "./modules/marketing/presentation/pages/AdminDashboard/AdminDashboard.jsx";
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -46,13 +49,15 @@ function ScrollToTop() {
 function AppLayout() {
   const location = useLocation();
 
-  // Don't show normal website Header/Footer on dashboards (Hackathon, Student, Assessments, or Certificates)
+  // Don't show normal website Header/Footer on dashboards (Hackathon, Student, Assessments, Certificates, or Admin)
   const hideHeaderFooter =
     location.pathname.startsWith("/hackathon-dashboard") ||
     location.pathname.startsWith("/dashboard") ||
     location.pathname.startsWith("/student") ||
     location.pathname.toLowerCase().startsWith("/assessments") ||
-    location.pathname.toLowerCase().startsWith("/certificates");
+    location.pathname.toLowerCase().startsWith("/certificates") ||
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/admin-dashboard");
 
   return (
     <>
@@ -127,6 +132,14 @@ function AppLayout() {
         <Route path="/certificates/*" element={<Dashboard />} />
         <Route path="/Certificates" element={<Dashboard />} />
         <Route path="/Certificates/*" element={<Dashboard />} />
+
+        {/* =====================================
+            PLATFORM ADMIN DASHBOARD
+            ===================================== */}
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/*" element={<AdminDashboard />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
 
       </Routes>
 
