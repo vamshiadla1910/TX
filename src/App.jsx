@@ -39,6 +39,9 @@ import AdminDashboard from "./modules/marketing/presentation/pages/AdminDashboar
 // Instructor Dashboard (Advanced Monolithic Model)
 import InstructorDashboard from "./modules/marketing/presentation/pages/instructor";
 
+// Institution Dashboard (Modular Domain Monolith)
+import InstitutionDashboard from "./modules/institution";
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -52,7 +55,7 @@ function ScrollToTop() {
 function AppLayout() {
   const location = useLocation();
 
-  // Don't show normal website Header/Footer on dashboards (Hackathon, Student, Assessments, Certificates, Admin, or Instructor)
+  // Don't show normal website Header/Footer on dashboards (Hackathon, Student, Assessments, Certificates, Admin, Instructor, or Institution)
   const hideHeaderFooter =
     location.pathname.startsWith("/hackathon-dashboard") ||
     location.pathname.startsWith("/dashboard") ||
@@ -62,7 +65,9 @@ function AppLayout() {
     location.pathname.startsWith("/admin") ||
     location.pathname.startsWith("/admin-dashboard") ||
     location.pathname.startsWith("/instructor") ||
-    location.pathname.startsWith("/instructor-dashboard");
+    location.pathname.startsWith("/instructor-dashboard") ||
+    location.pathname.startsWith("/institution") ||
+    location.pathname.startsWith("/institution-dashboard");
 
   return (
     <>
@@ -153,6 +158,14 @@ function AppLayout() {
         <Route path="/instructor/*" element={<InstructorDashboard />} />
         <Route path="/instructor-dashboard" element={<InstructorDashboard />} />
         <Route path="/instructor-dashboard/*" element={<InstructorDashboard />} />
+
+        {/* =====================================
+            INSTITUTION DASHBOARD
+            ===================================== */}
+        <Route path="/institution" element={<InstitutionDashboard />} />
+        <Route path="/institution/*" element={<InstitutionDashboard />} />
+        <Route path="/institution-dashboard" element={<InstitutionDashboard />} />
+        <Route path="/institution-dashboard/*" element={<InstitutionDashboard />} />
 
       </Routes>
 

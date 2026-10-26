@@ -1,0 +1,3208 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* ==========================================================================
+   INSTITUTION DASHBOARD SCOPED DESIGN SYSTEM
+   Strictly scoped under .institution-dashboard to eliminate global style leakage
+   and shield against external style bleed.
+   ========================================================================== */
+
+.institution-dashboard,
+.institutions-dashboard {
+  --blue: #294ee8;
+  --blue2: #3156d7;
+  --ink: #102744;
+  --muted: #6f83a5;
+  --line: #dce5f1;
+  --surface: #ffffff;
+  --canvas: #f3f6fb;
+  --green: #078d77;
+  --shadow: 0 3px 12px rgba(20, 50, 90, 0.035);
+
+  font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  color: var(--ink);
+  background: var(--canvas);
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode variables */
+.institution-dashboard.dark,
+.institutions-dashboard.dark {
+  --blue: #4f73f7;
+  --blue2: #3f64ee;
+  --ink: #e6eefb;
+  --muted: #9aacc7;
+  --line: #2a3c54;
+  --surface: #152438;
+  --canvas: #0e1826;
+  --green: #10b99d;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  color: var(--ink);
+  background: var(--canvas);
+}
+
+/* Universal box-sizing & Typography reset inside dashboard */
+.institution-dashboard *,
+.institution-dashboard *::before,
+.institution-dashboard *::after,
+.institutions-dashboard *,
+.institutions-dashboard *::before,
+.institutions-dashboard *::after {
+  box-sizing: border-box;
+}
+
+.institution-dashboard button,
+.institution-dashboard input,
+.institution-dashboard select,
+.institution-dashboard textarea,
+.institution-dashboard p,
+.institution-dashboard span,
+.institution-dashboard a,
+.institution-dashboard li,
+.institution-dashboard h1,
+.institution-dashboard h2,
+.institution-dashboard h3,
+.institution-dashboard h4,
+.institutions-dashboard button,
+.institutions-dashboard input,
+.institutions-dashboard select,
+.institutions-dashboard textarea,
+.institutions-dashboard p,
+.institutions-dashboard span,
+.institutions-dashboard a,
+.institutions-dashboard li,
+.institutions-dashboard h1,
+.institutions-dashboard h2,
+.institutions-dashboard h3,
+.institutions-dashboard h4 {
+  font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.institution-dashboard button,
+.institutions-dashboard button {
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+}
+
+.institution-dashboard button:focus-visible,
+.institution-dashboard input:focus-visible,
+.institution-dashboard select:focus-visible,
+.institution-dashboard textarea:focus-visible,
+.institutions-dashboard button:focus-visible,
+.institutions-dashboard input:focus-visible,
+.institutions-dashboard select:focus-visible,
+.institutions-dashboard textarea:focus-visible {
+  outline: 3px solid #9ab0ff;
+  outline-offset: 2px;
+}
+
+/* Monospace Micro-Typography */
+.institution-dashboard .eyebrow,
+.institution-dashboard .nav-label,
+.institution-dashboard .micro,
+.institution-dashboard .date-chip,
+.institution-dashboard .csv-tag,
+.institution-dashboard .programme-number,
+.institution-dashboard .programme-id,
+.institution-dashboard th,
+.institution-dashboard .detail-meta-tag,
+.institution-dashboard .detail-label,
+.institution-dashboard .detail-footnote,
+.institution-dashboard .module-idx,
+.institution-dashboard .page-indicator,
+.institution-dashboard .notif-time,
+.institution-dashboard .raw-preview,
+.institutions-dashboard .eyebrow,
+.institutions-dashboard .nav-label,
+.institutions-dashboard .micro,
+.institutions-dashboard .date-chip,
+.institutions-dashboard .csv-tag,
+.institutions-dashboard .programme-number,
+.institutions-dashboard .programme-id,
+.institutions-dashboard th,
+.institutions-dashboard .detail-meta-tag,
+.institutions-dashboard .detail-label,
+.institutions-dashboard .detail-footnote,
+.institutions-dashboard .module-idx,
+.institutions-dashboard .page-indicator,
+.institutions-dashboard .notif-time,
+.institutions-dashboard .raw-preview {
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+/* Eyebrow Neutralization: Prevents pill bleeding from Hackathon/RegistrationForm */
+.institution-dashboard .eyebrow,
+.institutions-dashboard .eyebrow {
+  display: inline-block !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  font-size: 9px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1.15px !important;
+  text-transform: uppercase !important;
+  line-height: normal !important;
+}
+
+.institution-dashboard .nav-label,
+.institutions-dashboard .nav-label {
+  font-size: 9px;
+  letter-spacing: 1.15px;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 0 8px 9px;
+  display: block;
+}
+
+.institution-dashboard .micro,
+.institutions-dashboard .micro {
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   APP LAYOUT & STRUCTURE
+   ========================================================================== */
+
+.institution-dashboard .app,
+.institutions-dashboard .app {
+  min-height: 100vh;
+  background: var(--canvas);
+  color: var(--ink);
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  width: 100%;
+}
+
+/* Sidebar */
+.institution-dashboard .sidebar,
+.institutions-dashboard .sidebar {
+  position: fixed;
+  z-index: 40;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 244px;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  transform: none;
+  transition: transform 0.22s ease;
+  overflow-y: auto;
+  box-shadow: none;
+}
+
+.institution-dashboard .brand,
+.institutions-dashboard .brand {
+  height: 76px;
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  border-bottom: 1px solid var(--line);
+  font-size: 17px;
+}
+
+.institution-dashboard .brand-link,
+.institutions-dashboard .brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--ink) !important;
+  font-weight: 700;
+}
+
+.institution-dashboard .brand-mark,
+.institutions-dashboard .brand-mark {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  color: var(--blue) !important;
+  font-style: italic;
+  line-height: 1;
+}
+
+.institution-dashboard .tenant,
+.institutions-dashboard .tenant {
+  padding: 22px 20px 16px;
+  border-bottom: 1px solid var(--line);
+  margin: 0 0 12px;
+}
+
+.institution-dashboard .tenant-info,
+.institutions-dashboard .tenant-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.institution-dashboard .tenant-info > svg,
+.institutions-dashboard .tenant-info > svg {
+  color: var(--blue);
+  flex-shrink: 0;
+}
+
+.institution-dashboard .tenant-info div,
+.institutions-dashboard .tenant-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.institution-dashboard .tenant-info strong,
+.institutions-dashboard .tenant-info strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.institution-dashboard .nav-group,
+.institutions-dashboard .nav-group {
+  padding: 8px 14px 12px;
+}
+
+.institution-dashboard .nav-item,
+.institutions-dashboard .nav-item {
+  width: 100%;
+  height: 39px;
+  border: 0;
+  background: transparent;
+  color: #304b70;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 11px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 2px 0;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.institution-dashboard .nav-item svg,
+.institutions-dashboard .nav-item svg {
+  color: #7a8eac;
+  flex-shrink: 0;
+}
+
+.institution-dashboard .nav-item small,
+.institutions-dashboard .nav-item small {
+  margin-left: auto;
+  font-size: 10px;
+  color: #7e92b1;
+  font-weight: 600;
+  background: rgba(126, 146, 177, 0.12);
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.institution-dashboard .nav-item:hover,
+.institutions-dashboard .nav-item:hover {
+  background: rgba(41, 78, 232, 0.05);
+  color: var(--blue);
+}
+
+.institution-dashboard .nav-item:hover svg,
+.institutions-dashboard .nav-item:hover svg {
+  color: var(--blue);
+}
+
+.institution-dashboard .nav-item.active,
+.institutions-dashboard .nav-item.active {
+  background: #edf1ff !important;
+  color: var(--blue) !important;
+  font-weight: 600;
+  box-shadow: inset 3px 0 var(--blue);
+}
+
+.institution-dashboard .nav-item.active svg,
+.institutions-dashboard .nav-item.active svg {
+  color: var(--blue) !important;
+}
+
+.institution-dashboard .sidebar-user-btn,
+.institutions-dashboard .sidebar-user-btn {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+  margin-top: auto;
+  padding: 0;
+  transition: background 0.15s ease;
+}
+
+.institution-dashboard .sidebar-user-btn:hover,
+.institutions-dashboard .sidebar-user-btn:hover {
+  background: rgba(41, 78, 232, 0.04);
+}
+
+.institution-dashboard .sidebar-user,
+.institutions-dashboard .sidebar-user {
+  padding: 14px 17px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.institution-dashboard .sidebar-user > div:last-child,
+.institutions-dashboard .sidebar-user > div:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.institution-dashboard .sidebar-user strong,
+.institutions-dashboard .sidebar-user strong {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.institution-dashboard .sidebar-user span:not(.avatar),
+.institutions-dashboard .sidebar-user span:not(.avatar) {
+  font-size: 9px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.institution-dashboard .avatar,
+.institutions-dashboard .avatar {
+  width: 31px;
+  height: 31px;
+  flex: 0 0 31px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: #eaf0ff;
+  color: var(--blue);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.institution-dashboard .avatar.large,
+.institutions-dashboard .avatar.large {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  font-size: 15px;
+  border-radius: 12px;
+}
+
+/* Main Area */
+.institution-dashboard .main,
+.institutions-dashboard .main {
+  margin-left: 244px;
+  min-height: 100vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--canvas);
+  position: relative;
+  width: calc(100% - 244px);
+}
+
+/* TopBar */
+.institution-dashboard .topbar,
+.institutions-dashboard .topbar {
+  height: 64px;
+  min-height: 64px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-sizing: border-box;
+}
+
+.institution-dashboard .breadcrumbs,
+.institutions-dashboard .breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.institution-dashboard .breadcrumbs strong,
+.institutions-dashboard .breadcrumbs strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.institution-dashboard .breadcrumb-link,
+.institutions-dashboard .breadcrumb-link {
+  cursor: pointer;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.institution-dashboard .breadcrumb-link:hover,
+.institutions-dashboard .breadcrumb-link:hover {
+  color: var(--blue);
+  text-decoration: underline;
+}
+
+.institution-dashboard .breadcrumb-sub,
+.institutions-dashboard .breadcrumb-sub {
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.institution-dashboard .top-actions,
+.institutions-dashboard .top-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.institution-dashboard .searchbox,
+.institutions-dashboard .searchbox {
+  height: 36px;
+  width: 270px;
+  max-width: 30vw;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  color: #8497b4;
+}
+
+.institution-dashboard .searchbox input,
+.institutions-dashboard .searchbox input {
+  border: 0;
+  outline: 0;
+  min-width: 0;
+  width: 100%;
+  font-size: 11px;
+  color: var(--ink);
+  background: transparent;
+  padding: 0;
+}
+
+.institution-dashboard .searchbox input::placeholder,
+.institutions-dashboard .searchbox input::placeholder {
+  color: #8a9bb4;
+}
+
+.institution-dashboard .searchbox button,
+.institution-dashboard .mobile-menu,
+.institution-dashboard .mobile-close,
+.institutions-dashboard .searchbox button,
+.institutions-dashboard .mobile-menu,
+.institutions-dashboard .mobile-close {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.institution-dashboard .icon-btn,
+.institutions-dashboard .icon-btn {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: #405978;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.institution-dashboard .notification i,
+.institutions-dashboard .notification i {
+  position: absolute;
+  right: -3px;
+  top: -4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e44b56;
+  color: white;
+  font-style: normal;
+  font-size: 9px;
+  display: grid;
+  place-items: center;
+  border: 1px solid white;
+  font-weight: 700;
+}
+
+/* Standard Buttons */
+.institution-dashboard .btn,
+.institutions-dashboard .btn {
+  height: 36px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: #344a68;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.institution-dashboard .btn.primary,
+.institutions-dashboard .btn.primary {
+  background: var(--blue) !important;
+  border-color: var(--blue) !important;
+  color: white !important;
+}
+
+.institution-dashboard .btn:hover,
+.institution-dashboard .icon-btn:hover,
+.institution-dashboard .square-action:hover,
+.institutions-dashboard .btn:hover,
+.institutions-dashboard .icon-btn:hover,
+.institutions-dashboard .square-action:hover {
+  filter: brightness(0.97);
+  border-color: #a9b9d2;
+}
+
+.institution-dashboard .btn.primary:hover,
+.institutions-dashboard .btn.primary:hover {
+  filter: brightness(1.06);
+}
+
+.institution-dashboard .btn.success-action,
+.institutions-dashboard .btn.success-action {
+  background: #078d77 !important;
+  border-color: #078d77 !important;
+  color: white !important;
+}
+
+.institution-dashboard .btn.warning-action,
+.institutions-dashboard .btn.warning-action {
+  background: #c57912 !important;
+  border-color: #c57912 !important;
+  color: white !important;
+}
+
+.institution-dashboard .btn.danger-btn,
+.institutions-dashboard .btn.danger-btn {
+  background: #fff0ee !important;
+  color: #c94f40 !important;
+  border-color: #f7cecb !important;
+}
+
+.institution-dashboard .btn.danger-btn:hover,
+.institutions-dashboard .btn.danger-btn:hover {
+  background: #ffe3e0 !important;
+}
+
+.institution-dashboard .website-btn,
+.institutions-dashboard .website-btn {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+/* Content Area */
+.institution-dashboard .content,
+.institutions-dashboard .content {
+  padding: 31px 30px 42px;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  flex: 1;
+}
+
+.institution-dashboard .page-heading,
+.institutions-dashboard .page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 2px 0 21px;
+}
+
+.institution-dashboard .page-heading h1,
+.institutions-dashboard .page-heading h1 {
+  font-size: 24px;
+  line-height: 1.2;
+  margin: 7px 0 7px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+}
+
+.institution-dashboard .page-heading p,
+.institutions-dashboard .page-heading p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.institution-dashboard .heading-action,
+.institutions-dashboard .heading-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Cards & Panels: explicitly overrides 22px padding from AdminDashboard */
+.institution-dashboard .card,
+.institutions-dashboard .card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  box-shadow: var(--shadow);
+  padding: 0;
+  margin: 0;
+}
+
+.institution-dashboard .panel,
+.institutions-dashboard .panel {
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.institution-dashboard .panel-head,
+.institutions-dashboard .panel-head {
+  min-height: 52px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.institution-dashboard .panel-aside,
+.institutions-dashboard .panel-aside {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 400;
+}
+
+.institution-dashboard .panel-description,
+.institutions-dashboard .panel-description {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 0;
+  padding: 12px 16px 0;
+}
+
+/* ==========================================================================
+   METRICS GRID & STAT STRIPS
+   ========================================================================== */
+
+.institution-dashboard .metrics-grid,
+.institutions-dashboard .metrics-grid {
+  display: grid;
+  gap: 15px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.institution-dashboard .metrics-grid.five,
+.institutions-dashboard .metrics-grid.five {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.institution-dashboard .metric,
+.institutions-dashboard .metric {
+  padding: 19px 18px 16px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.institution-dashboard .metric-top,
+.institutions-dashboard .metric-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.institution-dashboard .metric-icon,
+.institutions-dashboard .metric-icon {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #edf1ff;
+  color: var(--blue);
+  flex-shrink: 0;
+}
+
+.institution-dashboard .metric-icon.green,
+.institutions-dashboard .metric-icon.green { background: #e7f7f1; color: #078d77; }
+.institution-dashboard .metric-icon.orange,
+.institutions-dashboard .metric-icon.orange { background: #fff3e3; color: #c57912; }
+.institution-dashboard .metric-icon.teal,
+.institutions-dashboard .metric-icon.teal { background: #e4f6f5; color: #078b91; }
+.institution-dashboard .metric-icon.red,
+.institutions-dashboard .metric-icon.red { background: #fff0ee; color: #c94f40; }
+
+.institution-dashboard .metric-value,
+.institutions-dashboard .metric-value {
+  font-size: 31px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+  margin-top: 13px;
+  color: var(--ink);
+}
+
+.institution-dashboard .metric-sub,
+.institutions-dashboard .metric-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.institution-dashboard .trend,
+.institutions-dashboard .trend {
+  color: #079a81;
+}
+
+/* Stat Strip: Prevents white text bleed from Login.css */
+.institution-dashboard .stat-strip,
+.institutions-dashboard .stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 18px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  box-shadow: var(--shadow);
+  width: 100%;
+}
+
+.institution-dashboard .stat,
+.institutions-dashboard .stat {
+  padding: 15px 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-right: 1px solid var(--line);
+  min-width: 0;
+  background: transparent;
+}
+
+.institution-dashboard .stat:last-child,
+.institutions-dashboard .stat:last-child {
+  border-right: 0;
+}
+
+.institution-dashboard .stat strong,
+.institutions-dashboard .stat strong {
+  display: block !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.4px !important;
+  color: var(--ink) !important;
+  line-height: 1.25 !important;
+}
+
+.institution-dashboard .stat span,
+.institutions-dashboard .stat span {
+  display: block !important;
+  font-size: 10px !important;
+  color: var(--muted) !important;
+  line-height: normal !important;
+}
+
+/* Overview Grid */
+.institution-dashboard .overview-grid,
+.institutions-dashboard .overview-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 0.95fr;
+  gap: 18px;
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+/* Department Completion Chart: Fixes squished bar-track collision with instructor CSS */
+.institution-dashboard .department-chart,
+.institutions-dashboard .department-chart {
+  padding: 24px 26px 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.institution-dashboard .bar-row,
+.institutions-dashboard .bar-row {
+  display: grid;
+  grid-template-columns: 44px minmax(40px, 1fr) 32px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.institution-dashboard .bar-row-interactive,
+.institutions-dashboard .bar-row-interactive {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.12s;
+  text-align: left;
+}
+
+.institution-dashboard .bar-row-interactive:hover,
+.institutions-dashboard .bar-row-interactive:hover {
+  background: rgba(41, 78, 232, 0.06);
+}
+
+.institution-dashboard .bar-row > span,
+.institutions-dashboard .bar-row > span {
+  font-size: 9px;
+  color: var(--muted);
+  text-align: right;
+  font-weight: 600;
+}
+
+.institution-dashboard .bar-row > strong,
+.institutions-dashboard .bar-row > strong {
+  font-size: 10px;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.institution-dashboard .bar-track,
+.institutions-dashboard .bar-track {
+  width: 100% !important;
+  height: 16px !important;
+  background: #e8edf5 !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: static !important;
+  box-shadow: none !important;
+}
+
+.institution-dashboard .bar-track > div,
+.institutions-dashboard .bar-track > div {
+  display: block !important;
+  height: 100% !important;
+  background: var(--blue2) !important;
+  border-radius: 4px !important;
+  transition: width 0.3s ease;
+}
+
+/* Event List */
+.institution-dashboard .event-list,
+.institutions-dashboard .event-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.institution-dashboard .event-list.compact,
+.institutions-dashboard .event-list.compact {
+  padding: 8px 17px 10px;
+}
+
+.institution-dashboard .event-list.full,
+.institutions-dashboard .event-list.full {
+  padding: 0 18px 4px;
+}
+
+.institution-dashboard .event-row,
+.institutions-dashboard .event-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 0;
+  min-width: 0;
+}
+
+.institution-dashboard .event-button-interactive,
+.institutions-dashboard .event-button-interactive {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  transition: background 0.12s;
+}
+
+.institution-dashboard .event-button-interactive:last-child,
+.institutions-dashboard .event-button-interactive:last-child {
+  border-bottom: 0;
+}
+
+.institution-dashboard .event-row > div,
+.institutions-dashboard .event-row > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.institution-dashboard .event-row strong,
+.institutions-dashboard .event-row strong {
+  font-size: 11px;
+  display: block;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.institution-dashboard .event-row p,
+.institutions-dashboard .event-row p {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 4px 0 0;
+  line-height: 1.45;
+}
+
+.institution-dashboard .hover-arrow,
+.institutions-dashboard .hover-arrow {
+  color: var(--muted);
+  opacity: 0;
+  transition: all 0.15s;
+}
+
+.institution-dashboard .event-button-interactive:hover .hover-arrow,
+.institutions-dashboard .event-button-interactive:hover .hover-arrow {
+  opacity: 1;
+  transform: translateX(3px);
+  color: var(--blue);
+}
+
+.institution-dashboard .date-chip,
+.institutions-dashboard .date-chip {
+  min-width: 57px;
+  height: 31px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background: #edf1ff;
+  color: var(--blue);
+  font-size: 9px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.institution-dashboard .date-chip.orange,
+.institutions-dashboard .date-chip.orange {
+  background: #fff1dc;
+  color: #b76b0d;
+}
+
+/* Quick Links */
+.institution-dashboard .quick-links,
+.institutions-dashboard .quick-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 4px 16px;
+}
+
+.institution-dashboard .quick-links button,
+.institutions-dashboard .quick-links button {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px;
+  background: transparent;
+  border: 0;
+  color: #2e4d78;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.institution-dashboard .quick-links button svg:first-child,
+.institutions-dashboard .quick-links button svg:first-child {
+  color: #7e94b5;
+}
+
+.institution-dashboard .quick-links button svg:last-child,
+.institutions-dashboard .quick-links button svg:last-child {
+  margin-left: auto;
+}
+
+.institution-dashboard .quick-links button:hover,
+.institution-dashboard .text-action:hover,
+.institutions-dashboard .quick-links button:hover,
+.institutions-dashboard .text-action:hover {
+  color: var(--blue);
+}
+
+/* ==========================================================================
+   TABLES & DIRECTORIES
+   ========================================================================== */
+
+.institution-dashboard .filter-label,
+.institutions-dashboard .filter-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.institution-dashboard .filter-label select,
+.institutions-dashboard .filter-label select {
+  height: 32px;
+  max-width: 160px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  background: var(--surface);
+  font-size: 11px;
+}
+
+.institution-dashboard .filters-bar,
+.institutions-dashboard .filters-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.institution-dashboard .category-filter-row,
+.institutions-dashboard .category-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.institution-dashboard .filter-pill-btn,
+.institutions-dashboard .filter-pill-btn {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.institution-dashboard .filter-pill-btn.active,
+.institutions-dashboard .filter-pill-btn.active {
+  background: var(--blue) !important;
+  color: white !important;
+  border-color: var(--blue) !important;
+}
+
+.institution-dashboard .table-wrap,
+.institutions-dashboard .table-wrap {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.institution-dashboard table,
+.institutions-dashboard table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.institution-dashboard thead,
+.institutions-dashboard thead {
+  background: #fafbfd;
+}
+
+.institution-dashboard th,
+.institutions-dashboard th {
+  height: 32px;
+  font-size: 8px;
+  letter-spacing: 0.55px;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px 13px;
+  border-bottom: 1px solid #e9eef5;
+}
+
+.institution-dashboard td,
+.institutions-dashboard td {
+  padding: 10px 13px;
+  border-bottom: 1px solid #e9eef5;
+  font-size: 11px;
+  color: #304a6d;
+}
+
+.institution-dashboard tbody tr:last-child td,
+.institutions-dashboard tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.institution-dashboard tbody tr:hover,
+.institutions-dashboard tbody tr:hover {
+  background: #fbfcff;
+}
+
+.institution-dashboard td:first-child,
+.institution-dashboard th:first-child,
+.institutions-dashboard td:first-child,
+.institutions-dashboard th:first-child {
+  padding-left: 15px;
+}
+
+.institution-dashboard .learner-cell,
+.institutions-dashboard .learner-cell {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.institution-dashboard .learner-cell > div,
+.institutions-dashboard .learner-cell > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.institution-dashboard .learner-cell strong,
+.institution-dashboard td strong,
+.institutions-dashboard .learner-cell strong,
+.institutions-dashboard td strong {
+  font-size: 11px;
+  color: #183452;
+  font-weight: 600;
+}
+
+.institution-dashboard .learner-cell small,
+.institution-dashboard td small,
+.institutions-dashboard .learner-cell small,
+.institutions-dashboard td small {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.institution-dashboard .table-progress,
+.institutions-dashboard .table-progress {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 110px;
+}
+
+.institution-dashboard .table-progress .progress,
+.institutions-dashboard .table-progress .progress {
+  height: 7px;
+  width: 90px;
+  background: #e8edf5;
+  border-radius: 5px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.institution-dashboard .table-progress .progress > span,
+.institutions-dashboard .table-progress .progress > span {
+  display: block;
+  height: 100%;
+  background: var(--blue2);
+  border-radius: 5px;
+}
+
+.institution-dashboard .table-progress > span,
+.institutions-dashboard .table-progress > span {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.institution-dashboard .status,
+.institutions-dashboard .status {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  border-radius: 20px;
+  padding: 4px 8px;
+  font-size: 9px;
+  font-weight: 600;
+  background: #e9f7f1;
+  color: #00886d;
+}
+
+.institution-dashboard .status.warning,
+.institutions-dashboard .status.warning {
+  background: #fff3df;
+  color: #a96508;
+}
+
+.institution-dashboard .status.review,
+.institutions-dashboard .status.review {
+  background: #eaf0ff;
+  color: #3156d7;
+}
+
+.institution-dashboard .helper-text,
+.institutions-dashboard .helper-text {
+  color: var(--muted);
+  font-size: 10px;
+  margin: 12px 0 0;
+}
+
+.institution-dashboard .clickable-cell,
+.institutions-dashboard .clickable-cell {
+  cursor: pointer;
+}
+
+.institution-dashboard .clickable-cell:hover strong,
+.institutions-dashboard .clickable-cell:hover strong {
+  color: var(--blue);
+}
+
+.institution-dashboard .table-action-cell,
+.institutions-dashboard .table-action-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.institution-dashboard .icon-action-btn,
+.institutions-dashboard .icon-action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.institution-dashboard .icon-action-btn:hover,
+.institutions-dashboard .icon-action-btn:hover {
+  color: var(--blue);
+  border-color: var(--blue);
+}
+
+.institution-dashboard .pagination-bar,
+.institutions-dashboard .pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.institution-dashboard .pagination-info,
+.institutions-dashboard .pagination-info {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.institution-dashboard .pagination-controls,
+.institutions-dashboard .pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.institution-dashboard .page-btn,
+.institutions-dashboard .page-btn {
+  height: 28px;
+  padding: 0 10px;
+  font-size: 10px;
+}
+
+.institution-dashboard .page-indicator,
+.institutions-dashboard .page-indicator {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   COURSES CATALOGUE (LEARNING PAGE)
+   Fixes massive card collision with Courses.css (width: 225px / height: 86px)
+   ========================================================================== */
+
+.institution-dashboard .course-grid,
+.institutions-dashboard .course-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 17px !important;
+  width: 100% !important;
+}
+
+.institution-dashboard .course-card,
+.institutions-dashboard .course-card {
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  flex: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 9px !important;
+  background: var(--surface) !important;
+  box-shadow: var(--shadow) !important;
+  overflow: hidden !important;
+  cursor: default !important;
+  transform: none !important;
+}
+
+.institution-dashboard .course-card:hover,
+.institutions-dashboard .course-card:hover {
+  transform: none !important;
+  background: var(--surface) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.institution-dashboard .course-banner,
+.institutions-dashboard .course-banner {
+  height: 72px !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 20px !important;
+  color: white !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+}
+
+.institution-dashboard .course-banner span,
+.institutions-dashboard .course-banner span {
+  font-size: 8px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.6px !important;
+  color: white !important;
+  text-transform: uppercase !important;
+}
+
+.institution-dashboard .course-banner.blue,
+.institutions-dashboard .course-banner.blue { background: #294ee8 !important; }
+.institution-dashboard .course-banner.green,
+.institutions-dashboard .course-banner.green { background: #148b75 !important; }
+.institution-dashboard .course-banner.orange,
+.institutions-dashboard .course-banner.orange { background: #c66b20 !important; }
+.institution-dashboard .course-banner.red,
+.institutions-dashboard .course-banner.red { background: #b94d50 !important; }
+
+.institution-dashboard .course-body,
+.institutions-dashboard .course-body {
+  padding: 18px 20px 19px !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+  align-items: flex-start !important;
+}
+
+.institution-dashboard .course-body h3,
+.institutions-dashboard .course-body h3 {
+  font-size: 17px !important;
+  margin: 11px 0 4px !important;
+  letter-spacing: -0.3px !important;
+  color: var(--ink) !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+}
+
+.institution-dashboard .course-body > p,
+.institutions-dashboard .course-body > p {
+  font-size: 11px !important;
+  color: var(--muted) !important;
+  margin: 0 !important;
+  text-align: left !important;
+}
+
+.institution-dashboard .course-meta,
+.institutions-dashboard .course-meta {
+  display: flex !important;
+  gap: 17px !important;
+  margin: 18px 0 13px !important;
+  color: var(--muted) !important;
+  font-size: 10px !important;
+}
+
+.institution-dashboard .course-meta span,
+.institutions-dashboard .course-meta span {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  color: var(--muted) !important;
+}
+
+.institution-dashboard .course-body .progress,
+.institutions-dashboard .course-body .progress {
+  width: 100% !important;
+  height: 7px !important;
+  background: #e8edf5 !important;
+  border-radius: 5px !important;
+  overflow: hidden !important;
+}
+
+.institution-dashboard .course-body .progress > span,
+.institutions-dashboard .course-body .progress > span {
+  display: block !important;
+  height: 100% !important;
+  background: var(--blue2) !important;
+  border-radius: 5px !important;
+}
+
+.institution-dashboard .text-action,
+.institutions-dashboard .text-action {
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.institution-dashboard .course-body .text-action,
+.institutions-dashboard .course-body .text-action {
+  margin-top: 22px;
+}
+
+/* ==========================================================================
+   PROGRAMMES, EVENTS & COMPLIANCE
+   ========================================================================== */
+
+.institution-dashboard .programme-list,
+.institutions-dashboard .programme-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.institution-dashboard .programme-row,
+.institutions-dashboard .programme-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 76px 34px;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 18px;
+}
+
+.institution-dashboard .programme-number,
+.institution-dashboard .programme-id,
+.institutions-dashboard .programme-number,
+.institutions-dashboard .programme-id {
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.institution-dashboard .programme-main,
+.institutions-dashboard .programme-main {
+  min-width: 0;
+}
+
+.institution-dashboard .programme-id,
+.institutions-dashboard .programme-id {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+
+.institution-dashboard .programme-id .status,
+.institutions-dashboard .programme-id .status {
+  font-family: 'DM Sans', sans-serif !important;
+}
+
+.institution-dashboard .programme-main h3,
+.institutions-dashboard .programme-main h3 {
+  font-size: 13px;
+  margin: 0 0 3px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.institution-dashboard .programme-main p,
+.institutions-dashboard .programme-main p {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+
+.institution-dashboard .cohort-label,
+.institutions-dashboard .cohort-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.institution-dashboard .cohort-label strong,
+.institutions-dashboard .cohort-label strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.institution-dashboard .programme-main .progress,
+.institutions-dashboard .programme-main .progress {
+  width: 100%;
+  height: 6px;
+  background: #e8edf5;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.institution-dashboard .programme-main .progress > span,
+.institutions-dashboard .programme-main .progress > span {
+  display: block;
+  height: 100%;
+  background: var(--blue2);
+  border-radius: 4px;
+}
+
+.institution-dashboard .programme-count,
+.institutions-dashboard .programme-count {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.institution-dashboard .programme-count strong,
+.institutions-dashboard .programme-count strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.institution-dashboard .programme-count span,
+.institutions-dashboard .programme-count span {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.institution-dashboard .square-action,
+.institutions-dashboard .square-action {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 7px;
+  color: #617a9e;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.institution-dashboard .deadline,
+.institutions-dashboard .deadline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #fff4e3;
+  color: #a96610;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.institution-dashboard .compliance-foot,
+.institutions-dashboard .compliance-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 17px;
+  margin-top: -2px;
+}
+
+.institution-dashboard .compliance-foot > svg,
+.institutions-dashboard .compliance-foot > svg {
+  color: #078d77;
+  flex-shrink: 0;
+}
+
+.institution-dashboard .compliance-foot > div,
+.institutions-dashboard .compliance-foot > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.institution-dashboard .compliance-foot strong,
+.institutions-dashboard .compliance-foot strong {
+  font-size: 11px;
+  color: var(--ink);
+}
+
+.institution-dashboard .compliance-foot span,
+.institutions-dashboard .compliance-foot span {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.institution-dashboard .report-chart,
+.institutions-dashboard .report-chart {
+  max-width: 800px;
+}
+
+.institution-dashboard .report-list,
+.institutions-dashboard .report-list {
+  padding: 0 15px;
+}
+
+.institution-dashboard .report-row,
+.institutions-dashboard .report-row {
+  min-height: 57px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  border-bottom: 1px solid #edf1f6;
+  padding: 10px 0;
+}
+
+.institution-dashboard .report-row:last-child,
+.institutions-dashboard .report-row:last-child {
+  border-bottom: 0;
+}
+
+.institution-dashboard .report-icon,
+.institutions-dashboard .report-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #edf1ff;
+  color: var(--blue);
+  flex-shrink: 0;
+}
+
+.institution-dashboard .report-row > div,
+.institutions-dashboard .report-row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.institution-dashboard .report-row strong,
+.institutions-dashboard .report-row strong {
+  font-size: 11px;
+  color: var(--ink);
+}
+
+.institution-dashboard .report-row small,
+.institutions-dashboard .report-row small {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.institution-dashboard .csv-tag,
+.institutions-dashboard .csv-tag {
+  font-size: 8px;
+  background: #f0f3f7;
+  color: #71839c;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.institution-dashboard .empty,
+.institutions-dashboard .empty {
+  padding: 28px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   MODALS & INTERACTIVE OVERLAYS
+   ========================================================================== */
+
+.institution-dashboard .modal-backdrop,
+.institutions-dashboard .modal-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgba(20, 36, 60, 0.48);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  overflow-y: auto;
+}
+
+.institution-dashboard .modal,
+.institutions-dashboard .modal {
+  width: min(460px, 100%);
+  padding: 22px;
+  box-shadow: 0 20px 60px rgba(16, 39, 68, 0.28);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  position: relative;
+}
+
+.institution-dashboard .modal-head,
+.institutions-dashboard .modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.institution-dashboard .modal h2,
+.institutions-dashboard .modal h2 {
+  font-size: 20px;
+  margin: 7px 0 0;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.institution-dashboard .modal label,
+.institutions-dashboard .modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 15px 0;
+  color: #38516f;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.institution-dashboard .modal input,
+.institution-dashboard .modal textarea,
+.institution-dashboard .modal select,
+.institutions-dashboard .modal input,
+.institutions-dashboard .modal textarea,
+.institutions-dashboard .modal select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: var(--surface);
+  font-size: 12px;
+  box-sizing: border-box;
+}
+
+.institution-dashboard .modal textarea,
+.institutions-dashboard .modal textarea {
+  resize: vertical;
+}
+
+.institution-dashboard .modal-actions,
+.institutions-dashboard .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.institution-dashboard .record-detail-card,
+.institutions-dashboard .record-detail-card {
+  width: min(580px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.institution-dashboard .csv-modal-card,
+.institutions-dashboard .csv-modal-card {
+  width: min(660px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.institution-dashboard .user-profile-card,
+.institutions-dashboard .user-profile-card {
+  width: min(480px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.institution-dashboard .modal-description,
+.institutions-dashboard .modal-description {
+  font-size: 11px;
+  color: var(--muted);
+  margin: -10px 0 16px;
+  line-height: 1.45;
+}
+
+.institution-dashboard .detail-status-bar,
+.institutions-dashboard .detail-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.institution-dashboard .detail-meta-tag,
+.institutions-dashboard .detail-meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.institution-dashboard .detail-section,
+.institutions-dashboard .detail-section {
+  margin: 14px 0;
+}
+
+.institution-dashboard .detail-label,
+.institutions-dashboard .detail-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.institution-dashboard .detail-text,
+.institutions-dashboard .detail-text {
+  font-size: 12px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.institution-dashboard .detail-grid,
+.institutions-dashboard .detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 12px 0;
+}
+
+.institution-dashboard .detail-field,
+.institutions-dashboard .detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.institution-dashboard .detail-field strong,
+.institutions-dashboard .detail-field strong {
+  font-size: 12px;
+  color: var(--ink);
+}
+
+.institution-dashboard .status-radio-group,
+.institutions-dashboard .status-radio-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.institution-dashboard .status-chip-btn,
+.institutions-dashboard .status-chip-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: 10px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.institution-dashboard .status-chip-btn.selected.good,
+.institutions-dashboard .status-chip-btn.selected.good {
+  background: #e9f7f1;
+  color: #00886d;
+  border-color: #00886d;
+}
+
+.institution-dashboard .status-chip-btn.selected.review,
+.institutions-dashboard .status-chip-btn.selected.review {
+  background: #edf1ff;
+  color: var(--blue);
+  border-color: var(--blue);
+}
+
+.institution-dashboard .status-chip-btn.selected.warning,
+.institutions-dashboard .status-chip-btn.selected.warning {
+  background: #fff3df;
+  color: #a96508;
+  border-color: #a96508;
+}
+
+.institution-dashboard .detail-notes-box,
+.institutions-dashboard .detail-notes-box {
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.institution-dashboard .detail-notes-box p,
+.institutions-dashboard .detail-notes-box p {
+  margin: 0;
+}
+
+.institution-dashboard .detail-footnote,
+.institutions-dashboard .detail-footnote {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 14px;
+}
+
+.institution-dashboard .record-actions,
+.institutions-dashboard .record-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.institution-dashboard .detail-hero,
+.institutions-dashboard .detail-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.institution-dashboard .detail-hero h3,
+.institutions-dashboard .detail-hero h3 {
+  margin: 0 0 3px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.institution-dashboard .hero-tags,
+.institutions-dashboard .hero-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.institution-dashboard .detail-metrics-grid,
+.institutions-dashboard .detail-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.institution-dashboard .mini-metric,
+.institutions-dashboard .mini-metric {
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.institution-dashboard .mini-metric strong,
+.institutions-dashboard .mini-metric strong {
+  font-size: 16px;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+}
+
+.institution-dashboard .mini-metric .eyebrow,
+.institutions-dashboard .mini-metric .eyebrow {
+  font-size: 8px !important;
+}
+
+.institution-dashboard .mini-metric .progress,
+.institutions-dashboard .mini-metric .progress {
+  width: 100% !important;
+  height: 5px !important;
+  background: #e8edf5;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.institution-dashboard .mini-metric .progress > span,
+.institutions-dashboard .mini-metric .progress > span {
+  display: block;
+  height: 100%;
+  background: var(--blue2);
+  border-radius: 4px;
+}
+
+.institution-dashboard .detail-card-inner,
+.institutions-dashboard .detail-card-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.institution-dashboard .detail-card-inner svg,
+.institutions-dashboard .detail-card-inner svg {
+  color: var(--blue);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.institution-dashboard .detail-card-inner strong,
+.institutions-dashboard .detail-card-inner strong {
+  font-size: 11px;
+  display: block;
+  color: var(--ink);
+}
+
+.institution-dashboard .detail-card-inner p,
+.institutions-dashboard .detail-card-inner p {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 3px 0 0;
+  line-height: 1.4;
+}
+
+.institution-dashboard .tag-cluster,
+.institutions-dashboard .tag-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.institution-dashboard .partner-tag,
+.institutions-dashboard .partner-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 5px;
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  font-size: 10px;
+  color: var(--ink);
+}
+
+.institution-dashboard .syllabus-list,
+.institutions-dashboard .syllabus-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.institution-dashboard .syllabus-row,
+.institutions-dashboard .syllabus-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--ink);
+}
+
+.institution-dashboard .module-idx,
+.institutions-dashboard .module-idx {
+  font-size: 9px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.institution-dashboard .mod-check,
+.institutions-dashboard .mod-check {
+  color: #078d77;
+  margin-left: auto;
+}
+
+/* CSV Upload Dropzone */
+.institution-dashboard .drop-zone,
+.institutions-dashboard .drop-zone {
+  border: 2px dashed var(--line);
+  border-radius: 9px;
+  padding: 26px 18px;
+  text-align: center;
+  cursor: pointer;
+  background: var(--canvas);
+  transition: border-color 0.15s ease;
+}
+
+.institution-dashboard .drop-zone:hover,
+.institutions-dashboard .drop-zone:hover {
+  border-color: var(--blue);
+}
+
+.institution-dashboard .drop-icon,
+.institutions-dashboard .drop-icon {
+  color: var(--blue);
+  margin-bottom: 8px;
+}
+
+.institution-dashboard .drop-title,
+.institutions-dashboard .drop-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.institution-dashboard .drop-hint,
+.institutions-dashboard .drop-hint {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+
+.institution-dashboard .sample-csv-action,
+.institutions-dashboard .sample-csv-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 10px;
+  padding: 0 4px;
+}
+
+.institution-dashboard .csv-preview-container,
+.institutions-dashboard .csv-preview-container {
+  margin-top: 14px;
+}
+
+.institution-dashboard .csv-stats-bar,
+.institutions-dashboard .csv-stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.institution-dashboard .csv-stat-pill,
+.institutions-dashboard .csv-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.institution-dashboard .csv-stat-pill.good,
+.institutions-dashboard .csv-stat-pill.good { background: #e9f7f1; color: #00886d; }
+.institution-dashboard .csv-stat-pill.error,
+.institutions-dashboard .csv-stat-pill.error { background: #fff0ee; color: #c94f40; }
+.institution-dashboard .csv-stat-pill.warning,
+.institutions-dashboard .csv-stat-pill.warning { background: #fff3df; color: #a96508; }
+
+.institution-dashboard .csv-reupload,
+.institutions-dashboard .csv-reupload {
+  margin-left: auto;
+  font-size: 10px;
+}
+
+.institution-dashboard .csv-tab-bar,
+.institutions-dashboard .csv-tab-bar {
+  display: flex;
+  gap: 6px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 10px;
+}
+
+.institution-dashboard .csv-tab,
+.institutions-dashboard .csv-tab {
+  border: 0;
+  background: transparent;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.institution-dashboard .csv-tab.active,
+.institutions-dashboard .csv-tab.active {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
+}
+
+.institution-dashboard .csv-preview-table,
+.institutions-dashboard .csv-preview-table {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.institution-dashboard .raw-preview,
+.institutions-dashboard .raw-preview {
+  font-size: 9px;
+  color: var(--muted);
+  white-space: normal;
+}
+
+.institution-dashboard .error-text,
+.institutions-dashboard .error-text {
+  color: #c94f40;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.institution-dashboard .field-error-text,
+.institutions-dashboard .field-error-text {
+  display: block;
+  font-size: 10px;
+  color: #c94f40;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.institution-dashboard .form-error-banner,
+.institutions-dashboard .form-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #fff0ee;
+  color: #c94f40;
+  border-radius: 7px;
+  font-size: 11px;
+  margin-bottom: 14px;
+}
+
+/* Notifications Popover */
+.institution-dashboard .notifications-popover,
+.institutions-dashboard .notifications-popover {
+  position: fixed;
+  top: 68px;
+  right: 28px;
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  z-index: 50;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(16, 39, 68, 0.16);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.institution-dashboard .notif-head,
+.institutions-dashboard .notif-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.institution-dashboard .notif-title-area,
+.institutions-dashboard .notif-title-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.institution-dashboard .notif-badge,
+.institutions-dashboard .notif-badge {
+  background: var(--blue);
+  color: white;
+  border-radius: 10px;
+  padding: 1px 6px;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.institution-dashboard .notif-actions,
+.institutions-dashboard .notif-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.institution-dashboard .micro-btn,
+.institutions-dashboard .micro-btn {
+  font-size: 10px;
+  color: var(--blue);
+}
+
+.institution-dashboard .micro-icon-btn,
+.institutions-dashboard .micro-icon-btn {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+
+.institution-dashboard .notif-list,
+.institutions-dashboard .notif-list {
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.institution-dashboard .notif-item,
+.institutions-dashboard .notif-item {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 0;
+  background: var(--surface);
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.institution-dashboard .notif-item:last-child,
+.institutions-dashboard .notif-item:last-child {
+  border-bottom: 0;
+}
+
+.institution-dashboard .notif-item:hover,
+.institutions-dashboard .notif-item:hover {
+  background: var(--canvas);
+}
+
+.institution-dashboard .notif-item.unread,
+.institutions-dashboard .notif-item.unread {
+  background: #f7f9fe;
+}
+
+.institution-dashboard .notif-dot-col,
+.institutions-dashboard .notif-dot-col {
+  padding-top: 3px;
+}
+
+.institution-dashboard .notif-dot,
+.institutions-dashboard .notif-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: block;
+  background: transparent;
+}
+
+.institution-dashboard .notif-dot.active,
+.institutions-dashboard .notif-dot.active {
+  background: var(--blue);
+}
+
+.institution-dashboard .notif-body,
+.institutions-dashboard .notif-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.institution-dashboard .notif-item-title,
+.institutions-dashboard .notif-item-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+
+.institution-dashboard .notif-item-title strong,
+.institutions-dashboard .notif-item-title strong {
+  font-size: 11px;
+  color: var(--ink);
+}
+
+.institution-dashboard .notif-time,
+.institutions-dashboard .notif-time {
+  font-size: 8px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.institution-dashboard .notif-desc,
+.institutions-dashboard .notif-desc {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.institution-dashboard .notif-link-hint,
+.institutions-dashboard .notif-link-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: var(--blue);
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.institution-dashboard .notif-empty,
+.institutions-dashboard .notif-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* Toast Notifications */
+.institution-dashboard .toast,
+.institutions-dashboard .toast {
+  position: fixed;
+  z-index: 2000;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 17px;
+  background: #142b48;
+  color: white;
+  border-radius: 9px;
+  box-shadow: 0 8px 30px rgba(20, 43, 72, 0.25);
+  font-size: 12px;
+  max-width: min(420px, calc(100vw - 32px));
+}
+
+.institution-dashboard .toast svg,
+.institutions-dashboard .toast svg {
+  color: #70e0bf;
+  flex-shrink: 0;
+}
+
+.institution-dashboard .toast-close,
+.institutions-dashboard .toast-close {
+  background: transparent;
+  border: 0;
+  color: #a9bedb;
+  cursor: pointer;
+  padding: 2px;
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Hidden mobile toggles by default on desktop */
+.institution-dashboard .mobile-menu,
+.institution-dashboard .mobile-close,
+.institution-dashboard .scrim,
+.institutions-dashboard .mobile-menu,
+.institutions-dashboard .mobile-close,
+.institutions-dashboard .scrim {
+  display: none;
+}
+
+/* Department modal check chips */
+.institution-dashboard .dept-checkbox-group,
+.institutions-dashboard .dept-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.institution-dashboard .dept-chip-btn,
+.institutions-dashboard .dept-chip-btn {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.institution-dashboard .dept-chip-btn.selected,
+.institutions-dashboard .dept-chip-btn.selected {
+  background: #edf1ff;
+  color: var(--blue);
+  border-color: var(--blue);
+}
+
+.institution-dashboard .profile-actions-section,
+.institutions-dashboard .profile-actions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+/* ==========================================================================
+   DARK MODE OVERRIDES
+   ========================================================================== */
+
+.institution-dashboard.dark,
+.institutions-dashboard.dark {
+  color: var(--ink);
+  background: var(--canvas);
+}
+
+.institution-dashboard.dark .nav-item,
+.institutions-dashboard.dark .nav-item {
+  color: #c2d1e5;
+}
+
+.institution-dashboard.dark .nav-item:hover,
+.institutions-dashboard.dark .nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #aebeff;
+}
+
+.institution-dashboard.dark .nav-item.active,
+.institutions-dashboard.dark .nav-item.active {
+  background: #24385e !important;
+  color: #aebeff !important;
+}
+
+.institution-dashboard.dark .breadcrumbs strong,
+.institution-dashboard.dark .learner-cell strong,
+.institution-dashboard.dark td strong,
+.institution-dashboard.dark .metric-value,
+.institution-dashboard.dark .page-heading h1,
+.institution-dashboard.dark .panel-head,
+.institution-dashboard.dark .stat strong,
+.institution-dashboard.dark .programme-main h3,
+.institution-dashboard.dark .programme-count strong,
+.institution-dashboard.dark .course-body h3,
+.institution-dashboard.dark .report-row strong,
+.institution-dashboard.dark .event-row strong,
+.institutions-dashboard.dark .breadcrumbs strong,
+.institutions-dashboard.dark .learner-cell strong,
+.institutions-dashboard.dark td strong,
+.institutions-dashboard.dark .metric-value,
+.institutions-dashboard.dark .page-heading h1,
+.institutions-dashboard.dark .panel-head,
+.institutions-dashboard.dark .stat strong,
+.institutions-dashboard.dark .programme-main h3,
+.institutions-dashboard.dark .programme-count strong,
+.institutions-dashboard.dark .course-body h3,
+.institutions-dashboard.dark .report-row strong,
+.institutions-dashboard.dark .event-row strong {
+  color: #e0eaff !important;
+}
+
+.institution-dashboard.dark thead,
+.institution-dashboard.dark .event-button:hover,
+.institution-dashboard.dark tbody tr:hover,
+.institution-dashboard.dark .event-button-interactive:hover,
+.institutions-dashboard.dark thead,
+.institutions-dashboard.dark .event-button:hover,
+.institutions-dashboard.dark tbody tr:hover,
+.institutions-dashboard.dark .event-button-interactive:hover {
+  background: #18283d !important;
+}
+
+.institution-dashboard.dark .bar-track,
+.institution-dashboard.dark .progress,
+.institution-dashboard.dark .course-body .progress,
+.institution-dashboard.dark .programme-main .progress,
+.institutions-dashboard.dark .bar-track,
+.institutions-dashboard.dark .progress,
+.institutions-dashboard.dark .course-body .progress,
+.institutions-dashboard.dark .programme-main .progress {
+  background: #2a3d56 !important;
+}
+
+.institution-dashboard.dark .quick-links button,
+.institutions-dashboard.dark .quick-links button {
+  color: #c5d6ed;
+}
+
+.institution-dashboard.dark .date-chip,
+.institutions-dashboard.dark .date-chip {
+  background: #26395d;
+  color: #a8c1f0;
+}
+
+.institution-dashboard.dark .date-chip.orange,
+.institutions-dashboard.dark .date-chip.orange {
+  background: #503b25;
+  color: #f6c075;
+}
+
+.institution-dashboard.dark .status.good,
+.institutions-dashboard.dark .status.good {
+  background: #163f3b;
+  color: #70e0bf;
+}
+
+.institution-dashboard.dark .status.warning,
+.institutions-dashboard.dark .status.warning {
+  background: #4d3922;
+  color: #f1b369;
+}
+
+.institution-dashboard.dark .status.review,
+.institutions-dashboard.dark .status.review {
+  background: #26395d;
+  color: #a8c1f0;
+}
+
+.institution-dashboard.dark .metric-icon,
+.institutions-dashboard.dark .metric-icon {
+  background: #26395d;
+}
+
+.institution-dashboard.dark .metric-icon.green,
+.institutions-dashboard.dark .metric-icon.green { background: #16453f; }
+.institution-dashboard.dark .metric-icon.orange,
+.institutions-dashboard.dark .metric-icon.orange { background: #4d3922; }
+.institution-dashboard.dark .metric-icon.teal,
+.institutions-dashboard.dark .metric-icon.teal { background: #17444a; }
+.institution-dashboard.dark .metric-icon.red,
+.institutions-dashboard.dark .metric-icon.red { background: #4a2c34; }
+
+.institution-dashboard.dark .report-icon,
+.institutions-dashboard.dark .report-icon {
+  background: #26395d;
+}
+
+.institution-dashboard.dark .csv-tag,
+.institutions-dashboard.dark .csv-tag {
+  background: #2b3c52;
+  color: #9cb1cf;
+}
+
+.institution-dashboard.dark .deadline,
+.institutions-dashboard.dark .deadline {
+  background: #4d3922;
+  color: #f1b369;
+}
+
+.institution-dashboard.dark .notif-item.unread,
+.institutions-dashboard.dark .notif-item.unread {
+  background: #1f3350;
+}
+
+.institution-dashboard.dark .notif-item,
+.institutions-dashboard.dark .notif-item {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.institution-dashboard.dark .notif-item strong,
+.institutions-dashboard.dark .notif-item strong {
+  color: var(--ink);
+}
+
+.institution-dashboard.dark .modal-input,
+.institution-dashboard.dark .modal input,
+.institution-dashboard.dark .modal textarea,
+.institution-dashboard.dark .modal select,
+.institutions-dashboard.dark .modal-input,
+.institutions-dashboard.dark .modal input,
+.institutions-dashboard.dark .modal textarea,
+.institutions-dashboard.dark .modal select {
+  background: #132236;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.institution-dashboard.dark .drop-zone,
+.institutions-dashboard.dark .drop-zone {
+  background: #132236;
+  border-color: var(--line);
+}
+
+.institution-dashboard.dark .drop-title,
+.institutions-dashboard.dark .drop-title {
+  color: var(--ink);
+}
+
+.institution-dashboard.dark .detail-notes-box,
+.institution-dashboard.dark .mini-metric,
+.institution-dashboard.dark .detail-card-inner,
+.institution-dashboard.dark .syllabus-row,
+.institution-dashboard.dark .partner-tag,
+.institutions-dashboard.dark .detail-notes-box,
+.institutions-dashboard.dark .mini-metric,
+.institutions-dashboard.dark .detail-card-inner,
+.institutions-dashboard.dark .syllabus-row,
+.institutions-dashboard.dark .partner-tag {
+  background: #132236;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.institution-dashboard.dark .filter-pill-btn,
+.institutions-dashboard.dark .filter-pill-btn {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+.institution-dashboard.dark .filter-pill-btn.active,
+.institutions-dashboard.dark .filter-pill-btn.active {
+  background: var(--blue) !important;
+  color: white !important;
+}
+
+.institution-dashboard.dark .dept-chip-btn,
+.institutions-dashboard.dark .dept-chip-btn {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+.institution-dashboard.dark .dept-chip-btn.selected,
+.institutions-dashboard.dark .dept-chip-btn.selected {
+  background: #26395d;
+  color: #aebeff;
+  border-color: #3156d7;
+}
+
+.institution-dashboard.dark .status-chip-btn,
+.institutions-dashboard.dark .status-chip-btn {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+.institution-dashboard.dark .status-chip-btn.selected.review,
+.institutions-dashboard.dark .status-chip-btn.selected.review {
+  background: #26395d;
+  color: #aebeff;
+  border-color: #3156d7;
+}
+
+.institution-dashboard.dark .status-chip-btn.selected.good,
+.institutions-dashboard.dark .status-chip-btn.selected.good {
+  background: #163f3b;
+  color: #70e0bf;
+  border-color: #078d77;
+}
+
+.institution-dashboard.dark .status-chip-btn.selected.warning,
+.institutions-dashboard.dark .status-chip-btn.selected.warning {
+  background: #4d3922;
+  color: #f1b369;
+  border-color: #a96508;
+}
+
+.institution-dashboard.dark .btn.danger-btn,
+.institutions-dashboard.dark .btn.danger-btn {
+  background: #3b1b22 !important;
+  color: #f5848c !important;
+  border-color: #632a35 !important;
+}
+
+.institution-dashboard.dark .bar-row-interactive:hover,
+.institutions-dashboard.dark .bar-row-interactive:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.institution-dashboard.dark .sidebar-user-btn:hover,
+.institutions-dashboard.dark .sidebar-user-btn:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.institution-dashboard.dark .pagination-bar,
+.institutions-dashboard.dark .pagination-bar {
+  background: var(--surface);
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (1600px, 1200px, 850px, 560px, 375px)
+   ========================================================================== */
+
+/* Ultra-wide screens (>= 1600px) */
+@media (min-width: 1600px) {
+  .institution-dashboard .content,
+  .institutions-dashboard .content {
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+  .institution-dashboard .metric,
+  .institutions-dashboard .metric {
+    padding: 21px;
+  }
+  .institution-dashboard .metric-value,
+  .institutions-dashboard .metric-value {
+    font-size: 34px;
+  }
+  .institution-dashboard .page-heading h1,
+  .institutions-dashboard .page-heading h1 {
+    font-size: 26px;
+  }
+}
+
+/* Laptop / Compact Desktop (<= 1200px, covers 1024px) */
+@media (max-width: 1200px) {
+  .institution-dashboard .sidebar,
+  .institutions-dashboard .sidebar {
+    width: 220px;
+  }
+  .institution-dashboard .main,
+  .institutions-dashboard .main {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+  }
+  .institution-dashboard .content,
+  .institutions-dashboard .content {
+    padding: 25px 22px;
+  }
+  .institution-dashboard .metrics-grid.five,
+  .institutions-dashboard .metrics-grid.five {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .institution-dashboard .overview-grid,
+  .institutions-dashboard .overview-grid {
+    grid-template-columns: 1fr;
+  }
+  .institution-dashboard .searchbox,
+  .institutions-dashboard .searchbox {
+    width: 220px;
+  }
+  .institution-dashboard .topbar,
+  .institutions-dashboard .topbar {
+    padding: 0 20px;
+  }
+  .institution-dashboard .metric-value,
+  .institutions-dashboard .metric-value {
+    font-size: 28px;
+  }
+}
+
+/* Tablet (<= 850px, covers 768px) */
+@media (max-width: 850px) {
+  .institution-dashboard .sidebar,
+  .institutions-dashboard .sidebar {
+    transform: translateX(-100%);
+    box-shadow: 10px 0 35px rgba(16, 39, 68, 0.15);
+    z-index: 60;
+  }
+  .institution-dashboard .sidebar.mobile-open,
+  .institutions-dashboard .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  .institution-dashboard .main,
+  .institutions-dashboard .main {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+  .institution-dashboard .mobile-menu,
+  .institutions-dashboard .mobile-menu {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .institution-dashboard .mobile-close,
+  .institutions-dashboard .mobile-close {
+    display: block !important;
+    margin-left: auto;
+  }
+  .institution-dashboard .scrim,
+  .institutions-dashboard .scrim {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: rgba(16, 39, 68, 0.45);
+    border: 0;
+  }
+  .institution-dashboard .topbar,
+  .institutions-dashboard .topbar {
+    gap: 12px;
+  }
+  .institution-dashboard .breadcrumbs,
+  .institutions-dashboard .breadcrumbs {
+    margin-right: auto;
+  }
+  .institution-dashboard .top-actions .btn span,
+  .institutions-dashboard .top-actions .btn span {
+    display: none;
+  }
+  .institution-dashboard .top-actions .btn,
+  .institutions-dashboard .top-actions .btn {
+    width: 36px;
+    padding: 0;
+  }
+  .institution-dashboard .searchbox,
+  .institutions-dashboard .searchbox {
+    max-width: 34vw;
+  }
+  .institution-dashboard .metrics-grid.five,
+  .institutions-dashboard .metrics-grid.five {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .institution-dashboard .metrics-grid.five .metric:last-child,
+  .institutions-dashboard .metrics-grid.five .metric:last-child {
+    grid-column: span 2;
+  }
+  .institution-dashboard .course-grid,
+  .institutions-dashboard .course-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .institution-dashboard .quick-links,
+  .institutions-dashboard .quick-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Mobile Screens (<= 560px, covers 375px) */
+@media (max-width: 560px) {
+  .institution-dashboard .topbar,
+  .institutions-dashboard .topbar {
+    height: 58px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .institution-dashboard .breadcrumbs,
+  .institutions-dashboard .breadcrumbs {
+    gap: 4px;
+    font-size: 9px;
+  }
+  .institution-dashboard .breadcrumbs span:first-child,
+  .institutions-dashboard .breadcrumbs span:first-child {
+    display: none;
+  }
+  .institution-dashboard .searchbox,
+  .institutions-dashboard .searchbox {
+    width: 36px;
+    max-width: none;
+    padding: 0 9px;
+    border: 0;
+    background: transparent;
+  }
+  .institution-dashboard .searchbox:focus-within,
+  .institutions-dashboard .searchbox:focus-within {
+    position: absolute;
+    left: 50px;
+    right: 150px;
+    width: auto;
+    max-width: none;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    z-index: 35;
+  }
+  .institution-dashboard .searchbox input,
+  .institutions-dashboard .searchbox input {
+    width: 0;
+  }
+  .institution-dashboard .searchbox:focus-within input,
+  .institutions-dashboard .searchbox:focus-within input {
+    width: 100%;
+  }
+  .institution-dashboard .top-actions,
+  .institutions-dashboard .top-actions {
+    gap: 5px;
+  }
+  .institution-dashboard .top-actions .icon-btn,
+  .institution-dashboard .top-actions .btn,
+  .institutions-dashboard .top-actions .icon-btn,
+  .institutions-dashboard .top-actions .btn {
+    width: 32px;
+    height: 32px;
+  }
+  .institution-dashboard .content,
+  .institutions-dashboard .content {
+    padding: 20px 12px 28px;
+  }
+  .institution-dashboard .page-heading,
+  .institutions-dashboard .page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 17px;
+    gap: 13px;
+  }
+  .institution-dashboard .page-heading h1,
+  .institutions-dashboard .page-heading h1 {
+    font-size: 22px;
+  }
+  .institution-dashboard .page-heading p,
+  .institutions-dashboard .page-heading p {
+    font-size: 11px;
+  }
+  .institution-dashboard .heading-action,
+  .institutions-dashboard .heading-action {
+    width: 100%;
+  }
+  .institution-dashboard .heading-action .btn,
+  .institutions-dashboard .heading-action .btn {
+    width: 100%;
+  }
+  .institution-dashboard .metrics-grid.five,
+  .institutions-dashboard .metrics-grid.five {
+    gap: 9px;
+  }
+  .institution-dashboard .metric,
+  .institutions-dashboard .metric {
+    padding: 13px 12px;
+  }
+  .institution-dashboard .metric-value,
+  .institutions-dashboard .metric-value {
+    font-size: 25px;
+    margin-top: 10px;
+  }
+  .institution-dashboard .stat-strip,
+  .institutions-dashboard .stat-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    margin-bottom: 13px;
+  }
+  .institution-dashboard .stat,
+  .institutions-dashboard .stat {
+    padding: 12px 10px;
+  }
+  .institution-dashboard .stat strong,
+  .institutions-dashboard .stat strong {
+    font-size: 17px !important;
+  }
+  .institution-dashboard .stat span,
+  .institutions-dashboard .stat span {
+    font-size: 9px !important;
+  }
+  .institution-dashboard .stat:nth-child(2),
+  .institutions-dashboard .stat:nth-child(2) {
+    border-right: 0;
+  }
+  .institution-dashboard .stat:nth-child(1),
+  .institution-dashboard .stat:nth-child(2),
+  .institutions-dashboard .stat:nth-child(1),
+  .institutions-dashboard .stat:nth-child(2) {
+    border-bottom: 1px solid var(--line);
+  }
+  .institution-dashboard .department-chart,
+  .institutions-dashboard .department-chart {
+    padding: 20px 12px;
+    gap: 14px;
+  }
+  .institution-dashboard .bar-row,
+  .institutions-dashboard .bar-row {
+    grid-template-columns: 37px minmax(20px, 1fr) 28px;
+    gap: 7px;
+  }
+  .institution-dashboard .bar-track,
+  .institutions-dashboard .bar-track {
+    height: 12px !important;
+  }
+  .institution-dashboard .table-wrap table,
+  .institutions-dashboard .table-wrap table {
+    min-width: 680px;
+  }
+  .institution-dashboard .programme-row,
+  .institutions-dashboard .programme-row {
+    grid-template-columns: 22px minmax(0, 1fr) 47px 30px;
+    gap: 8px;
+    padding: 15px 10px;
+  }
+  .institution-dashboard .programme-count strong,
+  .institutions-dashboard .programme-count strong {
+    font-size: 15px;
+  }
+  .institution-dashboard .programme-count span,
+  .institutions-dashboard .programme-count span {
+    font-size: 8px;
+  }
+  .institution-dashboard .programme-main h3,
+  .institutions-dashboard .programme-main h3 {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .institution-dashboard .modal,
+  .institutions-dashboard .modal {
+    padding: 18px;
+  }
+}

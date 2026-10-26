@@ -48,6 +48,13 @@ export const PORTAL_PRESETS = {
     password: "instructor123",
     route: "/instructor-dashboard",
   },
+  institution: {
+    key: "institution",
+    name: "Institution",
+    email: "institution@pathwing.com",
+    password: "institution123",
+    route: "/institution-dashboard",
+  },
 };
 
 
@@ -101,6 +108,8 @@ const Login = ({
     if (isLoggedIn && !onClose) {
       if (userRole === "platform_admin" || isPlatformAdmin) {
         navigate("/admin-dashboard");
+      } else if (userRole === "institution" || userRole === "institution_admin") {
+        navigate("/institution-dashboard");
       } else if (userRole === "instructor") {
         navigate("/instructor-dashboard");
       } else if (userRole === "hackathon_admin" || isAdmin) {
@@ -333,7 +342,42 @@ const Login = ({
       }
 
       // ========================================
-      // 4. NORMAL STUDENT / LEARNER LOGIN
+      // 4. INSTITUTION PORTAL LOGIN
+      // ========================================
+      if (
+        email === "institution@pathwing.com" ||
+        email === "r.sathya@kits.edu" ||
+        email === "institutionadmin@kitsw.ac.in"
+      ) {
+        if (
+          password !== "institution123" &&
+          password !== "tanvox12340" &&
+          password !== "kits123"
+        ) {
+          setErrors({
+            password: "Invalid password for Institution portal. Expected institution123",
+          });
+          return;
+        }
+
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userName", "R. Sathyanarayana (Tenant Admin · KITS Warangal)");
+        localStorage.setItem("userRole", "institution");
+        localStorage.removeItem("isAdmin");
+        localStorage.removeItem("isPlatformAdmin");
+
+        window.dispatchEvent(new Event("authChanged"));
+        window.dispatchEvent(new Event("storage"));
+
+        if (onClose) onClose();
+
+        navigate("/institution-dashboard");
+        return;
+      }
+
+      // ========================================
+      // 5. NORMAL STUDENT / LEARNER LOGIN
       // ========================================
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userEmail", email);

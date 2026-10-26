@@ -64,6 +64,9 @@ export default function Header() {
     if (userRole === "platform_admin" || isPlatformAdmin) {
       return "/admin-dashboard";
     }
+    if (userRole === "institution" || userRole === "institution_admin") {
+      return "/institution-dashboard";
+    }
     if (userRole === "instructor") {
       return "/instructor-dashboard";
     }
@@ -77,6 +80,9 @@ export default function Header() {
     const isPlatformAdmin = localStorage.getItem("isPlatformAdmin") === "true";
     if (userRole === "platform_admin" || isPlatformAdmin) {
       return "Admin Console";
+    }
+    if (userRole === "institution" || userRole === "institution_admin") {
+      return "Institution Portal";
     }
     if (userRole === "instructor") {
       return "Instructor Portal";
