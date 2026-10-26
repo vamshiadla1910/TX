@@ -82,6 +82,9 @@ export const studentStorage = {
     localStorage.removeItem(STORAGE_KEYS.USER_NAME);
     localStorage.removeItem(STORAGE_KEYS.USER_PHONE);
     localStorage.removeItem(STORAGE_KEYS.IS_ADMIN);
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("isPlatformAdmin");
+    localStorage.removeItem("isHackathonAdmin");
 
     window.dispatchEvent(new Event("authChanged"));
     window.dispatchEvent(new Event("storage"));

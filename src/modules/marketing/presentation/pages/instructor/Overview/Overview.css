@@ -1,0 +1,892 @@
+/* =========================================================
+   PATHWING INSTRUCTOR DASHBOARD - OVERVIEW STYLING (BLUE & WHITE THEME)
+   Aesthetic: Crisp White Surfaces, Soft Slate Canvas,
+   Royal Electric Blue & Cobalt Accents, Modern Typography
+   ========================================================= */
+
+.instructor-app-shell .overview-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+/* =========================================================
+   OVERVIEW HERO BANNER (CLEAN BLUE & WHITE GRADIENT)
+   ========================================================= */
+.instructor-app-shell .overview-hero {
+  background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: 18px;
+  padding: 26px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.06), 0 1px 3px rgba(16, 24, 40, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.instructor-app-shell .overview-hero::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: 15%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.instructor-app-shell .overview-hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.instructor-app-shell .breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #64748b;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.instructor-app-shell .breadcrumb-nav .separator {
+  color: #cbd5e1;
+}
+
+.instructor-app-shell .breadcrumb-nav .current {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.instructor-app-shell .overview-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.6px;
+}
+
+.instructor-app-shell .instructor-meta-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 2px;
+  flex-wrap: wrap;
+}
+
+.instructor-app-shell .meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
+}
+
+.instructor-app-shell .meta-pill.verified {
+  background: #ecfdf5;
+  color: #059669;
+  border-color: #a7f3d0;
+}
+
+.instructor-app-shell .meta-pill.highlight {
+  background: #fffbeb;
+  color: #d97706;
+  border-color: #fde68a;
+}
+
+.instructor-app-shell .overview-subtitle {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.instructor-app-shell .overview-subtitle strong {
+  color: #0f172a;
+}
+
+/* AI Builder Hero CTA Button */
+.instructor-app-shell .btn-ai-builder-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+
+.instructor-app-shell .btn-ai-builder-hero:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.45);
+}
+
+/* =========================================================
+   5 BENTO KPI METRIC CARDS (CLEAN WHITE CARDS WITH CRISP ACCENTS)
+   ========================================================= */
+.instructor-app-shell .kpi-grid-container {
+  width: 100%;
+}
+
+.instructor-app-shell .metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.instructor-app-shell .inst-kpi-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid #2563eb;
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.02);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.instructor-app-shell .inst-kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: #bfdbfe;
+  border-top-color: #1d4ed8;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+}
+
+/* ALL KPI Cards Built From Active Learners Blueprint */
+.instructor-app-shell .inst-kpi-card.kpi-active-learners,
+.instructor-app-shell .inst-kpi-card.kpi-completion-rate,
+.instructor-app-shell .inst-kpi-card.kpi-average-rating,
+.instructor-app-shell .inst-kpi-card.kpi-net-earnings,
+.instructor-app-shell .inst-kpi-card.kpi-open-questions {
+  border-top: 3px solid #2563eb;
+}
+
+.instructor-app-shell .inst-kpi-card .inst-kpi-icon-wrap,
+.instructor-app-shell .inst-kpi-card.kpi-active-learners .inst-kpi-icon-wrap,
+.instructor-app-shell .inst-kpi-card.kpi-completion-rate .inst-kpi-icon-wrap,
+.instructor-app-shell .inst-kpi-card.kpi-average-rating .inst-kpi-icon-wrap,
+.instructor-app-shell .inst-kpi-card.kpi-net-earnings .inst-kpi-icon-wrap,
+.instructor-app-shell .inst-kpi-card.kpi-open-questions .inst-kpi-icon-wrap {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
+}
+
+.instructor-app-shell .inst-kpi-card:hover .inst-kpi-icon-wrap {
+  transform: scale(1.08);
+  background: #dbeafe;
+  border-color: #2563eb;
+}
+
+.instructor-app-shell .inst-kpi-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.instructor-app-shell .inst-kpi-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #64748b;
+  text-transform: uppercase;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.instructor-app-shell .inst-kpi-icon-wrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.instructor-app-shell .inst-kpi-card:hover .inst-kpi-icon-wrap {
+  transform: scale(1.08);
+}
+
+.instructor-app-shell .inst-kpi-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.instructor-app-shell .inst-kpi-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.instructor-app-shell .inst-kpi-sub {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+.instructor-app-shell .inst-kpi-foot-row {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.instructor-app-shell .inst-kpi-foot {
+  font-size: 11.5px;
+  font-weight: 700;
+  display: block;
+}
+
+.instructor-app-shell .inst-kpi-foot.positive {
+  color: #16a34a;
+}
+
+.instructor-app-shell .inst-kpi-foot.warning {
+  color: #d97706;
+}
+
+/* =========================================================
+   TWO-COLUMN MAIN AREA
+   ========================================================= */
+.instructor-app-shell .overview-dual-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.instructor-app-shell .grid-left-col,
+.instructor-app-shell .grid-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =========================================================
+   REVENUE ANALYTICS CARD & CHART
+   ========================================================= */
+.instructor-app-shell .earnings-chart-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid #2563eb;
+  border-radius: 18px;
+  padding: 24px 26px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.02);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.instructor-app-shell .earnings-chart-card:hover {
+  transform: translateY(-2px);
+  border-color: #bfdbfe;
+  border-top-color: #1d4ed8;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+}
+
+.instructor-app-shell .chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.instructor-app-shell .chart-main-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+}
+
+.instructor-app-shell .chart-summary-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.instructor-app-shell .stat-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #2563eb;
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.8px;
+}
+
+.instructor-app-shell .stat-amount {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.instructor-app-shell .stat-growth {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.instructor-app-shell .chart-metrics-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.instructor-app-shell .chart-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 9px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.instructor-app-shell .chart-pill strong {
+  color: #0f172a;
+}
+
+.instructor-app-shell .chart-pill.purple-highlight {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.instructor-app-shell .chart-pill.purple-highlight strong {
+  color: #1d4ed8;
+}
+
+.instructor-app-shell .svg-chart-container {
+  width: 100%;
+  position: relative;
+}
+
+.instructor-app-shell .earnings-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.instructor-app-shell .chart-axis-label {
+  fill: #64748b;
+  font-size: 10.5px;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+}
+
+.instructor-app-shell .chart-circle {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.instructor-app-shell .chart-circle:hover {
+  r: 7;
+  stroke: #1d4ed8;
+  fill: #eff6ff;
+}
+
+.instructor-app-shell .chart-tooltip {
+  position: absolute;
+  transform: translate(-50%, -120%);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.instructor-app-shell .chart-tooltip .tooltip-month {
+  font-weight: 700;
+  color: #93c5fd;
+  margin-bottom: 2px;
+}
+
+/* =========================================================
+   RECENT REVIEWS CARD
+   ========================================================= */
+.instructor-app-shell .recent-reviews-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid #2563eb;
+  border-radius: 18px;
+  padding: 24px 26px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.02);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.instructor-app-shell .recent-reviews-card:hover {
+  transform: translateY(-2px);
+  border-color: #bfdbfe;
+  border-top-color: #1d4ed8;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+}
+
+.instructor-app-shell .reviews-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.instructor-app-shell .reviews-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+}
+
+.instructor-app-shell .reviews-score-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #d97706;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.instructor-app-shell .reviews-score-pill span {
+  color: #64748b;
+  font-weight: 500;
+  font-size: 11px;
+}
+
+.instructor-app-shell .reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.instructor-app-shell .review-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px 18px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.instructor-app-shell .review-item:hover {
+  background: #ffffff;
+  border-color: #bfdbfe;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.06);
+  transform: translateY(-1px);
+}
+
+.instructor-app-shell .review-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.instructor-app-shell .reviewer-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.instructor-app-shell .reviewer-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.instructor-app-shell .reviewer-name {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.instructor-app-shell .reviewed-course {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.instructor-app-shell .review-stars-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.instructor-app-shell .review-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.instructor-app-shell .rating-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: #d97706;
+}
+
+.instructor-app-shell .review-text {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.instructor-app-shell .review-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.instructor-app-shell .review-date {
+  font-size: 11px;
+  color: #64748b;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+/* =========================================================
+   NEEDS ATTENTION PANEL
+   ========================================================= */
+.instructor-app-shell .attention-panel-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid #2563eb;
+  border-radius: 18px;
+  padding: 24px 26px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.02);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.instructor-app-shell .attention-panel-card:hover {
+  transform: translateY(-2px);
+  border-color: #bfdbfe;
+  border-top-color: #1d4ed8;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+}
+
+.instructor-app-shell .attention-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.instructor-app-shell .attention-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+}
+
+.instructor-app-shell .attention-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.instructor-app-shell .attention-tab-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  padding: 6px 13px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.instructor-app-shell .attention-tab-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.instructor-app-shell .attention-tab-btn.active {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.instructor-app-shell .attention-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.instructor-app-shell .attention-empty {
+  text-align: center;
+  padding: 36px 20px;
+  color: #64748b;
+}
+
+.instructor-app-shell .attention-empty h4 {
+  margin: 12px 0 4px;
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.instructor-app-shell .attention-empty p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.instructor-app-shell .attention-card-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  gap: 14px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.instructor-app-shell .attention-card-item:hover {
+  background: #ffffff;
+  border-color: #bfdbfe;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.06);
+  transform: translateY(-1px);
+}
+
+/* Priority Left Accent Bars */
+.instructor-app-shell .attention-card-item.priority-urgent {
+  border-left: 3px solid #ef4444;
+}
+
+.instructor-app-shell .attention-card-item.priority-high {
+  border-left: 3px solid #f59e0b;
+}
+
+.instructor-app-shell .attention-card-item.priority-normal {
+  border-left: 3px solid #2563eb;
+}
+
+.instructor-app-shell .att-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.instructor-app-shell .att-icon-badge,
+.instructor-app-shell .att-icon-badge.question,
+.instructor-app-shell .att-icon-badge.grading,
+.instructor-app-shell .att-icon-badge.review,
+.instructor-app-shell .att-icon-badge.session {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
+}
+
+.instructor-app-shell .att-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.instructor-app-shell .att-card-top-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.instructor-app-shell .att-course-chip {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #1d4ed8;
+  font-family: "IBM Plex Mono", monospace;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+
+.instructor-app-shell .att-time-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #64748b;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.instructor-app-shell .att-priority-pill {
+  margin-left: auto;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 5px;
+  text-transform: capitalize;
+}
+
+.instructor-app-shell .att-priority-pill.urgent {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+.instructor-app-shell .att-priority-pill.high {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.instructor-app-shell .att-priority-pill.normal {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.instructor-app-shell .att-card-title {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.instructor-app-shell .att-card-desc {
+  margin: 0 0 12px;
+  font-size: 12.5px;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.instructor-app-shell .att-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.instructor-app-shell .att-author-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+.instructor-app-shell .att-action-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.instructor-app-shell .att-action-pill-btn:hover {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  transform: translateY(-1px);
+}
+
+.instructor-app-shell .att-arrow-icon {
+  transition: transform 0.2s ease;
+}
+
+.instructor-app-shell .att-action-pill-btn:hover .att-arrow-icon {
+  transform: translateX(3px);
+}
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================= */
+@media (max-width: 1200px) {
+  .instructor-app-shell .metrics-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .instructor-app-shell .overview-dual-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .instructor-app-shell .overview-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .instructor-app-shell .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}

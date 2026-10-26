@@ -36,6 +36,9 @@ import Certificates from "./modules/marketing/presentation/pages/StudentDashboar
 // Platform Admin Dashboard
 import AdminDashboard from "./modules/marketing/presentation/pages/AdminDashboard/AdminDashboard.jsx";
 
+// Instructor Dashboard (Advanced Monolithic Model)
+import InstructorDashboard from "./modules/marketing/presentation/pages/instructor";
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -49,7 +52,7 @@ function ScrollToTop() {
 function AppLayout() {
   const location = useLocation();
 
-  // Don't show normal website Header/Footer on dashboards (Hackathon, Student, Assessments, Certificates, or Admin)
+  // Don't show normal website Header/Footer on dashboards (Hackathon, Student, Assessments, Certificates, Admin, or Instructor)
   const hideHeaderFooter =
     location.pathname.startsWith("/hackathon-dashboard") ||
     location.pathname.startsWith("/dashboard") ||
@@ -57,7 +60,9 @@ function AppLayout() {
     location.pathname.toLowerCase().startsWith("/assessments") ||
     location.pathname.toLowerCase().startsWith("/certificates") ||
     location.pathname.startsWith("/admin") ||
-    location.pathname.startsWith("/admin-dashboard");
+    location.pathname.startsWith("/admin-dashboard") ||
+    location.pathname.startsWith("/instructor") ||
+    location.pathname.startsWith("/instructor-dashboard");
 
   return (
     <>
@@ -140,6 +145,14 @@ function AppLayout() {
         <Route path="/admin/*" element={<AdminDashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
+
+        {/* =====================================
+            INSTRUCTOR DASHBOARD
+            ===================================== */}
+        <Route path="/instructor" element={<InstructorDashboard />} />
+        <Route path="/instructor/*" element={<InstructorDashboard />} />
+        <Route path="/instructor-dashboard" element={<InstructorDashboard />} />
+        <Route path="/instructor-dashboard/*" element={<InstructorDashboard />} />
 
       </Routes>
 

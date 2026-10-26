@@ -29,6 +29,22 @@ const HackathonDashboard = () => {
 
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userPhone");
+    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("isPlatformAdmin");
+    localStorage.removeItem("isHackathonAdmin");
+
+    window.dispatchEvent(new Event("authChanged"));
+    window.dispatchEvent(new Event("storage"));
+
+    navigate("/");
+  };
+
   const updateBadges = async () => {
     try {
       const [r1Res, r2Res, r3Res] = await Promise.all([
@@ -199,7 +215,9 @@ const HackathonDashboard = () => {
 
             <button
               className="hd-logout-btn"
-              onClick={() => navigate("/")}
+              onClick={handleLogout}
+              title="Sign out & Exit Hackathon Portal"
+              aria-label="Sign out & Exit Hackathon Portal"
             >
               <LogOut size={16} />
             </button>

@@ -47,12 +47,44 @@ export default function Header() {
   const [isAdmin, setIsAdmin] = useState(
     () => localStorage.getItem("isAdmin") === "true"
   );
+  const [userRole, setUserRole] = useState(
+    () => localStorage.getItem("userRole") || ""
+  );
 
   const location = useLocation();
 
   const checkAuth = () => {
     setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
     setIsAdmin(localStorage.getItem("isAdmin") === "true");
+    setUserRole(localStorage.getItem("userRole") || "");
+  };
+
+  const getDashboardDestination = () => {
+    const isPlatformAdmin = localStorage.getItem("isPlatformAdmin") === "true";
+    if (userRole === "platform_admin" || isPlatformAdmin) {
+      return "/admin-dashboard";
+    }
+    if (userRole === "instructor") {
+      return "/instructor-dashboard";
+    }
+    if (userRole === "hackathon_admin" || isAdmin) {
+      return "/hackathon-dashboard";
+    }
+    return "/dashboard";
+  };
+
+  const getDashboardText = () => {
+    const isPlatformAdmin = localStorage.getItem("isPlatformAdmin") === "true";
+    if (userRole === "platform_admin" || isPlatformAdmin) {
+      return "Admin Console";
+    }
+    if (userRole === "instructor") {
+      return "Instructor Portal";
+    }
+    if (userRole === "hackathon_admin" || isAdmin) {
+      return "Hackathon Portal";
+    }
+    return "Dashboard";
   };
 
   useEffect(() => {
@@ -209,10 +241,10 @@ export default function Header() {
 
             {isLoggedIn ? (
               <Link
-                to={isAdmin ? "/hackathon-dashboard" : "/dashboard"}
+                to={getDashboardDestination()}
                 className="btn-signin"
               >
-                {isAdmin ? "Admin Portal" : "Dashboard"}
+                {getDashboardText()}
               </Link>
             ) : (
               <button
@@ -341,11 +373,11 @@ export default function Header() {
         <div className="mobile-actions">
           {isLoggedIn ? (
             <Link
-              to={isAdmin ? "/hackathon-dashboard" : "/dashboard"}
+              to={getDashboardDestination()}
               className="btn-signin"
               onClick={closeMenu}
             >
-              {isAdmin ? "Admin Portal" : " Dashboard"}
+              {getDashboardText()}
             </Link>
           ) : (
             <button

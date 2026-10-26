@@ -81,16 +81,32 @@
   color: var(--primary-blue);
 }
 
+.sidebar-logo-box {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #ffffff;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.student-sidebar-logo,
 .brand-logo-img {
-  width: 34px;
-  height: 34px;
-  object-fit: contain;
+  width: 36px !important;
+  height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  object-fit: contain !important;
   border-radius: 6px;
   flex-shrink: 0;
   display: block;
   transition: transform 0.2s ease;
 }
 
+.brand-link:hover .student-sidebar-logo,
 .brand-link:hover .brand-logo-img {
   transform: scale(1.06);
 }
