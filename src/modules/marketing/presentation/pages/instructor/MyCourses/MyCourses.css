@@ -1,0 +1,552 @@
+/* =========================================================
+   PATHWING INSTRUCTOR DASHBOARD - MY COURSES MODULE STYLES
+   Prefix: inst-mc-* (Bulletproof scoped styles)
+========================================================= */
+
+.instructor-app-shell .inst-mc-container {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 100%;
+}
+
+/* Header */
+.instructor-app-shell .inst-mc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.instructor-app-shell .inst-mc-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.instructor-app-shell .inst-mc-title {
+  margin: 4px 0 2px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #101828;
+  letter-spacing: -0.4px;
+}
+
+.instructor-app-shell .inst-mc-subtitle {
+  margin: 0;
+  font-size: 13.5px;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.instructor-app-shell .inst-mc-btn-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #6d2be0 0%, #2563eb 50%, #00b4d8 100%);
+  color: #ffffff;
+  border: 1px solid rgba(37, 99, 235, 0.4);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.instructor-app-shell .inst-mc-btn-ai:hover {
+  background: linear-gradient(135deg, #7c3aed 0%, #1d4ed8 50%, #06b6d4 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5), 0 0 16px rgba(0, 180, 216, 0.3);
+}
+
+/* Stats Bar */
+.instructor-app-shell .inst-mc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.instructor-app-shell .inst-mc-stat-card {
+  background: #ffffff;
+  border: 1px solid #dce4f2;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.04);
+}
+
+.instructor-app-shell .inst-mc-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #2854e8;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.instructor-app-shell .inst-mc-stat-icon.warning {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.instructor-app-shell .inst-mc-stat-info strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: #101828;
+  line-height: 1.2;
+}
+
+.instructor-app-shell .inst-mc-stat-info small {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+/* Filter Row */
+.instructor-app-shell .inst-mc-filter-row {
+  background: #ffffff;
+  border: 1px solid #dce4f2;
+  border-radius: 12px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.04);
+}
+
+.instructor-app-shell .inst-mc-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  flex: 1;
+  min-width: 280px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.instructor-app-shell .inst-mc-search-box:focus-within {
+  border-color: #2854e8;
+  background: #ffffff;
+}
+
+.instructor-app-shell .inst-mc-search-box input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  outline: none;
+  font-size: 13px;
+  color: #1e293b;
+}
+
+.instructor-app-shell .inst-mc-search-icon {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.instructor-app-shell .inst-mc-filter-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.instructor-app-shell .inst-mc-pill-btn {
+  padding: 7px 14px;
+  background: #f1f5f9;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.instructor-app-shell .inst-mc-pill-btn:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.instructor-app-shell .inst-mc-pill-btn.active {
+  background: #2854e8;
+  color: #ffffff;
+  border-color: #2854e8;
+}
+
+/* Courses Grid */
+.instructor-app-shell .inst-mc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 22px;
+  width: 100%;
+}
+
+/* Individual Course Card */
+.instructor-app-shell .inst-mc-card {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  flex: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: #ffffff !important;
+  border: 1px solid #dce4f2 !important;
+  border-radius: 14px !important;
+  padding: 22px !important;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+  box-sizing: border-box !important;
+}
+
+.instructor-app-shell .inst-mc-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: #bfdbfe !important;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08) !important;
+}
+
+.instructor-app-shell .inst-mc-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.instructor-app-shell .inst-mc-code-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-family: "IBM Plex Mono", monospace;
+  text-transform: uppercase;
+}
+
+.instructor-app-shell .inst-mc-course-title {
+  margin: 0 0 6px 0;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: #101828;
+  line-height: 1.35;
+}
+
+.instructor-app-shell .inst-mc-course-subtitle {
+  display: block;
+  font-size: 12.5px;
+  color: #64748b;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+/* Metrics Box inside Card */
+.instructor-app-shell .inst-mc-metrics-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #f1f5f9;
+  margin-bottom: 16px;
+}
+
+.instructor-app-shell .inst-mc-metric {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.instructor-app-shell .inst-mc-metric svg {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.instructor-app-shell .inst-mc-metric svg.star-icon {
+  color: #f59e0b;
+}
+
+/* Card Footer */
+.instructor-app-shell .inst-mc-card-foot {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.instructor-app-shell .inst-mc-revenue small {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.instructor-app-shell .inst-mc-revenue strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+  color: #16a34a;
+}
+
+.instructor-app-shell .inst-mc-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.instructor-app-shell .inst-mc-btn-outline {
+  padding: 7px 14px;
+  border: 1px solid #dce4f2;
+  background: #ffffff;
+  color: #334155;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.instructor-app-shell .inst-mc-btn-outline:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.instructor-app-shell .inst-mc-btn-primary {
+  padding: 7px 14px;
+  border: 1px solid #2854e8;
+  background: #2854e8;
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.instructor-app-shell .inst-mc-btn-primary:hover {
+  background: #1e40af;
+  border-color: #1e40af;
+}
+
+/* Empty State */
+.instructor-app-shell .inst-mc-empty-state {
+  grid-column: 1 / -1;
+  background: #ffffff;
+  border: 1px solid #dce4f2;
+  border-radius: 14px;
+  padding: 56px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.instructor-app-shell .inst-mc-empty-state h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.instructor-app-shell .inst-mc-empty-state p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* Interactive Syllabus Modal */
+.inst-syllabus-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 18, 34, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.inst-syllabus-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  border: 1px solid #dce4f2;
+  overflow: hidden;
+  animation: modalScaleIn 0.2s ease-out;
+}
+
+@keyframes modalScaleIn {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.inst-syllabus-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  background: #f8fafc;
+}
+
+.inst-syllabus-title {
+  margin: 6px 0 2px;
+  font-size: 19px;
+  font-weight: 800;
+  color: #101828;
+}
+
+.inst-syllabus-sub {
+  margin: 0;
+  font-size: 12.5px;
+  color: #64748b;
+}
+
+.inst-modal-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #64748b;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.inst-modal-close-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #ef4444;
+}
+
+.inst-syllabus-modules-list {
+  padding: 20px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 55vh;
+}
+
+.inst-syllabus-section-lbl {
+  margin: 0 0 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inst-syllabus-module-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: #ffffff;
+  transition: border-color 0.15s ease;
+}
+
+.inst-syllabus-module-card:hover {
+  border-color: #cbd5e1;
+}
+
+.inst-module-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.inst-module-badge {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #7739ed;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.inst-module-title {
+  font-size: 13.5px;
+  color: #101828;
+  font-weight: 700;
+  flex: 1;
+  min-width: 200px;
+}
+
+.inst-module-hours {
+  font-size: 11.5px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.inst-module-topics {
+  margin: 10px 0 0;
+  padding-left: 20px;
+  font-size: 12.5px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.inst-syllabus-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  background: #f8fafc;
+}
+
+/* Responsiveness */
+@media (max-width: 860px) {
+  .instructor-app-shell .inst-mc-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .instructor-app-shell .inst-mc-grid {
+    grid-template-columns: 1fr;
+  }
+}

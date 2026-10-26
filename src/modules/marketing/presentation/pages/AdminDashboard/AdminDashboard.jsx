@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Activity, ArrowRight, ArrowUpRight, Award, Bell, BookOpen,
   Briefcase, Building2, Calendar, CheckCircle2, ChevronDown,
   ChevronRight, Download, FileText, Layers, LayoutDashboard,
-  LockKeyhole, Menu, Plus, Search, SearchX, Send, ShieldAlert,
+  LockKeyhole, LogOut, Menu, Plus, Search, SearchX, Send, ShieldAlert,
   ShieldCheck, Tag, UserCheck, UserPlus, UserRound, Users,
   Wallet, X, XCircle, Zap
 } from "lucide-react";
@@ -110,6 +111,7 @@ const navConfig = [
 ];
 
 function AdminDashboard() {
+  const navigate = useNavigate();
   const [page, setPage] = useState("Overview");
   const [mobileNav, setMobileNav] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -117,6 +119,22 @@ function AdminDashboard() {
   const [showNotifMenu, setShowNotifMenu] = useState(false);
   const [showRoleMenu, setShowRoleMenu] = useState(false);
   const [currentRole, setCurrentRole] = useState("Super admin — Platform");
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userPhone");
+    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("isPlatformAdmin");
+    localStorage.removeItem("isHackathonAdmin");
+
+    window.dispatchEvent(new Event("authChanged"));
+    window.dispatchEvent(new Event("storage"));
+
+    navigate("/");
+  };
 
   // Sync title with original index.html
   useEffect(() => {
@@ -267,6 +285,17 @@ function AdminDashboard() {
           </div>
 
           <button
+            type="button"
+            className="topbar-exit-btn"
+            onClick={handleLogout}
+            title="Sign out & Exit Admin Console"
+            aria-label="Sign out & Exit Admin Console"
+          >
+            <LogOut size={15} />
+            <span>Exit</span>
+          </button>
+
+          <button
             className="menu-toggle"
             onClick={() => setMobileNav(!mobileNav)}
             aria-label="Toggle navigation"
@@ -290,6 +319,7 @@ function AdminDashboard() {
           setCurrentRole={setCurrentRole}
           showRoleMenu={showRoleMenu}
           setShowRoleMenu={setShowRoleMenu}
+          onLogout={handleLogout}
           counts={{
             tenants: tenants.length + 32,
             moderation: moderationCount,
@@ -569,7 +599,7 @@ function AdminDashboard() {
 
             <footer>
               TX-PATHWING PLATFORM ADMIN CONSOLE
-              <span>Super Admin Operations · Multi-Tenant Architecture</span>
+              <span>Super Admin Operations Â· Multi-Tenant Architecture</span>
             </footer>
           </div>
         </main>

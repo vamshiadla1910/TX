@@ -1,0 +1,150 @@
+/* Earnings Page Styles */
+
+.earnings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.earnings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.bank-verified-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.download-notice-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.earnings-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.finance-card {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-lbl {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.6px;
+}
+
+.card-val {
+  font-size: 24px;
+  font-weight: 800;
+  color: #101828;
+}
+
+.card-val.highlight {
+  color: #2854e8;
+}
+
+.card-sub {
+  font-size: 12px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.payout-history-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.payout-card-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.section-sub {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.payout-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.payout-table th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 12px 18px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.payout-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.payout-table tr:hover td {
+  background: #fbfcfe;
+}
+
+.btn-download-invoice {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: #ffffff;
+  border: 1px solid #dce4f2;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-download-invoice:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}

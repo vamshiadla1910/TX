@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
+  BookOpen,
   CheckCircle,
   Eye,
   EyeOff,
@@ -16,10 +17,38 @@ import {
 import "./Login.css";
 
 // ==========================================
-// ADMIN LOGIN DETAILS
+// PRESET PORTAL CREDENTIALS FOR CATEGORIES
 // ==========================================
-const ADMIN_EMAIL = "tanvoxadmin@gmail.com";
-const ADMIN_PASSWORD = "tanvox12340";
+export const PORTAL_PRESETS = {
+  student: {
+    key: "student",
+    name: "Student",
+    email: "student@pathwing.com",
+    password: "student123",
+    route: "/dashboard",
+  },
+  hackathon: {
+    key: "hackathon",
+    name: "Hackathon",
+    email: "tanvoxadmin@gmail.com",
+    password: "tanvox12340",
+    route: "/hackathon-dashboard",
+  },
+  admin: {
+    key: "admin",
+    name: "Platform Admin",
+    email: "admin@pathwing.com",
+    password: "tanvox12340",
+    route: "/admin-dashboard",
+  },
+  instructor: {
+    key: "instructor",
+    name: "Instructor",
+    email: "ramana.r@kitsw.ac.in",
+    password: "instructor123",
+    route: "/instructor-dashboard",
+  },
+};
 
 
 const Login = ({
@@ -65,9 +94,16 @@ const Login = ({
   // ==========================================
   React.useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const userRole = localStorage.getItem("userRole");
     const isAdmin = localStorage.getItem("isAdmin") === "true";
+    const isPlatformAdmin = localStorage.getItem("isPlatformAdmin") === "true";
+
     if (isLoggedIn && !onClose) {
-      if (isAdmin) {
+      if (userRole === "platform_admin" || isPlatformAdmin) {
+        navigate("/admin-dashboard");
+      } else if (userRole === "instructor") {
+        navigate("/instructor-dashboard");
+      } else if (userRole === "hackathon_admin" || isAdmin) {
         navigate("/hackathon-dashboard");
       } else {
         navigate("/dashboard");
@@ -214,41 +250,96 @@ const Login = ({
     // ==========================================
     if (isLogin) {
       // ========================================
-      // ADMIN LOGIN
+      // 1. PLATFORM ADMIN PORTAL LOGIN
       // ========================================
-      if (
-        email === ADMIN_EMAIL &&
-        password === ADMIN_PASSWORD
-      ) {
+      if (email === "admin@pathwing.com") {
+        if (password !== "tanvox12340" && password !== "admin123") {
+          setErrors({
+            password: "Invalid password for admin@pathwing.com",
+          });
+          return;
+        }
+
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userEmail", email);
+        localStorage.setItem("userName", "Sunil Nambiar (Platform Admin)");
+        localStorage.setItem("userRole", "platform_admin");
         localStorage.setItem("isAdmin", "true");
+        localStorage.setItem("isPlatformAdmin", "true");
 
         window.dispatchEvent(new Event("authChanged"));
         window.dispatchEvent(new Event("storage"));
 
-        // Close login popup
-        if (onClose) {
-          onClose();
-        }
+        if (onClose) onClose();
+        if (onAdminLogin) onAdminLogin();
 
-        // Optional parent callback
-        if (onAdminLogin) {
-          onAdminLogin();
-        }
-
-        // Open Admin Dashboard
-        navigate("/hackathon-dashboard");
-
+        navigate("/admin-dashboard");
         return;
       }
 
       // ========================================
-      // NORMAL USER LOGIN
+      // 2. HACKATHON PORTAL LOGIN
+      // ========================================
+      if (email === "tanvoxadmin@gmail.com") {
+        if (password !== "tanvox12340") {
+          setErrors({
+            password: "Invalid password for tanvoxadmin@gmail.com. Expected tanvox12340.",
+          });
+          return;
+        }
+
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userName", "Lead Judge");
+        localStorage.setItem("userRole", "hackathon_admin");
+        localStorage.setItem("isAdmin", "true");
+        localStorage.removeItem("isPlatformAdmin");
+
+        window.dispatchEvent(new Event("authChanged"));
+        window.dispatchEvent(new Event("storage"));
+
+        if (onClose) onClose();
+        if (onAdminLogin) onAdminLogin();
+
+        navigate("/hackathon-dashboard");
+        return;
+      }
+
+      // ========================================
+      // 3. INSTRUCTOR PORTAL LOGIN
+      // ========================================
+      if (email === "ramana.r@kitsw.ac.in" || email === "instructor@pathwing.com") {
+        if (password !== "instructor123" && password !== "tanvox12340") {
+          setErrors({
+            password: "Invalid password for Instructor portal. Expected instructor123",
+          });
+          return;
+        }
+
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userName", "Dr. R. Ramana (Lead Instructor)");
+        localStorage.setItem("userRole", "instructor");
+        localStorage.removeItem("isAdmin");
+        localStorage.removeItem("isPlatformAdmin");
+
+        window.dispatchEvent(new Event("authChanged"));
+        window.dispatchEvent(new Event("storage"));
+
+        if (onClose) onClose();
+
+        navigate("/instructor-dashboard");
+        return;
+      }
+
+      // ========================================
+      // 4. NORMAL STUDENT / LEARNER LOGIN
       // ========================================
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userEmail", email);
+      localStorage.setItem("userRole", "student");
       localStorage.removeItem("isAdmin");
+      localStorage.removeItem("isPlatformAdmin");
 
       window.dispatchEvent(new Event("authChanged"));
       window.dispatchEvent(new Event("storage"));
@@ -343,9 +434,9 @@ const Login = ({
 
             <span className="login-tagline">
               LEARN
-              <span>•</span>
+              <span>â€¢</span>
               GROW
-              <span>•</span>
+              <span>â€¢</span>
               ACHIEVE
             </span>
 
@@ -413,10 +504,9 @@ const Login = ({
 
             <p>
               {isLogin
-                ? "Sign in to continue your learning journey."
+                ? "Sign in to access your portal or learning dashboard."
                 : "Join us and start building your future today."}
             </p>
-
           </div>
 
           {/* MESSAGE */}
