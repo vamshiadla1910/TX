@@ -25,19 +25,20 @@ const reviews = [
       "The mentors were very supportive and the hands-on learning helped me understand real-world DevOps concepts.",
   },
   {
-    id: 4,
-    name: "Likesh",
-    course: "Python Development",
-    comment:
-      "The real-world projects and interview preparation sessions helped me build confidence and improve my technical skills.",
-  },
-  {
     id: 5,
     name: "Vishnu",
     course: "Data Science",
     comment:
       "The content was easy to follow and very practical. I gained confidence working with real datasets and projects.",
   },
+  {
+    id: 4,
+    name: "Likesh",
+    course: "Python Development",
+    comment:
+      "The real-world projects and interview preparation sessions helped me build confidence and improve my technical skills.",
+  },
+  
   {
     id: 6,
     name: "Vamshi",

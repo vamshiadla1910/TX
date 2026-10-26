@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   CheckCircle,
@@ -677,6 +677,16 @@ const Login = ({
             </button>
 
           </div>
+
+          {isLogin && (
+            <Link
+              className="institution-login-link"
+              to="/institution-signin"
+              onClick={onClose}
+            >
+              Institution administrator? Sign in to your campus
+            </Link>
+          )}
 
           {/* SECURITY */}
           <p className="login-security">

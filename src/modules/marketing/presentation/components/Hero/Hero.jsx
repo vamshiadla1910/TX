@@ -1,4 +1,3 @@
-import React from "react";
 import "./Hero.css";
 import heroSkills from "./heroSkills";
 import SkillsOrbit from "./SkillsOrbit";
@@ -124,6 +123,14 @@ export default function Hero() {
               className="hero-button hero-button-secondary"
             >
               <span>Register for Events</span>
+            </Link>
+
+            <Link
+              to="/institution-dashboard"
+              className="hero-button hero-button-institution"
+            >
+              <span>Institution dashboard</span>
+              <span className="hero-button-arrow">→</span>
             </Link>
 
           </div>
