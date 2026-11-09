@@ -8,6 +8,7 @@ export default function QuestionCard({
   selectedAnswers,
   flaggedQuestions,
   currentAnsweredCount,
+  isExamPaused,
   onSelectOption,
   onToggleFlag,
   onSelectQuestionIndex,
@@ -19,7 +20,7 @@ export default function QuestionCard({
   const currentSelectedOption = selectedAnswers[currentQuestion.id];
 
   return (
-    <div className="question-card">
+    <div className={`question-card ${isExamPaused ? "question-card-paused" : ""}`}>
       {/* Question Number Pills Navigator */}
       <div
         style={{
@@ -41,11 +42,12 @@ export default function QuestionCard({
               <button
                 key={q.id}
                 type="button"
+                disabled={isExamPaused}
                 onClick={() => onSelectQuestionIndex(idx)}
                 style={{
-                  width: "34px",
-                  height: "34px",
-                  borderRadius: "8px",
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "9px",
                   border: isQCurrent
                     ? "2px solid #2563eb"
                     : isQAnswered
@@ -61,9 +63,10 @@ export default function QuestionCard({
                     : isQAnswered
                     ? "#15803d"
                     : "#334155",
-                  fontSize: "13px",
+                  fontSize: "14px",
                   fontWeight: 700,
-                  cursor: "pointer"
+                  cursor: isExamPaused ? "not-allowed" : "pointer",
+                  opacity: isExamPaused ? 0.6 : 1
                 }}
               >
                 {idx + 1}
@@ -71,7 +74,7 @@ export default function QuestionCard({
             );
           })}
         </div>
-        <span style={{ fontSize: "12.5px", fontWeight: 700, color: "#2563eb" }}>
+        <span style={{ fontSize: "13.5px", fontWeight: 700, color: "#2563eb" }}>
           Answered: {currentAnsweredCount} of {activeQuestions.length}
         </span>
       </div>
@@ -84,6 +87,7 @@ export default function QuestionCard({
           type="button"
           className={`flag-question-btn ${isFlagged ? "flagged" : ""}`}
           onClick={onToggleFlag}
+          disabled={isExamPaused}
         >
           <Flag size={14} />
           <span>{isFlagged ? "Flagged" : "Flag"}</span>
@@ -98,8 +102,13 @@ export default function QuestionCard({
           return (
             <div
               key={option.id}
-              className={`option-card ${isSelected ? "selected" : ""}`}
-              onClick={() => onSelectOption(option.id)}
+              className={`option-card ${isSelected ? "selected" : ""} ${isExamPaused ? "disabled-paused" : ""}`}
+              onClick={() => {
+                if (!isExamPaused) {
+                  onSelectOption(option.id);
+                }
+              }}
+              style={{ cursor: isExamPaused ? "not-allowed" : "pointer" }}
             >
               <div className="option-letter-circle">{option.id}</div>
               <span className="option-label-text">{option.text}</span>
@@ -113,7 +122,7 @@ export default function QuestionCard({
           type="button"
           className="btn-secondary"
           onClick={onPrevious}
-          disabled={currentQIndex === 0}
+          disabled={currentQIndex === 0 || isExamPaused}
         >
           &lt; Previous
         </button>
@@ -122,6 +131,7 @@ export default function QuestionCard({
           type="button"
           className="btn-flag-review"
           onClick={onToggleFlag}
+          disabled={isExamPaused}
         >
           {isFlagged ? "Unflag question" : "Flag for review"}
         </button>
@@ -131,7 +141,7 @@ export default function QuestionCard({
             type="button"
             className="btn-primary-blue"
             onClick={onNext}
-            disabled={currentQIndex === activeQuestions.length - 1}
+            disabled={currentQIndex === activeQuestions.length - 1 || isExamPaused}
           >
             Save &amp; next &gt;
           </button>
@@ -140,6 +150,7 @@ export default function QuestionCard({
             type="button"
             className="btn-submit-assessment"
             onClick={() => onSubmit("manual")}
+            disabled={isExamPaused}
           >
             <CheckCircle2 size={16} />
             <span>Submit Assessment</span>

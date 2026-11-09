@@ -30,6 +30,8 @@
   color: var(--ass-text-main);
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   box-sizing: border-box;
+  justify-content: space-between;
+  gap: 28px;
 }
 
 .btn-back-dashboard {
@@ -57,8 +59,10 @@
    ========================================================= */
 .assessment-center-area {
   flex: 1;
-  padding: 28px 36px 48px;
-  max-width: 900px;
+  padding: 24px 16px 48px 36px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Quiz Top Info Header */
@@ -141,12 +145,14 @@
 .question-card {
   background: var(--ass-card-bg);
   border: 1px solid var(--ass-border);
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+  border-radius: 18px;
+  padding: 34px 40px;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.04);
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .question-card-top {
@@ -190,9 +196,9 @@
 
 .question-text {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.6;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.65;
   color: #1e293b;
 }
 
@@ -217,10 +223,10 @@
 .option-card {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 18px;
-  border: 1px solid var(--ass-border);
-  border-radius: 12px;
+  gap: 16px;
+  padding: 16px 22px;
+  border: 1.5px solid var(--ass-border);
+  border-radius: 14px;
   background: #ffffff;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -238,14 +244,14 @@
 }
 
 .option-letter-circle {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
   border-radius: 50%;
   border: 1px solid #cbd5e1;
   background: #ffffff;
   color: var(--ass-text-muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -260,8 +266,8 @@
 }
 
 .option-label-text {
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 15.5px;
+  line-height: 1.55;
   color: #334155;
   font-weight: 500;
 }
@@ -343,9 +349,10 @@
    2. RIGHT PROCTORING PANEL
    ========================================================= */
 .proctoring-panel {
-  width: 320px;
-  min-width: 320px;
-  padding: 28px 24px 48px 0;
+  width: 330px;
+  min-width: 330px;
+  padding: 24px 32px 48px 0;
+  flex-shrink: 0;
 }
 
 .proctoring-card {
@@ -1601,3 +1608,653 @@
 
 
 
+
+
+/* =========================================================
+   EXAM INSTRUCTIONS POPUP MODAL (STEP 1: VIEW EXAM CLICK)
+   ========================================================= */
+.exam-instructions-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.exam-instructions-card-grid {
+  background: #ffffff;
+  border-radius: 18px;
+  max-width: 840px;
+  width: 95%;
+  max-height: 94vh;
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35);
+  border: 1px solid #cbd5e1;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+  overflow: hidden; /* No scrollbar */
+}
+
+/* Compact Header */
+.instructions-header-compact {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.instructions-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.instructions-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.instructions-title-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.instructions-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.instructions-badge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #ea580c;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+
+.instructions-status-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+
+.instructions-exam-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.instructions-exam-subtitle {
+  font-size: 11.5px;
+  color: #64748b;
+  margin: 2px 0 0;
+}
+
+/* 4 Compact Specs in 1 Row */
+.instructions-specs-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.spec-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 7px 10px;
+}
+
+.spec-icon {
+  flex-shrink: 0;
+}
+
+.spec-blue {
+  color: #2563eb;
+}
+.spec-indigo {
+  color: #4f46e5;
+}
+.spec-amber {
+  color: #d97706;
+}
+.spec-green {
+  color: #16a34a;
+}
+
+.spec-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.spec-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.spec-value {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* MAIN TWO-COLUMN GRID BOX (SIDE BY SIDE) */
+.instructions-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.grid-box {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.topics-grid-box {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.rules-grid-box {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.grid-box-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.grid-box-title {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.rules-title {
+  color: #92400e;
+}
+
+.grid-box-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Topics list item */
+.topic-grid-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: #334155;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  padding: 5px 8px;
+}
+
+.topic-num-pill {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.topic-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Rules list item */
+.rule-grid-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #78350f;
+  background: #ffffff;
+  border: 1px solid #fef08a;
+  border-radius: 7px;
+  padding: 5px 8px;
+  line-height: 1.35;
+}
+
+.rule-alert-item {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #991b1b;
+}
+
+.rule-bullet-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rule-red-icon {
+  background: #fee2e2;
+}
+
+.rule-lock-icon {
+  background: #ecfdf5;
+}
+
+.rule-desc {
+  flex: 1;
+}
+
+.rule-desc strong {
+  font-weight: 700;
+}
+
+/* Compact Footer Actions */
+.instructions-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.btn-instructions-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 20px;
+  border-radius: 9px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-instructions-back:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+.btn-instructions-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 26px;
+  border-radius: 9px;
+  background: #2563eb;
+  border: 1.5px solid #1d4ed8;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+  transition: all 0.15s ease;
+}
+
+.btn-instructions-start:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+}
+
+/* =========================================================
+   SECOND PERSON DETECTED MODAL & EXAM PAUSED OVERLAY
+   ========================================================= */
+.second-person-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 24px;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.second-person-modal-card {
+  background: #ffffff;
+  border-radius: 20px;
+  max-width: 580px;
+  width: 100%;
+  padding: 34px 38px;
+  box-shadow: 0 25px 60px -15px rgba(220, 38, 38, 0.35);
+  border: 2px solid #ef4444;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.second-person-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.second-person-icon-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #fef2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.second-person-pulse-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2.5px solid #ef4444;
+  animation: pulseWarning 1.5s infinite;
+}
+
+@keyframes pulseWarning {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+.second-person-heading {
+  font-size: 22px;
+  font-weight: 800;
+  color: #991b1b;
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.second-person-pause-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+
+.second-person-description {
+  font-size: 13.5px;
+  color: #475569;
+  line-height: 1.55;
+  margin: 0 0 18px;
+}
+
+.second-person-instructions-box {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.instruction-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.instruction-step.step-highlight {
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #1e293b;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-highlight .step-num {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.second-person-live-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.status-ping-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #dc2626;
+  box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+  animation: pingDot 1.4s infinite;
+}
+
+@keyframes pingDot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 7px rgba(220, 38, 38, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+}
+
+/* Header & Question Paused State */
+.quiz-lock-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.timer-paused-pill {
+  background: #fee2e2 !important;
+  border-color: #fca5a5 !important;
+  color: #dc2626 !important;
+  animation: pulseTimer 1s infinite alternate;
+}
+
+@keyframes pulseTimer {
+  from {
+    opacity: 0.85;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.question-card-paused {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.option-card.disabled-paused {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+@media (max-width: 640px) {
+  .instructions-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .exam-instructions-card {
+    padding: 20px;
+  }
+  .second-person-modal-card {
+    padding: 24px 20px;
+  }
+}
+
+
+/* Instant Resume Action Button */
+.btn-resume-alone {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  background: #16a34a;
+  border: 1px solid #15803d;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+  transition: all 0.15s ease;
+}
+
+.btn-resume-alone:hover {
+  background: #15803d;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.35);
+}
+
+
+/* =========================================================
+   HIDE SCROLLBARS COMPLETELY IN PROCTORED ASSESSMENTS
+   ========================================================= */
+
+.proctored-assessment-wrapper,
+.proctored-assessment-wrapper *,
+.topic-exams-page,
+.topic-exams-page * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.proctored-assessment-wrapper::-webkit-scrollbar,
+.proctored-assessment-wrapper *::-webkit-scrollbar,
+.topic-exams-page::-webkit-scrollbar,
+.topic-exams-page *::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+}

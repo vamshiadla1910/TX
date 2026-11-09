@@ -16,10 +16,15 @@ import ActiveExamHeader from "./components/ActiveExam/ActiveExamHeader";
 import QuestionCard from "./components/ActiveExam/QuestionCard";
 import ProctoringFeed from "./components/ActiveExam/ProctoringFeed";
 import ExamCompletedPopup from "./components/CompletedPopup/ExamCompletedPopup";
+import ExamInstructionsModal from "./components/InstructionsModal/ExamInstructionsModal";
+import SecondPersonWarningModal from "./components/ActiveExam/SecondPersonWarningModal";
 
-export default function Assessments({ onBack }) {
+export default function Assessments({ onBack, onExamActiveChange }) {
   // Category Filter State
   const [selectedCategory, setSelectedCategory] = useState("all");
+
+  // Instructions Modal State (Shown when clicking "View Exam" on any topic)
+  const [instructionExam, setInstructionExam] = useState(null);
 
   // Question & Navigation States
   const [currentQIndex, setCurrentQIndex] = useState(0);
@@ -51,10 +56,15 @@ export default function Assessments({ onBack }) {
     canvasRef,
     overlayCanvasRef,
     startCameraAndMic,
-    stopCameraAndMic
+    stopCameraAndMic,
+    forceSingleCandidateResume
   } = useProctoring(isExamActive);
 
-  // Active topic questions
+  // Second Person Detection & Auto-Pause Logic
+  const isSecondPersonDetected = isExamActive && faceDetectionState === "multiple";
+  const isExamPaused = isExamActive && isSecondPersonDetected;
+
+  // Active topic questions based dynamically on active exam category
   const activeQuestions =
     EXAM_QUESTIONS_BY_TOPIC[activeExam?.id] || EXAM_QUESTIONS_BY_TOPIC.java;
   const currentQuestion =
@@ -65,10 +75,23 @@ export default function Assessments({ onBack }) {
     Boolean(selectedAnswers[q.id])
   ).length;
 
-  // Submit Exam Handler -> stops camera & audio, calculates percentage, opens completed popup
+  // Submit Exam Handler -> stops camera & audio, exits fullscreen, opens completed popup
   const handleSubmitAssessment = useCallback(
     (reason = "manual") => {
       stopCameraAndMic();
+
+      // Exit browser fullscreen
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      } catch (err) {
+        console.warn("Fullscreen exit error:", err);
+      }
+
+      // Notify parent to restore dashboard layout
+      onExamActiveChange?.(false);
+
       const timeUsed = Math.max(1, (activeExam?.durationSeconds || 352) - secondsRemaining);
       const mins = Math.floor(timeUsed / 60);
       const secs = timeUsed % 60;
@@ -103,12 +126,12 @@ export default function Assessments({ onBack }) {
       setWarningMessage("");
       setExamStage("completed");
     },
-    [stopCameraAndMic, activeExam, secondsRemaining, selectedAnswers, setWarningMessage]
+    [stopCameraAndMic, onExamActiveChange, activeExam, secondsRemaining, selectedAnswers, setWarningMessage]
   );
 
-  // Countdown Timer
+  // Countdown Timer (Freezes/Pauses whenever a second person is detected)
   useEffect(() => {
-    if (!isExamActive) return;
+    if (!isExamActive || isExamPaused) return;
 
     const timer = setInterval(() => {
       setSecondsRemaining((prev) => {
@@ -119,19 +142,55 @@ export default function Assessments({ onBack }) {
         return prev - 1;
       });
     }, 1000);
-    return () => clearInterval(timer);
-  }, [isExamActive]);
 
-  // Auto-submit on 00:00
+    return () => clearInterval(timer);
+  }, [isExamActive, isExamPaused]);
+
+  // Auto-submit on 00:00 (only if not paused)
   useEffect(() => {
-    if (isExamActive && secondsRemaining === 0) {
+    if (isExamActive && !isExamPaused && secondsRemaining === 0) {
       handleSubmitAssessment("timeout");
     }
-  }, [secondsRemaining, isExamActive, handleSubmitAssessment]);
+  }, [secondsRemaining, isExamActive, isExamPaused, handleSubmitAssessment]);
 
-  // Step 1 -> Step 2: Start Proctored Exam
-  const handleStartExam = (exam) => {
+  // Anti-cheat navigation lock (prevent accidental exit or tab close during active exam)
+  useEffect(() => {
+    if (!isExamActive) return;
+
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = "Exam attempt in progress. Leaving will forfeit your answers.";
+      return e.returnValue;
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isExamActive]);
+
+  // Monitor fullscreen exit during active exam
+  useEffect(() => {
+    if (!isExamActive) return;
+
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement && isExamActive) {
+        setWarningMessage("⚠️ Fullscreen is mandatory! Please keep fullscreen enabled during exam.");
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, [isExamActive, setWarningMessage]);
+
+  // Step 1: Click "View Exam" -> Open Instructions Modal
+  const handleOpenInstructions = (exam) => {
     const chosenExam = exam || ASSESSMENT_EXAMS[0];
+    setInstructionExam(chosenExam);
+  };
+
+  // Step 2: Click "Start Exam" in Instructions Modal -> Fullscreen + Remove Sidebar + Start Exam
+  const handleStartExam = (exam) => {
+    const chosenExam = exam || instructionExam || ASSESSMENT_EXAMS[0];
+    setInstructionExam(null);
     setActiveExam(chosenExam);
     setCurrentQIndex(0);
     setSelectedAnswers({});
@@ -140,19 +199,39 @@ export default function Assessments({ onBack }) {
     setSecondsRemaining(chosenExam.durationSeconds || 352);
     setWarningMessage("");
     setExamStage("active");
+
+    // Inform Dashboard to hide sidebar and header
+    onExamActiveChange?.(true);
+
+    // Request browser Fullscreen
+    try {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen();
+      }
+    } catch (err) {
+      console.warn("Fullscreen request error:", err);
+    }
   };
 
-  // Step 3 -> Step 1: Done Button
+  // Step 3 -> Step 1: Done Button from Completed Popup
   const handleDoneExam = () => {
     stopCameraAndMic();
+    try {
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+    } catch (err) {}
+    onExamActiveChange?.(false);
     setSubmissionReason("");
     setWarningMessage("");
     setExamStage("start");
   };
 
-  // Option selection
+  // Option selection (disabled when exam is paused)
   const handleSelectOption = (optId) => {
-    if (!isExamActive) return;
+    if (!isExamActive || isExamPaused) return;
     setSelectedAnswers((prev) => ({
       ...prev,
       [currentQuestion.id]: optId
@@ -161,7 +240,7 @@ export default function Assessments({ onBack }) {
 
   // Toggle flag
   const handleToggleFlag = () => {
-    if (!isExamActive) return;
+    if (!isExamActive || isExamPaused) return;
     setFlaggedQuestions((prev) => ({
       ...prev,
       [currentQuestion.id]: !prev[currentQuestion.id]
@@ -170,12 +249,14 @@ export default function Assessments({ onBack }) {
 
   // Navigation Next / Previous
   const handleNext = () => {
+    if (isExamPaused) return;
     if (currentQIndex < activeQuestions.length - 1) {
       setCurrentQIndex((prev) => prev + 1);
     }
   };
 
   const handlePrevious = () => {
+    if (isExamPaused) return;
     if (currentQIndex > 0) {
       setCurrentQIndex((prev) => prev - 1);
     }
@@ -207,6 +288,15 @@ export default function Assessments({ onBack }) {
 
     return (
       <div className="topic-exams-page">
+        {/* Instructions Popup Modal with "Start Exam" and "Back" buttons */}
+        {instructionExam && (
+          <ExamInstructionsModal
+            exam={instructionExam}
+            onStartExam={handleStartExam}
+            onClose={() => setInstructionExam(null)}
+          />
+        )}
+
         <div className="topic-exams-content-grid">
           {/* Left Column: Topic Exam Cards List */}
           <div className="topic-exams-main-col">
@@ -253,7 +343,7 @@ export default function Assessments({ onBack }) {
                   key={exam.id}
                   exam={exam}
                   compData={completedExams[exam.id]}
-                  onStartExam={handleStartExam}
+                  onStartExam={handleOpenInstructions}
                 />
               ))}
             </div>
@@ -265,7 +355,7 @@ export default function Assessments({ onBack }) {
             totalExamsCount={ASSESSMENT_EXAMS.length}
             overallPercent={overallPercent}
             recommendedExam={ASSESSMENT_EXAMS[0]}
-            onStartExam={handleStartExam}
+            onStartExam={handleOpenInstructions}
           />
         </div>
       </div>
@@ -291,33 +381,38 @@ export default function Assessments({ onBack }) {
   }
 
   // =========================================================================
-  // STAGE 2: ACTIVE PROCTORED EXAM (Camera ON, Face AI, Audio Meter, Questions)
+  // STAGE 2: ACTIVE PROCTORED EXAM (Dedicated Fullscreen, No Sidebar, Camera AI)
   // =========================================================================
   return (
     <div className="proctored-assessment-wrapper">
+      {/* Second Person Warning Modal — Pauses Exam when second person is detected */}
+      {isSecondPersonDetected && (
+        <SecondPersonWarningModal
+          faceConfidence={faceConfidence}
+          onResume={forceSingleCandidateResume}
+        />
+      )}
+
       <main className="assessment-center-area">
-        {/* Active Header with Timer & Submit */}
+        {/* Active Header: No exit/back option midway through exam */}
         <ActiveExamHeader
           activeExam={activeExam}
           activeQuestions={activeQuestions}
           currentAnsweredCount={currentAnsweredCount}
           secondsRemaining={secondsRemaining}
-          onBack={() => {
-            stopCameraAndMic();
-            setExamStage("start");
-          }}
+          isExamPaused={isExamPaused}
           onSubmit={handleSubmitAssessment}
         />
 
-        {/* Warning incident alert banner */}
-        {warningMessage && (
+        {/* Warning incident alert banner (Single face alert, tab switch, etc.) */}
+        {warningMessage && !isSecondPersonDetected && (
           <div className="proctoring-incident-alert incident-warning">
             <span>{warningMessage}</span>
             <span style={{ fontSize: "11px", opacity: 0.85 }}>Live Monitored</span>
           </div>
         )}
 
-        {/* Main Question Card */}
+        {/* Main Question Card — Input locked while paused */}
         <QuestionCard
           activeQuestions={activeQuestions}
           currentQIndex={currentQIndex}
@@ -325,6 +420,7 @@ export default function Assessments({ onBack }) {
           selectedAnswers={selectedAnswers}
           flaggedQuestions={flaggedQuestions}
           currentAnsweredCount={currentAnsweredCount}
+          isExamPaused={isExamPaused}
           onSelectOption={handleSelectOption}
           onToggleFlag={handleToggleFlag}
           onSelectQuestionIndex={setCurrentQIndex}

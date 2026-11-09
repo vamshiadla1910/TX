@@ -18,6 +18,7 @@ import AchievementsSection from "./components/AchievementsSection";
 import AIAssistantTab from "./components/AIAssistantTab";
 import CodingLabTab from "./components/CodingLabTab";
 import CareersTab from "./components/CareersTab";
+import LeaderboardTab from "./components/LeaderboardTab";
 import CourseLearningDetails from "./components/CourseLearningDetails";
 import RecommendedCourseModal from "./components/RecommendedCourseModal";
 
@@ -59,8 +60,9 @@ export default function StudentDashboard() {
     const path = location.pathname.toLowerCase();
     if (path.includes("courses")) return "My courses";
     if (path.includes("coding-lab")) return "Coding lab";
-    if (path.includes("ai-assistant")) return "AI assistant";
+    if (path.includes("chat-instructor") || path.includes("instructor") || path.includes("ai-assistant")) return "Chat Instructor";
     if (path.includes("careers")) return "Careers";
+    if (path.includes("leaderboard") || path.includes("leaders")) return "Leaderboard";
     if (path.includes("assessments")) return "Assessments";
     if (path.includes("certificates")) return "Certificates";
     return "Dashboard";
@@ -72,6 +74,10 @@ export default function StudentDashboard() {
   const [toastMessage, setToastMessage] = useState("");
   const [selectedLearningCourseId, setSelectedLearningCourseId] = useState(getInitialLearningCourseId);
   const [selectedRecommendedCourse, setSelectedRecommendedCourse] = useState(null);
+  
+  // Assessments Category Only: Fullscreen & Sidebar removal when taking proctored exam
+  const [isExamActive, setIsExamActive] = useState(false);
+  const isFullscreenExamActive = activeTab === "Assessments" && isExamActive;
 
   const showToast = useCallback((msg) => {
     setToastMessage(msg);
@@ -90,14 +96,17 @@ export default function StudentDashboard() {
   }, [location.pathname, getInitialTab, getInitialLearningCourseId]);
 
   const handleTabClick = (tabName) => {
+    // When leaving or switching tabs, ensure any exam state is cleared
+    setIsExamActive(false);
     setActiveTab(tabName);
     setSelectedLearningCourseId(null);
     setMobileMenuOpen(false);
     if (tabName === "Dashboard") navigate("/dashboard");
     else if (tabName === "My courses") navigate("/dashboard/courses");
-    else if (tabName === "AI assistant") navigate("/dashboard/ai-assistant");
+    else if (tabName === "Chat Instructor" || tabName === "AI assistant") navigate("/dashboard/chat-instructor");
     else if (tabName === "Coding lab") navigate("/dashboard/coding-lab");
     else if (tabName === "Careers") navigate("/dashboard/careers");
+    else if (tabName === "Leaderboard") navigate("/dashboard/leaderboard");
     else if (tabName === "Assessments") navigate("/dashboard/assessments");
     else if (tabName === "Certificates") navigate("/dashboard/certificates");
   };
@@ -147,7 +156,7 @@ export default function StudentDashboard() {
   };
 
   return (
-    <div className="dashboard-root-layout">
+    <div className={`dashboard-root-layout ${isFullscreenExamActive ? "exam-fullscreen-mode" : ""}`}>
       {/* Toast Notification */}
       {toastMessage && (
         <div className="dashboard-toast">
@@ -182,34 +191,38 @@ export default function StudentDashboard() {
         />
       )}
 
-      {/* Mobile Drawer Backdrop */}
-      {mobileMenuOpen && (
+      {/* Mobile Drawer Backdrop - Only active for standard pages */}
+      {mobileMenuOpen && !isFullscreenExamActive && (
         <div
           className="dashboard-mobile-overlay"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
-      {/* Fixed Sidebar */}
-      <DashboardSidebar
-        userProfile={userProfile}
-        activeTab={selectedLearningCourseId ? "My courses" : activeTab}
-        onTabClick={handleTabClick}
-        enrollmentsCount={enrollments.length}
-        mobileOpen={mobileMenuOpen}
-        onCloseMobile={() => setMobileMenuOpen(false)}
-        onLogout={logout}
-      />
+      {/* Fixed Sidebar - Present for all categories; hidden ONLY during active Assessment exam */}
+      {!isFullscreenExamActive && (
+        <DashboardSidebar
+          userProfile={userProfile}
+          activeTab={selectedLearningCourseId ? "My courses" : activeTab}
+          onTabClick={handleTabClick}
+          enrollmentsCount={enrollments.length}
+          mobileOpen={mobileMenuOpen}
+          onCloseMobile={() => setMobileMenuOpen(false)}
+          onLogout={logout}
+        />
+      )}
 
       {/* Main Viewport */}
       <div className="dashboard-viewport">
-        {/* Fixed Header */}
-        <DashboardHeader
-          activeTab={selectedLearningCourseId ? "Course Learning" : activeTab}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          onOpenMobile={() => setMobileMenuOpen(true)}
-        />
+        {/* Fixed Header - Present for all categories; hidden ONLY during active Assessment exam */}
+        {!isFullscreenExamActive && (
+          <DashboardHeader
+            activeTab={selectedLearningCourseId ? "Course Learning" : activeTab}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            onOpenMobile={() => setMobileMenuOpen(true)}
+          />
+        )}
 
         {/* Scrollable Main Content */}
         <main className="dashboard-content-scroll">
@@ -223,6 +236,7 @@ export default function StudentDashboard() {
             />
           ) : (
             <>
+              {/* Category 1: My Courses */}
               {activeTab === "My courses" && (
                 <MyCourses
                   onResumeCourse={handleResumeLesson}
@@ -230,22 +244,41 @@ export default function StudentDashboard() {
                 />
               )}
 
-              {activeTab === "AI assistant" && (
+              {/* Category 2: Chat Instructor */}
+              {(activeTab === "Chat Instructor" || activeTab === "AI assistant") && (
                 <AIAssistantTab userName={userProfile.name} />
               )}
 
+              {/* Category 3: Coding Lab */}
               {activeTab === "Coding lab" && (
                 <CodingLabTab onOpenSandbox={() => showToast("Launching sandbox environment...")} />
               )}
 
+              {/* Category 4: Careers */}
               {activeTab === "Careers" && <CareersTab />}
 
-              {activeTab === "Assessments" && (
-                <Assessments onBack={() => handleTabClick("Dashboard")} />
+              {/* Category 4b: Leaderboard (Rankings, Podium, XP & Streaks) */}
+              {activeTab === "Leaderboard" && (
+                <LeaderboardTab
+                  currentUserName={userProfile?.name}
+                  currentUserEmail={userProfile?.email}
+                />
               )}
 
-              {activeTab === "Certificates" && <Certificates userEmail={userProfile?.email} userName={userProfile?.name} />}
+              {/* Category 5: Assessments (Dedicated Proctoring, Fullscreen & Instructions Rules) */}
+              {activeTab === "Assessments" && (
+                <Assessments
+                  onBack={() => handleTabClick("Dashboard")}
+                  onExamActiveChange={(active) => setIsExamActive(active)}
+                />
+              )}
 
+              {/* Category 6: Certificates */}
+              {activeTab === "Certificates" && (
+                <Certificates userEmail={userProfile?.email} userName={userProfile?.name} />
+              )}
+
+              {/* Category 7: Dashboard Overview */}
               {activeTab === "Dashboard" && (
                 <>
                   {/* Welcome Banner */}

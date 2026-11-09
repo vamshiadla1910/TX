@@ -1746,3 +1746,76 @@
 .careers-explore-btn:hover {
   background: #1d4ed8;
 }
+
+
+/* =========================================================
+   DEDICATED FULLSCREEN EXAM MODE (Removes Sidebar & Header)
+   ========================================================= */
+.dashboard-root-layout.exam-fullscreen-mode {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.dashboard-root-layout.exam-fullscreen-mode .dashboard-viewport {
+  margin-left: 0 !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  padding: 0 !important;
+}
+
+.dashboard-root-layout.exam-fullscreen-mode .dashboard-content-scroll {
+  padding: 0 !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow-y: auto !important;
+}
+
+
+/* =========================================================
+   REMOVE / HIDE SCROLLBARS COMPLETELY IN STUDENT DASHBOARD
+   ========================================================= */
+
+/* Hide scrollbars for WebKit browsers (Chrome, Safari, Edge, Opera) */
+.dashboard-root-layout *::-webkit-scrollbar,
+.dashboard-viewport *::-webkit-scrollbar,
+.dashboard-content-scroll::-webkit-scrollbar,
+.student-dashboard-layout *::-webkit-scrollbar,
+.proctored-assessment-wrapper *::-webkit-scrollbar,
+.topic-exams-page *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* Hide scrollbars for Firefox, IE, and modern standards */
+.dashboard-root-layout,
+.dashboard-viewport,
+.dashboard-content-scroll,
+.student-dashboard-layout,
+.sidebar-navigation,
+.dashboard-root-layout *,
+.proctored-assessment-wrapper,
+.proctored-assessment-wrapper * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+/* Prevent outer body/html scrollbar while in student dashboard */
+body:has(.dashboard-root-layout),
+html:has(.dashboard-root-layout) {
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+body:has(.dashboard-root-layout)::-webkit-scrollbar,
+html:has(.dashboard-root-layout)::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}

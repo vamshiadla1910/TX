@@ -5,7 +5,6 @@ import Header from "./modules/marketing/presentation/components/Header/Header";
 import Footer from "./modules/marketing/presentation/components/Footer/Footer";
 
 const InstitutionDashboard = lazy(() => import("./App"));
-const InstitutionSignIn = lazy(() => import("./modules/marketing/presentation/pages/InstitutionSignIn/InstitutionSignIn"));
 const Login = lazy(() => import("./modules/marketing/presentation/components/Login/Login"));
 const Signin = lazy(() => import("./modules/marketing/presentation/components/Login/signin"));
 const RegistrationForm = lazy(() => import("./modules/marketing/presentation/components/HackathonRegistration/RegistrationForm"));
@@ -33,14 +32,6 @@ function ScrollToTop() {
   }, [pathname]);
 
   return null;
-}
-
-function InstitutionDashboardRoute() {
-  if (localStorage.getItem("institutionLoggedIn") !== "true") {
-    return <Navigate to="/institution-signin" replace />;
-  }
-
-  return <InstitutionDashboard />;
 }
 
 function AppRoutes() {
@@ -95,8 +86,8 @@ function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/Signin" element={<Signin />} />
       <Route path="/registration" element={<RegistrationForm />} />
-      <Route path="/institution-signin" element={<InstitutionSignIn />} />
-      <Route path="/institution-dashboard/*" element={<InstitutionDashboardRoute />} />
+      <Route path="/institution-signin" element={<Navigate to="/institution-dashboard" replace />} />
+      <Route path="/institution-dashboard/*" element={<InstitutionDashboard />} />
       <Route path="/hackathon-dashboard/*" element={<HackathonDashboard />} />
       <Route path="/dashboard/*" element={<StudentDashboard />} />
       <Route path="/student/*" element={<StudentDashboard />} />

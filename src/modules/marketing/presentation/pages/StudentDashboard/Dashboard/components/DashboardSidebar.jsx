@@ -4,13 +4,14 @@ import txIcon from "../../../../../../../assets/tx-icon.jpg";
 import {
   LayoutDashboard,
   BookOpen,
-  Bot,
+  MessageSquare,
   Code2,
   Briefcase,
   LogOut,
   X,
   ClipboardCheck,
   Award,
+  Trophy,
 } from "lucide-react";
 
 export default function DashboardSidebar({
@@ -28,7 +29,7 @@ export default function DashboardSidebar({
       items: [
         { name: "Dashboard", icon: LayoutDashboard },
         { name: "My courses", icon: BookOpen, count: enrollmentsCount || 2 },
-        { name: "AI assistant", icon: Bot },
+        { name: "Chat Instructor", icon: MessageSquare },
         { name: "Coding lab", icon: Code2, count: 3 },
       ],
     },
@@ -41,7 +42,10 @@ export default function DashboardSidebar({
     },
     {
       section: "NEXT",
-      items: [{ name: "Careers", icon: Briefcase }],
+      items: [
+        { name: "Careers", icon: Briefcase },
+        { name: "Leaderboard", icon: Trophy, count: "Top 5%" },
+      ],
     },
   ];
 
@@ -105,22 +109,23 @@ export default function DashboardSidebar({
         ))}
       </nav>
 
-      {/* Profile Footer */}
+      {/* Profile & Logout Footer */}
       <div className="sidebar-profile">
         <div className="profile-info-group">
-          <div className="profile-avatar">{userProfile?.initials || "ST"}</div>
+          <div className="profile-avatar">
+            {(userProfile?.name || "Student").charAt(0).toUpperCase()}
+          </div>
           <div className="profile-details">
-            <p className="profile-name">{userProfile?.name || "Student"}</p>
-            <p className="profile-description">
-              {userProfile?.email || "Student Portal"}
-            </p>
+            <h4 className="profile-name">{userProfile?.name || "Student"}</h4>
+            <span className="profile-role">Learner</span>
           </div>
         </div>
         <button
           type="button"
           className="sidebar-logout-btn"
           onClick={onLogout}
-          title="Log out"
+          title="Sign out of student account"
+          aria-label="Logout"
         >
           <LogOut size={16} />
         </button>

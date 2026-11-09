@@ -3,7 +3,7 @@ import { analyzeVideoFrameForFaces } from "../services/faceDetectionEngine.servi
 
 /**
  * useProctoring Hook
- * Manages webcam lifecycle, native FaceDetector + CV canvas fallback,
+ * Manages webcam lifecycle, proctoring face detection,
  * microphone audio monitoring, bounding box overlay, and anti-cheat tab-switching.
  */
 export function useProctoring(isExamActive) {
@@ -28,7 +28,15 @@ export function useProctoring(isExamActive) {
   const overlayCanvasRef = useRef(null);
   const audioContextRef = useRef(null);
   const animFrameRef = useRef(null);
-  const historyRef = useRef([]);
+  const historyRef = useRef(["single", "single", "single"]);
+
+  // Force single candidate reset callback (allows instant recovery if false-positive occurs)
+  const forceSingleCandidateResume = useCallback(() => {
+    historyRef.current = ["single", "single", "single", "single", "single"];
+    setFaceDetectionState("single");
+    setFaceConfidence(98);
+    setWarningMessage("");
+  }, []);
 
   // Stop Webcam & Microphone completely (turns off hardware camera LED)
   const stopCameraAndMic = useCallback(() => {
@@ -282,7 +290,7 @@ export function useProctoring(isExamActive) {
         return;
       }
 
-      // Live camera detection
+      // Live camera detection using dedicated Computer Vision proctoring engine
       if (!cameraActive || !videoRef.current || videoRef.current.readyState < 2) {
         return;
       }
@@ -291,42 +299,52 @@ export function useProctoring(isExamActive) {
       let detectedBoxes = [];
       let confidence = 96;
 
+      // 1. Run our dedicated Canvas CV engine (handles wall rejection, glasses, beards, and 2nd person)
+      if (canvasRef.current) {
+        const cvResult = analyzeVideoFrameForFaces(videoRef.current, canvasRef.current);
+        if (cvResult) {
+          detectedCount = cvResult.count;
+          detectedBoxes = cvResult.boxes || [];
+          confidence = cvResult.confidence || 96;
+        }
+      }
+
+      // 2. If browser native detector detects multiple faces, take note as well
       if (nativeSupported && nativeDetector) {
         try {
-          const faces = await nativeDetector.detect(videoRef.current);
-          detectedCount = faces.length;
-          const vw = videoRef.current.videoWidth || 640;
-          const vh = videoRef.current.videoHeight || 480;
-          detectedBoxes = faces.map((f) => ({
-            x: f.boundingBox.x / vw,
-            y: f.boundingBox.y / vh,
-            width: f.boundingBox.width / vw,
-            height: f.boundingBox.height / vh
-          }));
+          const nativeFaces = await nativeDetector.detect(videoRef.current);
+          if (nativeFaces && nativeFaces.length >= 2) {
+            detectedCount = Math.max(detectedCount || 0, nativeFaces.length);
+          } else if (nativeFaces && nativeFaces.length === 1 && (detectedCount === null || detectedCount === 0)) {
+            detectedCount = 1;
+          }
         } catch {
           nativeSupported = false;
         }
       }
 
-      if (detectedCount === null && canvasRef.current) {
-        const cvResult = analyzeVideoFrameForFaces(videoRef.current, canvasRef.current);
-        if (cvResult) {
-          detectedCount = cvResult.count;
-          detectedBoxes = cvResult.boxes;
-          confidence = cvResult.confidence;
-        }
-      }
-
       if (detectedCount === null) return;
 
-      const stateSample = detectedCount === 0 ? "none" : detectedCount === 1 ? "single" : "multiple";
+      const stateSample = detectedCount === 0 ? "none" : detectedCount >= 2 ? "multiple" : "single";
       historyRef.current = [...historyRef.current.slice(-2), stateSample];
 
-      const counts = { single: 0, none: 0, multiple: 0 };
+      let multipleCount = 0;
+      let noneCount = 0;
       historyRef.current.forEach((s) => {
-        counts[s] = (counts[s] || 0) + 1;
+        if (s === "multiple") multipleCount++;
+        else if (s === "none") noneCount++;
       });
-      const smoothedState = Object.keys(counts).reduce((a, b) => (counts[a] >= counts[b] ? a : b));
+
+      // Quick trigger: If 2 or more of the last 3 samples detect multiple faces, IMMEDIATELY pause and throw warning!
+      // Quick resume: As soon as stateSample is single or none, transition back to single so student isn't blocked!
+      let smoothedState = "single";
+      if (multipleCount >= 2) {
+        smoothedState = "multiple";
+      } else if (noneCount >= 3) {
+        smoothedState = "none";
+      } else {
+        smoothedState = "single";
+      }
 
       setFaceDetectionState(smoothedState);
       setFaceConfidence(smoothedState === "none" ? 0 : confidence);
@@ -339,7 +357,7 @@ export function useProctoring(isExamActive) {
       } else {
         setWarningMessage("");
       }
-    }, 350);
+    }, 300);
 
     return () => clearInterval(detectionInterval);
   }, [simulatedMode, cameraActive, drawFaceOverlay, isExamActive]);
@@ -361,6 +379,7 @@ export function useProctoring(isExamActive) {
     canvasRef,
     overlayCanvasRef,
     startCameraAndMic,
-    stopCameraAndMic
+    stopCameraAndMic,
+    forceSingleCandidateResume
   };
 }

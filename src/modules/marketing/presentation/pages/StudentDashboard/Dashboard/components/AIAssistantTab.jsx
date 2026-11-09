@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Bot, Send } from "lucide-react";
+import { MessageSquare, Send, UserCheck } from "lucide-react";
 
 export default function AIAssistantTab({ userName = "Learner" }) {
   const [messages, setMessages] = useState([
     {
-      sender: "ai",
-      text: `Hello ${userName}! I'm your Pathwing AI Study Assistant. Ask me anything about your course concepts, code debugging, or architectural patterns.`,
+      sender: "instructor",
+      text: `Hello ${userName}! I'm your Pathwing Course Instructor. Feel free to ask me anything about your course concepts, code debugging, or architectural patterns.`,
       time: "Just now",
     },
   ]);
@@ -29,7 +29,7 @@ export default function AIAssistantTab({ userName = "Learner" }) {
       } else if (query.includes("docker") || query.includes("cloud")) {
         reply = "Docker packages code and dependencies into portable containers. For cloud production, focus on multi-stage builds and automated CI/CD pipelines.";
       }
-      setMessages((prev) => [...prev, { sender: "ai", text: reply, time: "Just now" }]);
+      setMessages((prev) => [...prev, { sender: "instructor", text: reply, time: "Just now" }]);
     }, 600);
   };
 
@@ -37,11 +37,11 @@ export default function AIAssistantTab({ userName = "Learner" }) {
     <div className="ai-assistant-container">
       <div className="ai-assistant-header-card">
         <div className="ai-assistant-header-top">
-          <Bot size={24} color="#2563eb" />
-          <h2 className="ai-assistant-header-title">AI Learning Assistant</h2>
+          <MessageSquare size={24} color="#2563eb" />
+          <h2 className="ai-assistant-header-title">Chat Instructor</h2>
         </div>
         <p className="ai-assistant-header-desc">
-          Instant answers, code debugging help, and curriculum clarifications.
+          Direct guidance, code debugging help, and curriculum clarifications from your course instructor.
         </p>
       </div>
 
@@ -61,7 +61,7 @@ export default function AIAssistantTab({ userName = "Learner" }) {
           <input
             type="text"
             className="ai-chat-input"
-            placeholder="Ask a question about your lessons..."
+            placeholder="Ask your instructor a question about your lessons..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />

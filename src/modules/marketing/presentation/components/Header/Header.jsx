@@ -150,7 +150,7 @@ export default function Header() {
   // Open "WELCOME TO PATHWING PORTAL" selection popup
   const openSelectionPopup = () => {
     closeMenu();
-    navigate("/institution-signin");
+    // removed navigate to institution-signin
     setSelectionOpen(true);
     setLoginOpen(false);
   };
