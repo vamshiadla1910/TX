@@ -244,7 +244,7 @@ export default function StudentDashboard() {
                 <Assessments onBack={() => handleTabClick("Dashboard")} />
               )}
 
-              {activeTab === "Certificates" && <Certificates />}
+              {activeTab === "Certificates" && <Certificates userEmail={userProfile?.email} userName={userProfile?.name} />}
 
               {activeTab === "Dashboard" && (
                 <>

@@ -472,7 +472,7 @@ export default function InstitutionDashboard() {
               className="toast-close"
               onClick={() => setNotice('')}
               aria-label="Dismiss notification"
-            >c
+            >
               <X size={13} />
             </button>
           </div>
