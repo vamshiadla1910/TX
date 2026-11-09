@@ -68,7 +68,6 @@ export default function Header() {
   const [selectionOpen, setSelectionOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState("student");
-  const [cartCount, setCartCount] = useState(0);
 
   const [isLoggedIn, setIsLoggedIn] = useState(
     () => localStorage.getItem("isLoggedIn") === "true"
