@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from "react";
 import { ArrowRight, CheckCircle, Eye, EyeOff, Lock, Mail, Phone, ShieldCheck, User, X } from "lucide-react";
+import { registerCustomUser } from "../../../services/authService";
 import "./Login.css";
 
 const Signup = ({ isOpen, onClose, onSwitchToLogin }) => {
@@ -27,7 +27,17 @@ const Signup = ({ isOpen, onClose, onSwitchToLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
+    registerCustomUser({
+      email: form.email,
+      password: form.password,
+      full_name: form.full_name.trim(),
+      phone: form.phone,
+      role: "student",
+    });
     localStorage.setItem("userEmail", form.email);
+    localStorage.setItem("userName", form.full_name.trim());
+    window.dispatchEvent(new Event("authChanged"));
+    window.dispatchEvent(new Event("storage"));
     alert("Account created! Now sign in.");
     onSwitchToLogin(); // auto go to login - THIS FIXES YOUR ISSUE
   };
@@ -48,7 +58,7 @@ const Signup = ({ isOpen, onClose, onSwitchToLogin }) => {
           <span className="login-label">GET STARTED</span>
           <h1>Create your account</h1>
           <form className="login-form" onSubmit={handleSubmit}>
-            <div className="login-field"><div className={`login-input-box ${errors.full_name?'input-error':''}`}><User size={18} className="input-icon"/><input type="text" name="full_name" placeholder="Full name" value={form.full_name} onChange={(e)=>{setForm({...form, full_name:e.target.value}); setErrors({...errors, full_name:''})}} /></div>{errors.full_name && <small className="input-error-message">{errors.full_name}</small>}</div>
+            <div className="login-field"><div className={`login-input-box ${errors.full_name?'input-error':''}`}><User size={18} className="input-icon"/><input type="text" name="full_name" placeholder="Full name (e.g. Aditya Reddy)" value={form.full_name} onChange={(e)=>{setForm({...form, full_name:e.target.value}); setErrors({...errors, full_name:''})}} /></div>{errors.full_name && <small className="input-error-message">{errors.full_name}</small>}</div>
             <div className="login-field"><div className={`login-input-box ${errors.email?'input-error':''}`}><Mail size={18} className="input-icon"/><input type="email" name="email" placeholder="Email address" value={form.email} onChange={(e)=>{setForm({...form, email:e.target.value}); setErrors({...errors, email:''})}} /></div>{errors.email && <small className="input-error-message">{errors.email}</small>}</div>
             <div className="login-field"><div className={`login-input-box ${errors.phone?'input-error':''}`}><Phone size={18} className="input-icon"/><input type="tel" name="phone" maxLength={10} placeholder="Mobile number" value={form.phone} onChange={(e)=>{setForm({...form, phone:e.target.value}); setErrors({...errors, phone:''})}} /></div>{errors.phone && <small className="input-error-message">{errors.phone}</small>}</div>
             <div className="login-field"><div className={`login-input-box ${errors.password?'input-error':''}`}><Lock size={18} className="input-icon"/><input type={showPassword?"text":"password"} name="password" placeholder="Password" value={form.password} onChange={(e)=>{setForm({...form, password:e.target.value}); setErrors({...errors, password:''})}} /><button type="button" className="password-toggle" onClick={()=>setShowPassword(!showPassword)}>{showPassword?<EyeOff size={17}/>:<Eye size={17}/>}</button></div>{errors.password && <small className="input-error-message">{errors.password}</small>}</div>

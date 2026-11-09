@@ -322,12 +322,15 @@ export function verifyCredentials(emailInput, passwordInput, selectedRole = null
 
     // For any other email address: dynamically create authorized student user
     const prefix = email.split("@")[0] || "Learner";
+    const cleanLetters = prefix.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[^a-zA-Z]+/g, " ").trim();
     const formattedName =
-      prefix
-        .replace(/[._-]+/g, " ")
-        .split(" ")
-        .map((w) => (w ? w.charAt(0).toUpperCase() + w.slice(1) : ""))
-        .join(" ") || "Student Learner";
+      (cleanLetters
+        ? cleanLetters
+            .split(/\s+/)
+            .filter(Boolean)
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+            .join(" ")
+        : "") || "Student Learner";
 
     const studentUser = {
       email,
@@ -387,6 +390,12 @@ export function registerCustomUser({ email, password, full_name, phone, role }) 
   }
 
   localStorage.setItem("tx_custom_users", JSON.stringify(customUsers));
+  localStorage.setItem("userName", newUser.name);
+  localStorage.setItem("userEmail", normalizedEmail);
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("authChanged"));
+    window.dispatchEvent(new Event("storage"));
+  }
   return newUser;
 }
 

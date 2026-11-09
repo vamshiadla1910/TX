@@ -372,6 +372,11 @@ const Login = ({
       role: selectedRole,
     });
 
+    localStorage.setItem("userName", form.full_name.trim());
+    localStorage.setItem("userEmail", email);
+    window.dispatchEvent(new Event("authChanged"));
+    window.dispatchEvent(new Event("storage"));
+
     setMessage(
       "Account created successfully! Please sign in with your credentials."
     );
@@ -544,7 +549,7 @@ const Login = ({
                   <input
                     type="text"
                     name="full_name"
-                    placeholder="Full name"
+                    placeholder="Full name (e.g. Aditya Reddy)"
                     value={form.full_name}
                     onChange={handleChange}
                   />
