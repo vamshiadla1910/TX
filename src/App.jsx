@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Activity, ArrowDownToLine, ArrowLeft, ArrowRight, Award, Bell, BookOpen,
   BriefcaseBusiness, Building2, CalendarDays, Check, CheckCircle2, Clock3, FileText, FileUp, Globe2,
@@ -7,7 +7,6 @@ import {
 import { Link } from "react-router-dom";
 import txIcon from "./assets/tx-icon.jpg";
 import "./App.css";
-import { useState, useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -117,67 +116,7 @@ function downloadCsv(fileName, rows) {
   link.download = fileName;
   link.click();
   URL.revokeObjectURL(link.href);
-/**
- * Dedicated LoginPage wrapper component for direct /login or /signin access
- * Immediately pops up "WELCOME TO PATHWING PORTAL" over the page
- */
-function LoginPage() {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-
-  const portalParam =
-    searchParams.get("portal") || searchParams.get("role") || "";
-
-  const [selectionOpen, setSelectionOpen] = useState(!portalParam);
-  const [loginOpen, setLoginOpen] = useState(Boolean(portalParam));
-  const [selectedRole, setSelectedRole] = useState(portalParam || "student");
-
-  useEffect(() => {
-    if (portalParam) {
-      setSelectedRole(portalParam);
-      setSelectionOpen(false);
-      setLoginOpen(true);
-    } else {
-      setSelectionOpen(true);
-      setLoginOpen(false);
-    }
-  }, [portalParam]);
-
-  const handleSelectRole = (role) => {
-    setSelectedRole(role);
-    setSelectionOpen(false);
-    setLoginOpen(true);
-  };
-
-  const handleBackToSelection = () => {
-    setLoginOpen(false);
-    setSelectionOpen(true);
-  };
-
-  const handleClose = () => {
-    navigate("/");
-  };
-
-  return (
-    <>
-      <Home />
-      {/* WELCOME TO PATHWING PORTAL SELECTION POPUP */}
-      <DashboardSelectionModal
-        isOpen={selectionOpen}
-        onClose={handleClose}
-        onSelectRole={handleSelectRole}
-      />
-      {/* PARTICULAR ROLE SIGN-IN POPUP */}
-      <Login
-        isOpen={loginOpen}
-        selectedRole={selectedRole}
-        onClose={handleClose}
-        onBack={handleBackToSelection}
-      />
-    </>
-  );
 }
-
 /**
  * Dedicated LoginPage wrapper component for direct /login or /signin access
  * Immediately pops up "WELCOME TO PATHWING PORTAL" over the page
@@ -327,7 +266,6 @@ function AppLayout() {
             </ProtectedRoute>
           }
         />
-        <Route
         <Route
           path="/dashboard"
           element={
@@ -682,6 +620,4 @@ export default function Dashboard() {
     {mobileNavOpen && <button className="mobile-scrim" type="button" aria-label="Close navigation" onClick={() => setMobileNavOpen(false)} />}{message && <div className="status-toast" role="status"><Check size={16} />{message}</div>}
   </div>;
 }
-
-export default App;
 

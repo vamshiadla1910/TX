@@ -297,65 +297,11 @@ const Login = ({
       if (onLoginSuccess) onLoginSuccess();
       if (onAdminLogin && normalizedUserRole === "admin") onAdminLogin();
 
-      if (onClose) {
-        onClose();
-      }
-
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
-
-      // Open Student Dashboard
-      navigate("/dashboard");
-      // 1. Verify credentials passing the active selectedRole
-      // Student login accepts any email and any password!
-      const authResult = verifyCredentials(email, password, selectedRole);
-
-      if (!authResult.success) {
-        setErrors({
-          general:
-            authResult.error ||
-            "Invalid email or password. Please verify your credentials.",
-        });
-        return;
-      }
-
-      const authenticatedUser = authResult.user;
-
-      // 2. Verify authenticated user's actual role and compare with selected dashboard
-      const normalizedUserRole = normalizeRole(authenticatedUser.role);
-      const normalizedSelectedRole = normalizeRole(selectedRole);
-
-      // Enforce role comparison: Allow access only when both roles match
-      if (normalizedUserRole !== normalizedSelectedRole) {
-        const actualRoleName = getRoleDisplayName(normalizedUserRole);
-        const selectedDashboardName = roleConfig.displayName;
-        setErrors({
-          general: `Role mismatch: This account has the role of ${actualRoleName}, but you are attempting to log in to ${selectedDashboardName}. Please return to dashboard selection and choose ${actualRoleName} Dashboard.`,
-        });
-        return;
-      }
-
-      // 3. Roles match! Set active session and dispatch events
-      setAuthenticatedSession(authenticatedUser);
-
-      if (onClose) onClose();
-      if (onLoginSuccess) onLoginSuccess();
-      if (onAdminLogin && normalizedUserRole === "admin") onAdminLogin();
-
       // 4. Redirect to authorized dashboard
       const targetRoute =
         roleConfig.route ||
         authenticatedUser.targetDashboard ||
         "/dashboard";
-
-
-      // 4. Redirect to authorized dashboard
-      const targetRoute =
-        roleConfig.route ||
-        authenticatedUser.targetDashboard ||
-        "/dashboard";
-
 
       navigate(targetRoute);
       return;
@@ -513,8 +459,7 @@ const Login = ({
 
             <p>
               {isLogin
-                ? "Sign in to continue your learning journey."
-                ? roleConfig.subtitle
+                ? (roleConfig.subtitle || "Sign in to continue your learning journey.")
                 : "Join us and start building your future today."}
             </p>
 
