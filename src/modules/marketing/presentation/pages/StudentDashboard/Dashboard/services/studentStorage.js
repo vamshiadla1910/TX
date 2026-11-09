@@ -49,6 +49,7 @@ const KNOWN_CODES = {
 export const studentStorage = {
   initDemoSession() {
     if (localStorage.getItem(STORAGE_KEYS.IS_LOGGED_IN) === "true") {
+
       if (!localStorage.getItem(STORAGE_KEYS.USER_EMAIL)) {
         localStorage.setItem(STORAGE_KEYS.USER_EMAIL, "student@pathwing.com");
       }
@@ -84,9 +85,6 @@ export const studentStorage = {
     localStorage.removeItem(STORAGE_KEYS.USER_NAME);
     localStorage.removeItem(STORAGE_KEYS.USER_PHONE);
     localStorage.removeItem(STORAGE_KEYS.IS_ADMIN);
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("isPlatformAdmin");
-    localStorage.removeItem("isHackathonAdmin");
 
     window.dispatchEvent(new Event("authChanged"));
     window.dispatchEvent(new Event("storage"));

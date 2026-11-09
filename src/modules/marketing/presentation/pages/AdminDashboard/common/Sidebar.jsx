@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  ChevronDown, ChevronLeft, ChevronRight, Layers, LogOut,
+  ChevronDown, ChevronLeft, ChevronRight, Layers,
   PanelLeftClose, PanelLeftOpen, ShieldCheck, X
 } from "lucide-react";
 
@@ -16,8 +16,7 @@ export function Sidebar({
   setCurrentRole,
   showRoleMenu,
   setShowRoleMenu,
-  counts,
-  onLogout
+  counts
 }) {
   // Collapsible nested navigation groups
   const [collapsedGroups, setCollapsedGroups] = useState({});
@@ -81,7 +80,7 @@ export function Sidebar({
 
                 {showRoleMenu && (
                   <div className="role-dropdown-menu" role="listbox">
-                    {["Super admin â€” Platform", "Organization Admin", "Lead Academic Auditor"].map(r => (
+                    {["Super admin — Platform", "Organization Admin", "Lead Academic Auditor"].map(r => (
                       <button
                         key={r}
                         type="button"
@@ -200,15 +199,6 @@ export function Sidebar({
               <small>Super admin · all data boundaries</small>
             </div>
           )}
-          <button
-            type="button"
-            className="sidebar-logout-btn"
-            onClick={onLogout}
-            title="Sign out & Exit Admin Console"
-            aria-label="Sign out & Exit Admin Console"
-          >
-            <LogOut size={16} />
-          </button>
         </div>
       </aside>
     </>

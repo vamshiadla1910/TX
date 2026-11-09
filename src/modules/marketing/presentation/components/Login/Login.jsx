@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   ArrowRight,
@@ -28,12 +28,19 @@ import {
 
 import "./Login.css";
 
+// ==========================================
+// ADMIN LOGIN DETAILS
+// ==========================================
+const ADMIN_EMAIL = "tanvoxadmin@gmail.com";
+const ADMIN_PASSWORD = "tanvox12340";
 const ROLE_ICON_MAP = {
   student: GraduationCap,
   admin: ShieldCheck,
   instructor: Users,
   institution: Building2,
 };
+
+
 
 const Login = ({
   isOpen = true,
@@ -76,7 +83,24 @@ const Login = ({
   const [messageType, setMessageType] = React.useState("");
 
   // ==========================================
-  // RESET WHEN POPUP OPENS OR ROLE CHANGES
+  // AUTO-REDIRECT IF ALREADY AUTHENTICATED
+  // ==========================================
+  React.useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const isAdmin = localStorage.getItem("isAdmin") === "true";
+    if (isLoggedIn && !onClose) {
+      if (isAdmin) {
+        navigate("/hackathon-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
+    }
+  }, [navigate, onClose]);
+
+  // ==========================================
+  // RESET WHEN POPUP OPENS
+
+  // RESET WHEN POPUP OPENS OR ROLE CHANGE
   // ==========================================
   React.useEffect(() => {
     if (isOpen) {
@@ -201,6 +225,88 @@ const Login = ({
     // LOGIN FLOW
     // ==========================================
     if (isLogin) {
+      // ========================================
+      // ADMIN LOGIN
+      // ========================================
+      if (
+        email === ADMIN_EMAIL &&
+        password === ADMIN_PASSWORD
+      ) {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("isAdmin", "true");
+
+        window.dispatchEvent(new Event("authChanged"));
+        window.dispatchEvent(new Event("storage"));
+
+        // Close login popup
+        if (onClose) {
+          onClose();
+        }
+
+        // Optional parent callback
+        if (onAdminLogin) {
+          onAdminLogin();
+        }
+
+        // Open Admin Dashboard
+        navigate("/hackathon-dashboard");
+
+        return;
+      }
+
+      // ========================================
+      // NORMAL USER LOGIN
+      // ========================================
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userEmail", email);
+      localStorage.removeItem("isAdmin");
+      // 1. Verify credentials passing the active selectedRole
+      // Student login accepts any email and any password!
+      const authResult = verifyCredentials(email, password, selectedRole);
+
+      if (!authResult.success) {
+        setErrors({
+          general:
+            authResult.error ||
+            "Invalid email or password. Please verify your credentials.",
+        });
+        return;
+      }
+
+      const authenticatedUser = authResult.user;
+
+      // 2. Verify authenticated user's actual role and compare with selected dashboard
+      const normalizedUserRole = normalizeRole(authenticatedUser.role);
+      const normalizedSelectedRole = normalizeRole(selectedRole);
+
+      // Enforce role comparison: Allow access only when both roles match
+      if (normalizedUserRole !== normalizedSelectedRole) {
+        const actualRoleName = getRoleDisplayName(normalizedUserRole);
+        const selectedDashboardName = roleConfig.displayName;
+        setErrors({
+          general: `Role mismatch: This account has the role of ${actualRoleName}, but you are attempting to log in to ${selectedDashboardName}. Please return to dashboard selection and choose ${actualRoleName} Dashboard.`,
+        });
+        return;
+      }
+
+      // 3. Roles match! Set active session and dispatch events
+      setAuthenticatedSession(authenticatedUser);
+
+      if (onClose) onClose();
+      if (onLoginSuccess) onLoginSuccess();
+      if (onAdminLogin && normalizedUserRole === "admin") onAdminLogin();
+
+      if (onClose) {
+        onClose();
+      }
+
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
+
+      // Open Student Dashboard
+      navigate("/dashboard");
       // 1. Verify credentials passing the active selectedRole
       // Student login accepts any email and any password!
       const authResult = verifyCredentials(email, password, selectedRole);
@@ -242,6 +348,14 @@ const Login = ({
         roleConfig.route ||
         authenticatedUser.targetDashboard ||
         "/dashboard";
+
+
+      // 4. Redirect to authorized dashboard
+      const targetRoute =
+        roleConfig.route ||
+        authenticatedUser.targetDashboard ||
+        "/dashboard";
+
 
       navigate(targetRoute);
       return;
@@ -394,9 +508,11 @@ const Login = ({
 
             <p>
               {isLogin
+                ? "Sign in to continue your learning journey."
                 ? roleConfig.subtitle
                 : "Join us and start building your future today."}
             </p>
+
           </div>
 
           {/* GENERAL ERROR OR SUCCESS MESSAGE */}
@@ -578,7 +694,19 @@ const Login = ({
             </button>
           </div>
 
+          {isLogin && (
+            <Link
+              className="institution-login-link"
+              to="/institution-signin"
+              onClick={onClose}
+            >
+              Institution administrator? Sign in to your campus
+            </Link>
+          )}
+
+          {/* SECURITY */}
           {/* SECURITY NOTE */}
+
           <p className="login-security">
             <ShieldCheck size={14} />
             Your information is securely protected.

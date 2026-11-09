@@ -162,6 +162,14 @@ body {
   transform: scaleX(1);
 }
 
+.nav-more details { position: relative; }
+.nav-more summary { list-style: none; cursor: pointer; }
+.nav-more summary::-webkit-details-marker { display: none; }
+.nav-more summary span { margin-left: 4px; font-size: 12px; }
+.nav-more-menu { position: absolute; z-index: 1200; top: calc(100% + 8px); right: 0; width: 220px; padding: 6px; background: #fff; border: 1px solid var(--line); border-radius: 9px; box-shadow: 0 14px 32px rgba(20, 11, 43, .14); }
+.nav-more-menu a { display: block; padding: 10px 11px; color: var(--ink); border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; }
+.nav-more-menu a:hover { color: var(--purple); background: #f7f4fc; }
+
 .nav-actions {
   justify-self: end;
   display: flex;

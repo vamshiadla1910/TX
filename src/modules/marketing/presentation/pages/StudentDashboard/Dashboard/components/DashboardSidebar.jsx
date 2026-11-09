@@ -50,9 +50,7 @@ export default function DashboardSidebar({
       {/* Brand */}
       <div className="sidebar-brand">
         <Link to="/" className="brand-link" title="Return to Home">
-          <div className="sidebar-logo-box">
-            <img src={txIcon} alt="TX Pathwing" className="student-sidebar-logo" />
-          </div>
+          <img src={txIcon} alt="TX Pathwing" className="brand-logo-img" />
           <span className="brand-name">Pathwing</span>
         </Link>
         <button

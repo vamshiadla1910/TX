@@ -1,6 +1,6 @@
-import React from "react";
 import txIcon from "../../../../../assets/tx-icon.jpg";
 import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
 const FOOTER_COLUMNS = [
@@ -17,31 +17,31 @@ const FOOTER_COLUMNS = [
   {
     heading: "Solutions",
     links: [
-      { label: "For colleges", href: "/solutions/colleges" },
-      { label: "For companies", href: "/solutions/companies" },
-      { label: "For instructors", href: "/solutions/instructors" },
-      { label: "For employers", href: "/solutions/employers" },
+      { label: "For colleges", href: "/for-institutions" },
+      { label: "For companies", href: "/for-corporate" },
+      { label: "For instructors", href: "/for-instructors" },
+      { label: "For employers", href: "/industry-partners" },
       { label: "Placement network", href: "/placement-network" },
     ],
   },
   {
     heading: "Resources",
     links: [
-      { label: "Verify a certificate", href: "/verify" },
-      { label: "Student handbook", href: "/resources/student-handbook" },
-      { label: "Internship handbook", href: "/resources/internship-handbook" },
-      { label: "Corporate catalogue", href: "/resources/corporate-catalogue" },
-      { label: "College partnership brochure", href: "/resources/college-brochure" },
+      { label: "Learning journey", href: "/learner-journey" },
+      { label: "Events calendar", href: "/events" },
+      { label: "Course catalogue", href: "/marketplace" },
+      { label: "Tech articles", href: "/blog" },
+      { label: "Frequently asked questions", href: "/faq" },
     ],
   },
   {
     heading: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "Help centre", href: "/help" },
-      { label: "Security", href: "/security" },
-      { label: "Privacy policy", href: "/privacy" },
-      { label: "Terms and refunds", href: "/terms" },
+      { label: "Careers", href: "/careers" },
+      { label: "Contact", href: "/contact" },
+      { label: "For institutions", href: "/solutions/colleges" },
+      { label: "Institution sign in", href: "/institution-signin" },
     ],
   },
 ];
@@ -59,10 +59,10 @@ export default function Footer({
     <footer className="tx-footer">
       <div className="tx-footer-top">
         <div className="tx-footer-brand">
-          <a href="/" className="tx-footer-logo" aria-label={`${companyName} home`}>
+          <Link to="/" className="tx-footer-logo" aria-label={`${companyName} home`}>
             <img src={txIcon} alt={`${companyName} logo`} />
             <span>{companyName}</span>
-          </a>
+          </Link>
 
           <p className="tx-footer-tagline">{tagline}</p>
 
@@ -90,7 +90,7 @@ export default function Footer({
               <ul>
                 {column.links.map((link) => (
                   <li key={link.label}>
-                    <a href={link.href}>{link.label}</a>
+                    <Link to={link.href}>{link.label}</Link>
                   </li>
                 ))}
               </ul>
