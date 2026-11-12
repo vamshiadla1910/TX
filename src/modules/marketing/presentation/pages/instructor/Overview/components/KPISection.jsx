@@ -32,7 +32,7 @@ export function KPISection({ instructorProfile }) {
       },
       {
         id: "kpi-net-earnings",
-        label: "NET EARNINGS",
+        label: "REVENUE",
         value: `₹${Number(instructorProfile.netEarningsMonth || 284500).toLocaleString("en-IN")}`,
         foot: "▲ 18.5% growth",
         tone: "positive",

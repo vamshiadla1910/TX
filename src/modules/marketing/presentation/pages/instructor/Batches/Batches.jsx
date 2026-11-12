@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Users,
   Calendar,
@@ -22,6 +22,7 @@ import {
   Briefcase
 } from "lucide-react";
 import { Badge } from "../common/Badge";
+import { ActionButton, IconButton } from "../common/ActionButton.jsx";
 import "./Batches.css";
 
 // Helper function to resolve category from course name
@@ -874,7 +875,6 @@ export function Batches({
                 </div>
               )}
             </div>
-
             <div className="cohort-modal-footer" style={{ justifyContent: "space-between" }}>
               <button
                 type="button"

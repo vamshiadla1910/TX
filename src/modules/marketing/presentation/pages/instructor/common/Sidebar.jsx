@@ -1,9 +1,13 @@
-import React from "react";
 import txIcon from "../../../../../../assets/tx-icon.jpg";
-import {
-  BookOpen, ChevronDown, ChevronLeft, ChevronRight,
-  LayoutDashboard, LogOut, Sparkles, Users, X
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut, X } from "lucide-react";
+import { IconButton } from "./ActionButton.jsx";
+import { CountBadge } from "./CountBadge.jsx";
+
+function isNumericBadge(value) {
+  if (typeof value === "number") return Number.isFinite(value);
+  if (typeof value === "string") return /^-?\d+(,\d{3})*$/.test(value.trim());
+  return false;
+}
 
 export function Sidebar({
   navConfig,
@@ -40,13 +44,15 @@ export function Sidebar({
             </div>
             <span className="drawer-title">TX Pathwing</span>
           </div>
-          <button
-            className="icon-button close-drawer-btn"
+          <IconButton
+            icon={X}
+            size="sm"
+            variant="neutral"
+            className="close-drawer-btn"
             onClick={() => setMobileNav(false)}
-            aria-label="Close navigation"
-          >
-            <X size={18} />
-          </button>
+            tooltip="Close navigation"
+            ariaLabel="Close navigation"
+          />
         </div>
 
         {/* Sidebar Header & Collapse Toggle */}
@@ -81,13 +87,12 @@ export function Sidebar({
                 {group.items.map((item) => {
                   const Icon = item.icon;
                   const isActive = page === item.name;
-                  const isSpecial = item.name === "AI Course Builder";
 
                   return (
                     <div key={item.name} className="nav-item-wrapper inst-nav-item-wrapper">
                       <button
                         type="button"
-                        className={`nav-item inst-nav-item ${isActive ? "active" : ""} ${isSpecial ? "special-action-item" : ""}`}
+                        className={`nav-item inst-nav-item ${isActive ? "active" : ""}`}
                         onClick={() => {
                           onNavigate(item.name);
                           setMobileNav(false);
@@ -98,12 +103,32 @@ export function Sidebar({
                         <Icon size={18} className="nav-icon inst-nav-icon" />
                         {!sidebarCollapsed && <span className="nav-text inst-nav-text">{item.name}</span>}
                         {!sidebarCollapsed && item.badge !== undefined && (
-                          <span className={`nav-counter inst-nav-counter ${item.badgeTone || "blue"}`}>
-                            {item.badge}
-                          </span>
+                          <CountBadge
+                            count={item.badge}
+                            max={99}
+                            hideZero={isNumericBadge(item.badge)}
+                            tone={item.badgeTone || "blue"}
+                            variant="inline"
+                            title={item.badgeTitle}
+                            className="inst-nav-counter-badge"
+                          />
                         )}
                         {sidebarCollapsed && item.badge !== undefined && (
-                          <span className="collapsed-dot" />
+                          isNumericBadge(item.badge) ? (
+                            <CountBadge
+                              count={item.badge}
+                              max={9}
+                              hideZero={true}
+                              tone={item.badgeTone || "blue"}
+                              variant="compact"
+                              title={item.badgeTitle || `${item.label}: ${item.badge}`}
+                            />
+                          ) : (
+                            <span
+                              className="collapsed-dot"
+                              title={item.badgeTitle || `${item.label}: ${item.badge}`}
+                            />
+                          )
                         )}
                       </button>
 

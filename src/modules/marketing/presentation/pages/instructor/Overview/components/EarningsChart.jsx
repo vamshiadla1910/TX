@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from "react";
-import { ArrowUpRight, TrendingUp } from "lucide-react";
+import { useState, useMemo } from "react";
+import { ArrowUpRight } from "lucide-react";
 
-export function EarningsChart({ earningsData = [] }) {
+export function EarningsChart({ earningsData = [], onViewFullAnalytics }) {
   const [activePoint, setActivePoint] = useState(null);
 
   // Guarantee strictly deduplicated months using stable identifier map
@@ -25,14 +25,16 @@ export function EarningsChart({ earningsData = [] }) {
   // Calculate SVG coordinates
   const maxNet = Math.max(...uniqueMonths.map((d) => d.net)) * 1.15;
   const minNet = Math.min(...uniqueMonths.map((d) => d.net)) * 0.85;
+  const ySpan = maxNet - minNet || 1;
   const chartWidth = 560;
   const chartHeight = 190;
   const paddingX = 36;
   const paddingY = 24;
 
   const points = uniqueMonths.map((d, index) => {
-    const x = paddingX + (index / (uniqueMonths.length - 1)) * (chartWidth - paddingX * 2);
-    const y = chartHeight - paddingY - ((d.net - minNet) / (maxNet - minNet)) * (chartHeight - paddingY * 2);
+    const ratioX = uniqueMonths.length > 1 ? index / (uniqueMonths.length - 1) : 0.5;
+    const x = paddingX + ratioX * (chartWidth - paddingX * 2);
+    const y = chartHeight - paddingY - ((d.net - minNet) / ySpan) * (chartHeight - paddingY * 2);
     return { ...d, x, y };
   });
 
@@ -40,19 +42,34 @@ export function EarningsChart({ earningsData = [] }) {
   const areaPath = `${linePath} L ${points[points.length - 1].x} ${chartHeight - paddingY} L ${points[0].x} ${chartHeight - paddingY} Z`;
 
   const latest = uniqueMonths[uniqueMonths.length - 1];
+  const previous = uniqueMonths.length > 1 ? uniqueMonths[uniqueMonths.length - 2] : null;
+  const growthPct = previous && previous.net > 0
+    ? Number((((latest.net - previous.net) / previous.net) * 100).toFixed(1))
+    : 0;
+  const ytdNetTotal = uniqueMonths.reduce((sum, item) => sum + Number(item.net || 0), 0);
 
   return (
     <article className="card earnings-chart-card">
       <div className="chart-header">
         <div>
           <h3 className="chart-main-title">Revenue Analytics</h3>
+          {typeof onViewFullAnalytics === "function" && (
+            <button
+              type="button"
+              className="chart-view-full-link"
+              onClick={onViewFullAnalytics}
+            >
+              <span>View Full Analytics</span>
+              <ArrowUpRight size={14} />
+            </button>
+          )}
         </div>
 
         <div className="chart-summary-stat">
-          <span className="stat-label">OCT NET</span>
+          <span className="stat-label">{String(latest.month || "LATEST").toUpperCase()} NET</span>
           <strong className="stat-amount">₹{Number(latest.net).toLocaleString("en-IN")}</strong>
           <span className="stat-growth">
-            <ArrowUpRight size={14} /> +18.5%
+            <ArrowUpRight size={14} /> {growthPct >= 0 ? `+${growthPct}%` : `${growthPct}%`}
           </span>
         </div>
       </div>
@@ -68,7 +85,7 @@ export function EarningsChart({ earningsData = [] }) {
         </div>
         <div className="chart-pill purple-highlight">
           <span>YTD Payout:</span>
-          <strong>₹14,92,000</strong>
+          <strong>₹{ytdNetTotal.toLocaleString("en-IN")}</strong>
         </div>
       </div>
 
@@ -127,7 +144,7 @@ export function EarningsChart({ earningsData = [] }) {
           />
 
           {/* Interactive Data Nodes */}
-          {points.map((p, idx) => {
+          {points.map((p) => {
             const isHovered = activePoint && activePoint.month === p.month;
             return (
               <g key={p.month}>

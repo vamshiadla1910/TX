@@ -234,8 +234,14 @@ function Empty({ onCreate }) {
   );
 }
 
-export default function LiveSessions() {
-  const [sessions, setSessions] = useState(load), [view, setView] = useState("overview"), [filter, setFilter] = useState("all"), [q, setQ] = useState("");
+export default function LiveSessions({ sessions: propSessions, onAddSession }) {
+  const [sessions, setSessions] = useState(() => {
+    const loaded = load();
+    if (loaded && loaded.length) return loaded;
+    if (propSessions && propSessions.length) return propSessions;
+    return makeSamples(new Date());
+  });
+  const [view, setView] = useState("overview"), [filter, setFilter] = useState("all"), [q, setQ] = useState("");
   const [now, setNow] = useState(() => new Date()), [toast, setToast] = useState(null), [confirmId, setConfirmId] = useState(null);
   const [freshId, setFreshId] = useState(null), [leavingId, setLeavingId] = useState(null), [dirty, setDirty] = useState(false), [leaveAsk, setLeaveAsk] = useState(false);
   const clearToast = useCallback(() => setToast(null), []);
@@ -253,6 +259,9 @@ export default function LiveSessions() {
   const goBack = () => (dirty ? setLeaveAsk(true) : leave());
   const handleSave = (s) => {
     setSessions((p) => (!p.length && SEED_DEMO ? [s, ...makeSamples(new Date())] : [s, ...p]));
+    if (typeof onAddSession === "function") {
+      try { onAddSession(s); } catch { /* ignore */ }
+    }
     setDirty(false); setView("overview"); setFilter("all"); setQ(""); setFreshId(s.id); setTimeout(() => setFreshId(null), 2600); setToast("Session scheduled");
   };
   const remove = (id) => { setConfirmId(null); setLeavingId(id); setTimeout(() => { setSessions((p) => p.filter((x) => x.id !== id)); setLeavingId(null); setToast("Session cancelled"); }, 320); };

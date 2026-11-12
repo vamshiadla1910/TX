@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { MessageSquare, Star, ThumbsUp, User } from "lucide-react";
-import { Badge } from "../common/Badge";
+import { useState, useMemo } from "react";
+import { Star } from "lucide-react";
 
 export function Reviews({ reviews = [] }) {
   const [starFilter, setStarFilter] = useState("All");

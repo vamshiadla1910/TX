@@ -1,105 +1,150 @@
-import React, { useState } from "react";
+/**
+ * Integrated Course & AI Curriculum Studio (AICourseBuilder)
+ * Supports BOTH AI-powered syllabus generation AND manual course creation, plus
+ * full Course, Module, and Topic management (Edit, Add, Delete, Reorder) embedded
+ * directly inside My Courses (without requiring a separate sidebar page).
+ */
+
 import {
-  Sparkles, Check, ArrowRight, BookOpen, Layers,
-  Code2, CheckCircle2, RefreshCw, Save
+  Sparkles,
+  CheckCircle2,
+  RefreshCw,
+  AlertCircle,
+  X,
+  ArrowLeft,
+  BookOpen,
+  FolderPlus
 } from "lucide-react";
+import { ActionButton, IconButton } from "../common/ActionButton.jsx";
+import { useCurriculumBuilder } from "./hooks/useCurriculumBuilder.js";
+import { CurriculumSpecificationPanel } from "./components/CurriculumSpecificationPanel.jsx";
+import {
+  EditTopicModal,
+  AddTopicModal,
+  DeleteConfirmation,
+  ModuleFormModal,
+  DeleteModuleConfirmation
+} from "../MyCourses/components/Syllabus/index.js";
+import {
+  EditCourseModal,
+  DeleteCourseConfirmation
+} from "../MyCourses/components/CourseManagement/index.js";
+import {
+  COURSE_CATEGORIES,
+  COURSE_LEVELS,
+  COURSE_STATUSES
+} from "../MyCourses/validation/courseValidation.js";
+import "../MyCourses/styles/syllabus.css";
 import "./AICourseBuilder.css";
 
-export function AICourseBuilder({ onSaveCourse, onNavigate }) {
-  const [topic, setTopic] = useState("Autonomous AI Agents & Multi-Agent Orchestration");
-  const [level, setLevel] = useState("Advanced");
-  const [category, setCategory] = useState("Artificial Intelligence & Systems");
-  const [targetAudience, setTargetAudience] = useState("Software Engineers & Full Stack Developers");
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedSyllabus, setGeneratedSyllabus] = useState(null);
-  const [successNotice, setSuccessNotice] = useState("");
+export function AICourseBuilder({
+  instructorProfile,
+  embedded = true,
+  initialMode = "ai",
+  editingCourse = null,
+  learners = [],
+  batches = [],
+  onSaveCourse,
+  onDeleteCourse,
+  onCloseBuilder,
+  onNavigate
+}) {
+  const {
+    isEditingExisting,
+    builderMode,
+    switchBuilderMode,
+    topic,
+    setTopic,
+    code,
+    setCode,
+    level,
+    setLevel,
+    category,
+    setCategory,
+    targetAudience,
+    setTargetAudience,
+    status,
+    setStatus,
+    price,
+    setPrice,
+    totalHours,
+    setTotalHours,
+    description,
+    setDescription,
+    isGenerating,
+    isSubmitting,
+    handleGenerate,
+    handleInitializeManual,
+    generatedSyllabus,
+    hasUnsavedChanges,
+    successNotice,
+    errorNotice,
+    clearFeedback,
+    // Course dialogs
+    isEditCourseOpen,
+    openEditCourseModal,
+    closeEditCourseModal,
+    saveCourseMetadata,
+    deleteCourseModalState,
+    existingCourseImpact,
+    openDeleteOrDiscardCourse,
+    closeDeleteCourseModal,
+    confirmDeleteOrDiscardCourse,
+    // Module dialogs & actions
+    moduleFormState,
+    openAddModule,
+    openEditModule,
+    closeModuleModal,
+    saveModuleForm,
+    deletingModule,
+    openDeleteModule,
+    closeDeleteModule,
+    confirmDeleteModule,
+    handleReorderModule,
+    // Topic dialogs & actions
+    handleReorderTopic,
+    editingTopic,
+    openEditTopic,
+    closeEditTopic,
+    saveEditTopic,
+    addingToModule,
+    openAddTopic,
+    closeAddTopic,
+    saveAddTopic,
+    deletingTopic,
+    openDeleteTopic,
+    closeDeleteTopic,
+    confirmDeleteTopic,
+    // Draft / Publish
+    handleSaveDraftChanges,
+    handleCancelDraftChanges,
+    handlePublishCourse
+  } = useCurriculumBuilder({
+    instructorProfile,
+    initialMode,
+    editingCourse,
+    learners,
+    batches,
+    onSaveCourse,
+    onDeleteCourse,
+    onCloseBuilder,
+    onNavigate
+  });
 
-  const handleGenerate = () => {
-    setIsGenerating(true);
-    setSuccessNotice("");
-
-    // Realistic AI simulation with structured output
-    setTimeout(() => {
-      setGeneratedSyllabus({
-        title: topic.trim() || "Autonomous AI Agents & Multi-Agent Orchestration",
-        code: "AGENT-AI",
-        category,
-        level,
-        estimatedHours: 52,
-        modulesCount: 6,
-        modules: [
-          {
-            num: 1,
-            title: "Foundations of Autonomous Agents & LLM Function Calling",
-            duration: "8 hours",
-            topics: ["Prompt orchestration", "Structured tool calling with JSON Schema", "Memory systems (Short-term & Vector Store)"]
-          },
-          {
-            num: 2,
-            title: "LangGraph & State Machine Agent Workflows",
-            duration: "10 hours",
-            topics: ["Stateful graph topologies", "Cyclic execution loops", "Human-in-the-loop validation checkpoints"]
-          },
-          {
-            num: 3,
-            title: "Multi-Agent Collaboration & Role Delegation",
-            duration: "10 hours",
-            topics: ["Hierarchical supervisor architecture", "Peer-to-peer consensus", "Subagent task distribution"]
-          },
-          {
-            num: 4,
-            title: "Real-World Sandboxed Coding & Browser Automation",
-            duration: "8 hours",
-            topics: ["Dockerized sandbox execution", "Playwright & Chrome DevTools Protocol", "Security sandboxing"]
-          },
-          {
-            num: 5,
-            title: "Production Observability & Token Cost Optimization",
-            duration: "8 hours",
-            topics: ["OpenTelemetry tracing", "Latency mitigation & caching", "Rate limiting & failovers"]
-          },
-          {
-            num: 6,
-            title: "Capstone Project: Enterprise AI Coding Assistant",
-            duration: "8 hours",
-            topics: ["End-to-end repository indexing", "Automated unit test generation", "Pull request self-healing"]
-          }
-        ]
-      });
-      setIsGenerating(false);
-    }, 1200);
-  };
-
-  const handlePublishCourse = () => {
-    if (!generatedSyllabus) return;
-
-    const newCourse = {
-      id: `crs-ai-${Date.now()}`,
-      code: generatedSyllabus.code,
-      title: generatedSyllabus.title,
-      category: generatedSyllabus.category,
-      level: generatedSyllabus.level,
-      enrolledLearners: 0,
-      completionRate: 0,
-      rating: 5.0,
-      reviewsCount: 0,
-      status: "Published",
-      modulesCount: generatedSyllabus.modulesCount,
-      totalHours: generatedSyllabus.estimatedHours,
-      price: 19999,
-      revenue: 0,
-      lastUpdated: "Just now",
-      thumbnailTone: "purple"
-    };
-
-    if (onSaveCourse) {
-      onSaveCourse(newCourse);
-    }
-
-    setSuccessNotice("Course curriculum generated and published to your catalogue successfully!");
-    setTimeout(() => {
-      onNavigate("My Courses");
-    }, 1400);
+  const activeCourseObj = generatedSyllabus || {
+    id: editingCourse?.id || "draft-course",
+    code,
+    title: topic,
+    category,
+    level,
+    status,
+    price,
+    totalHours,
+    targetAudience,
+    description,
+    generationMode: builderMode,
+    modulesCount: generatedSyllabus?.modules?.length || 0,
+    enrolledLearners: editingCourse?.enrolledLearners || 0
   };
 
   return (
@@ -111,37 +156,107 @@ export function AICourseBuilder({ onSaveCourse, onNavigate }) {
           <span className="separator">/</span>
           <span>Instructor</span>
           <span className="separator">/</span>
-          <strong className="current">AI Course Builder</strong>
+          <span>My Courses</span>
+          <span className="separator">/</span>
+          <strong className="current">
+            {isEditingExisting ? "Edit Course & Curriculum" : "Create Course"}
+          </strong>
         </div>
+
         <div className="title-row">
-          <div>
-            <h1 className="module-title">AI Course Builder</h1>
-            <p className="module-sub">
-              Generate course syllabi and lab structures with AI.
-            </p>
+          <div className="inst-cb-title-group">
+            {embedded && typeof onCloseBuilder === "function" && (
+              <ActionButton
+                icon={ArrowLeft}
+                variant="secondary"
+                size="sm"
+                onClick={() => onCloseBuilder()}
+                tooltip="Return to My Courses"
+              >
+                Back to My Courses
+              </ActionButton>
+            )}
+            <div>
+              <h1 className="module-title">
+                {isEditingExisting
+                  ? `Manage Course: ${editingCourse.title}`
+                  : "Create Course & Curriculum"}
+              </h1>
+              <p className="module-sub">
+                Author course details manually or generate a syllabus outline with AI, then refine
+                modules and topics freely.
+              </p>
+            </div>
           </div>
-          <span className="ai-model-tag">
-            <Sparkles size={14} /> AI Powered
-          </span>
+
+          {!isEditingExisting && (
+            <div className="inst-cb-mode-switcher" role="tablist" aria-label="Course creation mode">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={builderMode === "ai"}
+                className={`inst-cb-mode-tab ${builderMode === "ai" ? "active" : ""}`}
+                onClick={() => switchBuilderMode("ai")}
+              >
+                <Sparkles size={14} />
+                <span>Create with AI</span>
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={builderMode === "manual"}
+                className={`inst-cb-mode-tab ${builderMode === "manual" ? "active" : ""}`}
+                onClick={() => switchBuilderMode("manual")}
+              >
+                <BookOpen size={14} />
+                <span>Manual Setup</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {successNotice && (
-        <div className="builder-success-banner">
+        <div className="builder-success-banner" role="status">
           <CheckCircle2 size={18} />
           <span>{successNotice}</span>
+          <IconButton
+            icon={X}
+            size="xs"
+            variant="ghost"
+            className="inst-cb-banner-dismiss"
+            onClick={clearFeedback}
+            tooltip="Dismiss notification"
+            ariaLabel="Dismiss notification"
+          />
         </div>
       )}
 
-      {/* Two Column Layout: Generator Inputs on Left, Generated Syllabus on Right */}
+      {errorNotice && (
+        <div className="builder-error-banner" role="alert">
+          <AlertCircle size={18} />
+          <span>{errorNotice}</span>
+          <IconButton
+            icon={X}
+            size="xs"
+            variant="ghost"
+            className="inst-cb-banner-dismiss"
+            onClick={clearFeedback}
+            tooltip="Dismiss error"
+            ariaLabel="Dismiss error"
+          />
+        </div>
+      )}
+
+      {/* Two Column Layout: Course Specifications on Left, Interactive Curriculum on Right */}
       <div className="builder-dual-layout">
-        {/* Left Column: Input Form */}
         <div className="card builder-input-card">
-          <h3 className="section-heading">Course Specifications</h3>
+          <h3 className="section-heading">Course Details & Specifications</h3>
 
           <div className="form-group">
-            <label>Course Topic / Subject</label>
+            <label htmlFor="ai-course-topic">Course Title / Topic *</label>
             <input
+              id="ai-course-topic"
               type="text"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
@@ -151,115 +266,245 @@ export function AICourseBuilder({ onSaveCourse, onNavigate }) {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Domain Category</label>
-              <select value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option value="Artificial Intelligence & Systems">Artificial Intelligence</option>
-                <option value="Software Development">Software Development</option>
-                <option value="Cloud & DevOps">Cloud & DevOps</option>
-                <option value="Cybersecurity">Cybersecurity</option>
-                <option value="System Design & Architecture">System Design</option>
+              <label htmlFor="ai-course-code">Course Code *</label>
+              <input
+                id="ai-course-code"
+                type="text"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                placeholder="e.g. MICRO-ARCH"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="ai-course-status">Publishing Status</label>
+              <select
+                id="ai-course-status"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                {COURSE_STATUSES.map((st) => (
+                  <option key={st} value={st}>
+                    {st}
+                  </option>
+                ))}
+                {isEditingExisting && status === "Archived" && (
+                  <option value="Archived">Archived</option>
+                )}
+              </select>
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="ai-course-category">Domain Category</label>
+              <select
+                id="ai-course-category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                {!COURSE_CATEGORIES.includes(category) && (
+                  <option value={category}>{category}</option>
+                )}
+                {COURSE_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
               </select>
             </div>
 
             <div className="form-group">
-              <label>Target Proficiency</label>
-              <select value={level} onChange={(e) => setLevel(e.target.value)}>
-                <option value="Beginner">Beginner (Foundational)</option>
-                <option value="Intermediate">Intermediate (Practitioner)</option>
-                <option value="Advanced">Advanced (Expert / Architect)</option>
+              <label htmlFor="ai-course-level">Target Proficiency</label>
+              <select
+                id="ai-course-level"
+                value={level}
+                onChange={(e) => setLevel(e.target.value)}
+              >
+                {!COURSE_LEVELS.includes(level) && <option value={level}>{level}</option>}
+                {COURSE_LEVELS.map((lvl) => (
+                  <option key={lvl} value={lvl}>
+                    {lvl}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="ai-course-price">Course Fee (INR ₹)</label>
+              <input
+                id="ai-course-price"
+                type="number"
+                min={0}
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="ai-course-hours">Estimated Hours</label>
+              <input
+                id="ai-course-hours"
+                type="number"
+                min={1}
+                value={totalHours}
+                onChange={(e) => setTotalHours(e.target.value)}
+              />
+            </div>
+          </div>
+
           <div className="form-group">
-            <label>Target Audience Description</label>
+            <label htmlFor="ai-course-audience">Target Audience</label>
             <input
+              id="ai-course-audience"
               type="text"
               value={targetAudience}
               onChange={(e) => setTargetAudience(e.target.value)}
-              placeholder="e.g. Senior engineers preparing for cloud architects certification"
+              placeholder="e.g. Senior engineers preparing for cloud architecture certification"
             />
           </div>
 
-          <button
-            type="button"
-            className="btn-generate-ai"
-            onClick={handleGenerate}
-            disabled={isGenerating || !topic.trim()}
-          >
-            {isGenerating ? (
-              <>
-                <RefreshCw size={16} className="spinner" />
-                <span>Generating Curriculum with AI...</span>
-              </>
-            ) : (
-              <>
-                <Sparkles size={16} />
-                <span>Generate Curriculum Outline</span>
-              </>
-            )}
-          </button>
-        </div>
-
-        {/* Right Column: Generated Curriculum Preview */}
-        <div className="card builder-preview-card">
-          <div className="preview-header">
-            <div>
-              <span className="preview-tag">CURRICULUM SPECIFICATION</span>
-              <h3 className="section-heading">
-                {generatedSyllabus ? generatedSyllabus.title : "Generated Syllabus Preview"}
-              </h3>
-            </div>
-
-            {generatedSyllabus && (
-              <button
-                type="button"
-                className="btn-save-course"
-                onClick={handlePublishCourse}
-              >
-                <Save size={16} />
-                <span>Publish to My Courses</span>
-              </button>
-            )}
+          <div className="form-group">
+            <label htmlFor="ai-course-description">Course Description</label>
+            <textarea
+              id="ai-course-description"
+              rows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Concise overview of prerequisites, projects, and outcomes..."
+            />
           </div>
 
-          {!generatedSyllabus ? (
-            <div className="preview-placeholder">
-              <Sparkles size={36} className="text-purple" />
-              <h4>Ready to Architect Your Next Course</h4>
-              <p>Configure your course parameters on the left and click "Generate Curriculum Outline" to produce an interactive module breakdown.</p>
-            </div>
+          {builderMode === "ai" ? (
+            <button
+              type="button"
+              className="btn-generate-ai"
+              onClick={handleGenerate}
+              disabled={isGenerating || !topic.trim()}
+            >
+              {isGenerating ? (
+                <>
+                  <RefreshCw size={16} className="spinner" />
+                  <span>Generating Curriculum with AI...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={16} />
+                  <span>
+                    {generatedSyllabus
+                      ? "Regenerate Curriculum with AI"
+                      : "Generate Curriculum Outline"}
+                  </span>
+                </>
+              )}
+            </button>
           ) : (
-            <div className="modules-timeline">
-              <div className="curriculum-summary-banner">
-                <div>
-                  <strong>{generatedSyllabus.modulesCount} Core Modules</strong> · {generatedSyllabus.estimatedHours} Total Estimated Hours
-                </div>
-                <span className="badge success">AI Verified</span>
-              </div>
-
-              {generatedSyllabus.modules.map((m) => (
-                <div key={m.num} className="module-item">
-                  <div className="module-number">0{m.num}</div>
-                  <div className="module-content">
-                    <div className="module-meta">
-                      <strong>Module {m.num}: {m.title}</strong>
-                      <small>{m.duration}</small>
-                    </div>
-                    <ul className="module-topics-list">
-                      {m.topics.map((t, idx) => (
-                        <li key={idx}>
-                          <Check size={12} className="check-icon" /> {t}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <button
+              type="button"
+              className="btn-generate-ai"
+              onClick={generatedSyllabus ? openAddModule : handleInitializeManual}
+              disabled={!topic.trim()}
+            >
+              <FolderPlus size={16} />
+              <span>
+                {generatedSyllabus ? "Add Module to Manual Course" : "Initialize Course Structure"}
+              </span>
+            </button>
           )}
         </div>
+
+        {/* Right Column: Editable Curriculum Specification (Modules + Topics) */}
+        <CurriculumSpecificationPanel
+          syllabus={generatedSyllabus}
+          isEditingExisting={isEditingExisting}
+          existingCourseEnrolled={Boolean(existingCourseImpact?.requiresArchive)}
+          hasUnsavedChanges={hasUnsavedChanges}
+          isSubmitting={isSubmitting}
+          onOpenEditCourse={openEditCourseModal}
+          onOpenDeleteOrDiscardCourse={openDeleteOrDiscardCourse}
+          onAddModule={openAddModule}
+          onEditModule={openEditModule}
+          onDeleteModule={openDeleteModule}
+          onReorderModule={handleReorderModule}
+          onAddTopic={openAddTopic}
+          onEditTopic={openEditTopic}
+          onDeleteTopic={openDeleteTopic}
+          onReorderTopic={handleReorderTopic}
+          onSaveDraftChanges={handleSaveDraftChanges}
+          onCancelDraftChanges={handleCancelDraftChanges}
+          onPublishCourse={handlePublishCourse}
+        />
       </div>
+
+      {/* Edit Course Metadata Modal */}
+      <EditCourseModal
+        isOpen={isEditCourseOpen}
+        course={activeCourseObj}
+        onClose={closeEditCourseModal}
+        onSave={saveCourseMetadata}
+        isSubmitting={isSubmitting}
+      />
+
+      {/* Delete / Archive Course or Discard Draft Confirmation */}
+      <DeleteCourseConfirmation
+        isOpen={Boolean(deleteCourseModalState?.isOpen)}
+        course={activeCourseObj}
+        impact={deleteCourseModalState?.impact}
+        onClose={closeDeleteCourseModal}
+        onConfirm={confirmDeleteOrDiscardCourse}
+        isSubmitting={isSubmitting}
+      />
+
+      {/* Add / Edit Module Modal */}
+      <ModuleFormModal
+        isOpen={Boolean(moduleFormState)}
+        mode={moduleFormState?.mode || "add"}
+        module={moduleFormState?.module || null}
+        modulesCount={generatedSyllabus?.modules?.length || 0}
+        onClose={closeModuleModal}
+        onSave={saveModuleForm}
+        isSubmitting={isSubmitting}
+      />
+
+      {/* Delete Module Confirmation (with Topic Impact Warning) */}
+      <DeleteModuleConfirmation
+        isOpen={Boolean(deletingModule)}
+        module={deletingModule}
+        onClose={closeDeleteModule}
+        onConfirm={confirmDeleteModule}
+        isSubmitting={isSubmitting}
+      />
+
+      {/* Reused Topic Management Dialogs */}
+      <EditTopicModal
+        isOpen={Boolean(editingTopic)}
+        module={editingTopic?.module}
+        topic={editingTopic?.topic}
+        onClose={closeEditTopic}
+        onSave={saveEditTopic}
+        isSubmitting={isSubmitting}
+      />
+
+      <AddTopicModal
+        isOpen={Boolean(addingToModule)}
+        module={addingToModule}
+        onClose={closeAddTopic}
+        onAdd={saveAddTopic}
+        isSubmitting={isSubmitting}
+      />
+
+      <DeleteConfirmation
+        isOpen={Boolean(deletingTopic)}
+        module={deletingTopic?.module}
+        topic={deletingTopic?.topic}
+        onClose={closeDeleteTopic}
+        onConfirm={confirmDeleteTopic}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 }
+
+export default AICourseBuilder;

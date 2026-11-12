@@ -331,6 +331,28 @@
   letter-spacing: -0.3px;
 }
 
+.instructor-app-shell .chart-view-full-link {
+  margin-top: 6px;
+  padding: 4px 10px;
+  border-radius: 7px;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.instructor-app-shell .chart-view-full-link:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1e40af;
+}
+
 .instructor-app-shell .chart-summary-stat {
   display: flex;
   flex-direction: column;

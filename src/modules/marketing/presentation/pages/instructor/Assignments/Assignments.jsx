@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from "react";
-import { CheckCircle2, Clock, ExternalLink, FileCheck, Filter, MessageSquare, Search, Star, X } from "lucide-react";
+import { useState, useMemo } from "react";
+import { CheckCircle2, Clock, ExternalLink, Pencil, Search, Send, X } from "lucide-react";
 import { Badge } from "../common/Badge";
+import { ActionButton, IconButton } from "../common/ActionButton.jsx";
 
 export function Assignments({ assignments = [], onGradeAssignment }) {
   const [search, setSearch] = useState("");
@@ -79,6 +80,16 @@ export function Assignments({ assignments = [], onGradeAssignment }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+          {search && (
+            <IconButton
+              icon={X}
+              size="xs"
+              variant="ghost"
+              onClick={() => setSearch("")}
+              tooltip="Clear search"
+              ariaLabel="Clear assignment search"
+            />
+          )}
         </div>
         <div className="filter-chips">
           {["All", "Pending Review", "Graded", "Needs Resubmission"].map((st) => (
@@ -141,13 +152,15 @@ export function Assignments({ assignments = [], onGradeAssignment }) {
                   )}
                 </td>
                 <td className="text-right">
-                  <button
-                    type="button"
-                    className="btn-action-sm"
+                  <ActionButton
+                    icon={item.status === "Graded" ? Pencil : CheckCircle2}
+                    variant={item.status === "Graded" ? "secondary" : "outline-blue"}
+                    size="sm"
                     onClick={() => handleOpenGrade(item)}
+                    tooltip={item.status === "Graded" ? "Edit rubric feedback & score" : "Evaluate & grade submission"}
                   >
                     {item.status === "Graded" ? "Edit Feedback" : "Evaluate & Grade"}
-                  </button>
+                  </ActionButton>
                 </td>
               </tr>
             ))}
@@ -165,7 +178,14 @@ export function Assignments({ assignments = [], onGradeAssignment }) {
                 <h2>{selectedAsg.title}</h2>
                 <small className="modal-sub">Student: {selectedAsg.student} · {selectedAsg.course}</small>
               </div>
-              <button type="button" className="icon-button" onClick={() => setSelectedAsg(null)}><X size={16} /></button>
+              <IconButton
+                icon={X}
+                size="sm"
+                variant="neutral"
+                onClick={() => setSelectedAsg(null)}
+                tooltip="Close"
+                ariaLabel="Close grading dialog"
+              />
             </div>
             <div className="modal-body form-grid">
               <label>
@@ -192,8 +212,17 @@ export function Assignments({ assignments = [], onGradeAssignment }) {
               </label>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn-secondary" onClick={() => setSelectedAsg(null)}>Cancel</button>
-              <button type="submit" className="btn-primary-gradient">Publish Score & Feedback</button>
+              <ActionButton
+                icon={X}
+                variant="secondary"
+                size="md"
+                onClick={() => setSelectedAsg(null)}
+              >
+                Cancel
+              </ActionButton>
+              <ActionButton icon={Send} type="submit" variant="primary" size="md">
+                Publish Score & Feedback
+              </ActionButton>
             </div>
           </form>
         </div>

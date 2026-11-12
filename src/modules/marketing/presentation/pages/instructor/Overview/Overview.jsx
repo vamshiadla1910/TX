@@ -1,5 +1,4 @@
-import React from "react";
-import { Plus, Sparkles, Award, BookOpen, ExternalLink } from "lucide-react";
+import { Sparkles, Award, BookOpen } from "lucide-react";
 import { KPISection } from "./components/KPISection";
 import { EarningsChart } from "./components/EarningsChart";
 import { AttentionPanel } from "./components/AttentionPanel";
@@ -12,6 +11,7 @@ export function Overview({
   attentionItems,
   reviews,
   onNavigate,
+  onCreateCourse,
   onResolveItem
 }) {
   return (
@@ -27,7 +27,7 @@ export function Overview({
             <strong className="current">Dashboard</strong>
           </div>
 
-          <h1 className="overview-title">Instructor Overview</h1>
+          <h1 className="overview-title"> Welcome back, {instructorProfile.name}</h1>
 
           <div className="instructor-meta-pills">
             <span className="meta-pill verified">
@@ -42,7 +42,7 @@ export function Overview({
           </div>
 
           <p className="overview-subtitle">
-            Welcome back, <strong>{instructorProfile.name}</strong>. Here is your courses and learners performance overview.
+           <strong>{instructorProfile.name}</strong>. Here is your courses and learners performance overview.
           </p>
         </div>
 
@@ -50,7 +50,7 @@ export function Overview({
           <button
             type="button"
             className="btn-ai-builder-hero"
-            onClick={() => onNavigate("AI Course Builder")}
+            onClick={() => (onCreateCourse ? onCreateCourse() : onNavigate("My Courses"))}
             title="Create a new course"
           >
             <Sparkles size={16} />
@@ -65,7 +65,10 @@ export function Overview({
       {/* Two-Column Analytics & Action Layout */}
       <div className="overview-dual-grid">
         <div className="grid-left-col">
-          <EarningsChart earningsData={earningsData} />
+          <EarningsChart
+            earningsData={earningsData}
+            onViewFullAnalytics={() => onNavigate("Revenue Analytics")}
+          />
           <RecentReviews reviews={reviews} />
         </div>
 

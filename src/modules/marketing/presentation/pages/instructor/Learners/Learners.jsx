@@ -1,5 +1,12 @@
 import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
+import {
+  Users, Search, Mail, RotateCcw,
+  SlidersHorizontal, ChevronLeft, ChevronRight, X, LayoutGrid, Table
+} from "lucide-react";
+import { Badge, getStatusTone } from "../common/Badge";
+import { ActionButton, IconButton } from "../common/ActionButton.jsx";
+import { initialLearners } from "../data/mockData";
 import "./Learners.css";
 
 /* ------------------------------------------------------------------ */
@@ -187,10 +194,10 @@ function Composer({ learner, batch, mode = "email", onClose }) {
               <div className="lx-tpl">
                 <span>Quick templates</span>
                 {Object.keys(TEMPLATES).map((t) => (
-                  <button key={t} onClick={() => setBody(TEMPLATES[t](learner.name, batch.name))}>{t}</button>
+                  <button key={t} onClick={() => setBody(TEMPLATES[t](learner.name, batch?.name || "the course"))}>{t}</button>
                 ))}
               </div>
-              <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder={`Write your message to ${learner.name.split(" ")[0]}…`} />
+              <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder={`Write your message to ${(learner.name || "").split(" ")[0]}…`} />
             </div>
             <footer>
               <span className="lx-muted">{body.length} characters</span>
@@ -440,32 +447,388 @@ function BatchDetail({ batch, onBack, onContact, onProfile }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  PAGE                                                               */
+/*  ALL LEARNERS TABLE VIEW (HEAD Implementation)                     */
 /* ------------------------------------------------------------------ */
-export default function Learners() {
+function AllLearnersTableView({ learners = [], onContact, onProfile }) {
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [cohortFilter, setCohortFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+
+  const cohorts = useMemo(() => {
+    const set = new Set();
+    learners.forEach((l) => { if (l.cohort) set.add(l.cohort); });
+    return ["all", ...Array.from(set)];
+  }, [learners]);
+
+  const filteredLearners = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return learners.filter((lrn) => {
+      const matchSearch =
+        !q ||
+        (lrn.name || "").toLowerCase().includes(q) ||
+        (lrn.email || "").toLowerCase().includes(q) ||
+        (lrn.courseName || "").toLowerCase().includes(q);
+
+      const stLower = (lrn.status || "").toLowerCase();
+      const matchStatus =
+        statusFilter === "all"
+          ? true
+          : statusFilter === "needs support"
+          ? stLower.includes("support")
+          : stLower === statusFilter;
+
+      const matchCohort =
+        cohortFilter === "all" || lrn.cohort === cohortFilter;
+
+      return matchSearch && matchStatus && matchCohort;
+    });
+  }, [learners, search, statusFilter, cohortFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredLearners.length / ITEMS_PER_PAGE));
+  const paginatedLearners = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredLearners.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredLearners, currentPage]);
+
+  const clearSearch = () => {
+    setSearch("");
+    setCurrentPage(1);
+  };
+
+  return (
+    <div className="learners-all-table-container">
+      {/* Search and Filter Bar */}
+      <div className="card learners-filter-card">
+        {/* Search Input Box */}
+        <div className="learners-search-wrap">
+          <Search size={16} className="learners-search-icon" />
+          <input
+            type="text"
+            className="learners-search-input"
+            placeholder="Search learners by name, email, or course..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+          {search && (
+            <IconButton
+              icon={X}
+              size="xs"
+              variant="ghost"
+              className="learners-search-clear"
+              onClick={clearSearch}
+              tooltip="Clear search"
+              ariaLabel="Clear search"
+            />
+          )}
+        </div>
+
+        {/* Filter Controls Group */}
+        <div className="learners-filter-controls">
+          {/* Status Pills */}
+          <div className="learners-status-pills">
+            {["all", "active", "needs support", "completed"].map((st) => (
+              <button
+                key={st}
+                type="button"
+                className={`learners-status-pill ${statusFilter === st ? "active" : ""}`}
+                onClick={() => {
+                  setStatusFilter(st);
+                  setCurrentPage(1);
+                }}
+              >
+                {st === "all" ? "All" : st.charAt(0).toUpperCase() + st.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          {/* Cohort Select Dropdown */}
+          <div className="learners-cohort-dropdown">
+            <SlidersHorizontal size={14} className="filter-icon" />
+            <select
+              value={cohortFilter}
+              onChange={(e) => {
+                setCohortFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              aria-label="Filter by cohort"
+            >
+              {cohorts.map((c) => (
+                <option key={c} value={c}>
+                  {c === "all" ? "All Cohorts" : c}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Active Search & Filter Banner */}
+      {(search.trim() !== "" || cohortFilter !== "all" || statusFilter !== "all") && (
+        <div className="learners-active-filter-bar">
+          <div className="active-filter-info">
+            <span>
+              Showing <strong>{filteredLearners.length}</strong> matching results
+              {search && <> for "<strong>{search}</strong>"</>}
+              {cohortFilter !== "all" && <> in <strong>{cohortFilter}</strong></>}
+              {statusFilter !== "all" && <> with status <strong>{statusFilter}</strong></>}
+            </span>
+          </div>
+          <ActionButton
+            icon={RotateCcw}
+            variant="secondary"
+            size="sm"
+            className="btn-reset-filters"
+            onClick={() => {
+              setSearch("");
+              setCohortFilter("all");
+              setStatusFilter("all");
+              setCurrentPage(1);
+            }}
+            tooltip="Reset all search & filters"
+          >
+            Reset Filters
+          </ActionButton>
+        </div>
+      )}
+
+      {/* Learners Table */}
+      <div className="card table-card">
+        <div className="table-responsive">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Learner</th>
+                <th>Enrolled Course</th>
+                <th>Cohort</th>
+                <th>Progress</th>
+                <th>Quiz Avg</th>
+                <th>Status</th>
+                <th>Last Active</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedLearners.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="learners-empty-cell">
+                    <div className="learners-empty-state">
+                      <Search size={32} className="text-muted" />
+                      <h4>No learners match your criteria</h4>
+                      <p>Try refining your search keyword or clearing active cohort filters.</p>
+                      <button
+                        type="button"
+                        className="btn-clear-empty"
+                        onClick={() => {
+                          setSearch("");
+                          setCohortFilter("all");
+                          setStatusFilter("all");
+                        }}
+                      >
+                        Clear Filters
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                paginatedLearners.map((lrn) => {
+                  const tone = getStatusTone(lrn.status);
+                  return (
+                    <tr key={lrn.id}>
+                      <td>
+                        <div
+                          className="learner-user-cell"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => onProfile?.(lrn)}
+                        >
+                          <div className="learner-avatar">
+                            {(lrn.name || "").split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                          </div>
+                          <div>
+                            <strong>{lrn.name}</strong>
+                            <small>{lrn.email}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="course-name-tag">{lrn.courseName}</span>
+                      </td>
+                      <td>
+                        <span className="cohort-badge">{lrn.cohort}</span>
+                      </td>
+                      <td>
+                        <div className="progress-cell">
+                          <div className="progress-bar-bg">
+                            <div
+                              className="progress-bar-fill"
+                              style={{ width: `${lrn.progress}%` }}
+                            />
+                          </div>
+                          <span>{lrn.progress}%</span>
+                        </div>
+                      </td>
+                      <td>
+                        <strong className="quiz-score">{lrn.quizScore || lrn.quiz || 85}%</strong>
+                      </td>
+                      <td>
+                        <Badge tone={tone}>{lrn.status}</Badge>
+                      </td>
+                      <td>
+                        <small className="last-active">{lrn.lastActive || "Recently"}</small>
+                      </td>
+                      <td>
+                        <IconButton
+                          icon={Mail}
+                          size="sm"
+                          variant="edit"
+                          tooltip={`Send message to ${lrn.name}`}
+                          ariaLabel={`Send message to ${lrn.name}`}
+                          onClick={() => onContact?.(lrn)}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="pagination-bar">
+          <small>
+            Showing {paginatedLearners.length} of {filteredLearners.length} learners
+          </small>
+
+          <div className="pagination-buttons">
+            <button
+              type="button"
+              className="page-btn"
+              disabled={currentPage <= 1}
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            >
+              <ChevronLeft size={16} /> Prev
+            </button>
+            <span className="page-indicator">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              type="button"
+              className="page-btn"
+              disabled={currentPage >= totalPages}
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            >
+              Next <ChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  MAIN LEARNERS COMPONENT                                           */
+/* ------------------------------------------------------------------ */
+export default function Learners({ learners: propLearners = [] }) {
+  const effectiveLearners = (propLearners && propLearners.length > 0) ? propLearners : initialLearners;
+  const [viewMode, setViewMode] = useState("batch"); // "batch" | "table"
   const [batch, setBatch] = useState(null);
   const [mail, setMail] = useState(null);
   const [profile, setProfile] = useState(null);
 
   return (
     <div className="lx">
-      <nav className="lx-crumbs">
-        <span>TX Pathwing</span>/<span>Instructor</span>/
-        <button onClick={() => setBatch(null)} className={!batch ? "cur" : ""}>Learners</button>
-        {batch && <><span>/</span><span className="cur">{batch.tag === "Py" ? "Python" : batch.tag}</span></>}
-      </nav>
+      {/* Top Navigation & View Switcher */}
+      <div className="lx-top-bar" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "12px" }}>
+        <nav className="lx-crumbs" style={{ margin: 0 }}>
+          <span>TX Pathwing</span>/<span>Instructor</span>/
+          <button onClick={() => { setViewMode("batch"); setBatch(null); }} className={viewMode === "batch" && !batch ? "cur" : ""}>Learners</button>
+          {viewMode === "batch" && batch && <><span>/</span><span className="cur">{batch.tag === "Py" ? "Python" : batch.tag}</span></>}
+          {viewMode === "table" && <><span>/</span><span className="cur">All Enrolled</span></>}
+        </nav>
 
-      <div key={batch ? batch.id : "home"} className="lx-view">
-        {batch ? <BatchDetail batch={batch} onBack={() => setBatch(null)} onContact={(l, mode) => setMail({ l, mode })} onProfile={setProfile} /> : <BatchGrid onOpen={setBatch} />}
+        <div className="lx-view-toggle" style={{ display: "inline-flex", background: "#f1f5f9", padding: "4px", borderRadius: "10px", border: "1px solid #e2e8f0" }}>
+          <button
+            type="button"
+            onClick={() => { setViewMode("batch"); setBatch(null); }}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "6px",
+              padding: "6px 14px", borderRadius: "8px", border: "none",
+              fontSize: "13px", fontWeight: 600, cursor: "pointer",
+              background: viewMode === "batch" ? "#fff" : "transparent",
+              color: viewMode === "batch" ? "#2563eb" : "#64748b",
+              boxShadow: viewMode === "batch" ? "0 1px 3px rgba(0,0,0,0.08)" : "none"
+            }}
+          >
+            <LayoutGrid size={15} />
+            <span>By Cohort / Batch</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode("table")}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "6px",
+              padding: "6px 14px", borderRadius: "8px", border: "none",
+              fontSize: "13px", fontWeight: 600, cursor: "pointer",
+              background: viewMode === "table" ? "#fff" : "transparent",
+              color: viewMode === "table" ? "#2563eb" : "#64748b",
+              boxShadow: viewMode === "table" ? "0 1px 3px rgba(0,0,0,0.08)" : "none"
+            }}
+          >
+            <Table size={15} />
+            <span>All Enrolled Learners ({effectiveLearners.length})</span>
+          </button>
+        </div>
       </div>
 
-      {profile && <Portal><Profile learner={profile} batch={batch} onClose={() => setProfile(null)} onContact={(l, mode) => setMail({ l, mode })} /></Portal>}
-      {mail && <Portal><Composer learner={mail.l} mode={mail.mode} batch={batch} onClose={() => setMail(null)} /></Portal>}
+      {viewMode === "table" ? (
+        <AllLearnersTableView
+          learners={effectiveLearners}
+          onContact={(lrn) => setMail({ l: lrn, mode: "email" })}
+          onProfile={(lrn) => setProfile(lrn)}
+        />
+      ) : (
+        <div key={batch ? batch.id : "home"} className="lx-view">
+          {batch ? (
+            <BatchDetail
+              batch={batch}
+              onBack={() => setBatch(null)}
+              onContact={(l, mode) => setMail({ l, mode })}
+              onProfile={setProfile}
+            />
+          ) : (
+            <BatchGrid onOpen={setBatch} />
+          )}
+        </div>
+      )}
+
+      {profile && (
+        <Portal>
+          <Profile
+            learner={profile}
+            batch={batch || { name: profile.courseName || "Course", cohort: profile.cohort || "Active Cohort", start: "Jan 2026" }}
+            onClose={() => setProfile(null)}
+            onContact={(l, mode) => setMail({ l, mode })}
+          />
+        </Portal>
+      )}
+      {mail && (
+        <Portal>
+          <Composer
+            learner={mail.l}
+            mode={mail.mode}
+            batch={batch || { name: mail.l?.courseName || "General Course", tag: "General" }}
+            onClose={() => setMail(null)}
+          />
+        </Portal>
+      )}
     </div>
   );
 }
 
-/* Works with both import styles:
-   import Learners from "./Learners";
-   import { Learners } from "./Learners";  (or { LearnersPage }) */
 export { Learners, Learners as LearnersPage };

@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-import {
-  Wallet, IndianRupee, ArrowUpRight, Download, CheckCircle2,
-  Building, Clock, FileText, ShieldCheck
-} from "lucide-react";
+import { useState } from "react";
+import { ArrowUpRight, Download, CheckCircle2, ShieldCheck } from "lucide-react";
 import { Badge, getStatusTone } from "../common/Badge";
+import { ActionButton } from "../common/ActionButton.jsx";
 import "./Earnings.css";
 
 export function Earnings({ payoutHistory = [], instructorProfile = {} }) {
@@ -124,14 +122,15 @@ export function Earnings({ payoutHistory = [], instructorProfile = {} }) {
                       <small className="text-muted">{p.date}</small>
                     </td>
                     <td>
-                      <button
-                        type="button"
-                        className="btn-download-invoice"
+                      <ActionButton
+                        icon={Download}
+                        variant="outline-blue"
+                        size="sm"
                         onClick={() => handleDownloadInvoice(p.id)}
-                        title={`Download invoice for ${p.id}`}
+                        tooltip={`Download tax invoice PDF for ${p.id}`}
                       >
-                        <Download size={14} /> PDF
-                      </button>
+                        PDF
+                      </ActionButton>
                     </td>
                   </tr>
                 );

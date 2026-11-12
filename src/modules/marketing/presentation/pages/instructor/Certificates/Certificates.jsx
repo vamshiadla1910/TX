@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from "react";
-import { Award, CheckCircle2, Download, ExternalLink, Plus, Search, ShieldCheck, X } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Award, ExternalLink, Search, Send, ShieldCheck, X } from "lucide-react";
 import { Badge } from "../common/Badge";
+import { ActionButton, IconButton } from "../common/ActionButton.jsx";
 
 export function Certificates({ certificates = [], onIssueCertificate }) {
   const [search, setSearch] = useState("");
@@ -44,14 +45,15 @@ export function Certificates({ certificates = [], onIssueCertificate }) {
           <h1 className="module-title">Credential Verification & Certificate Issuance</h1>
           <p className="module-sub">Award verifiable cryptographic completion credentials to graduating engineers.</p>
         </div>
-        <button
-          type="button"
-          className="btn-primary-gradient"
+        <ActionButton
+          icon={Award}
+          variant="primary"
+          size="md"
           onClick={() => setShowIssueModal(true)}
+          tooltip="Issue a new verified certificate"
         >
-          <Award size={16} />
-          <span>Issue New Certificate</span>
-        </button>
+          Issue New Certificate
+        </ActionButton>
       </div>
 
       {/* Metrics */}
@@ -83,6 +85,16 @@ export function Certificates({ certificates = [], onIssueCertificate }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+          {search && (
+            <IconButton
+              icon={X}
+              size="xs"
+              variant="ghost"
+              onClick={() => setSearch("")}
+              tooltip="Clear search"
+              ariaLabel="Clear certificate search"
+            />
+          )}
         </div>
       </div>
 
@@ -138,7 +150,14 @@ export function Certificates({ certificates = [], onIssueCertificate }) {
           <form className="card modal-dialog" onClick={(e) => e.stopPropagation()} onSubmit={handleIssueSubmit}>
             <div className="modal-header">
               <h2>Issue Course Completion Certificate</h2>
-              <button type="button" className="icon-button" onClick={() => setShowIssueModal(false)}><X size={16} /></button>
+              <IconButton
+                icon={X}
+                size="sm"
+                variant="neutral"
+                onClick={() => setShowIssueModal(false)}
+                tooltip="Close"
+                ariaLabel="Close certificate dialog"
+              />
             </div>
             <div className="modal-body form-grid">
               <label>
@@ -172,8 +191,12 @@ export function Certificates({ certificates = [], onIssueCertificate }) {
               </label>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn-secondary" onClick={() => setShowIssueModal(false)}>Cancel</button>
-              <button type="submit" className="btn-primary-gradient">Issue Verified Credential</button>
+              <ActionButton icon={X} variant="secondary" size="md" onClick={() => setShowIssueModal(false)}>
+                Cancel
+              </ActionButton>
+              <ActionButton icon={Send} type="submit" variant="primary" size="md">
+                Issue Verified Credential
+              </ActionButton>
             </div>
           </form>
         </div>

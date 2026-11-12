@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   AlertCircle, CheckCircle, Clock, FileCheck, HelpCircle,
   Radio, ArrowRight, User
 } from "lucide-react";
-import { Badge, getStatusTone } from "../../common/Badge";
+import { Badge } from "../../common/Badge";
 
-export function AttentionPanel({ items = [], onResolveItem, onNavigate }) {
+export function AttentionPanel({ items = [], onResolveItem }) {
   const [filter, setFilter] = useState("all");
 
   // Filter items without modifying original array, guaranteed unique keys
@@ -59,7 +59,6 @@ export function AttentionPanel({ items = [], onResolveItem, onNavigate }) {
           </div>
         ) : (
           filteredItems.map((item) => {
-            const tone = getStatusTone(item.status);
             return (
               <div
                 key={item.id}

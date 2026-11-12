@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Bell, CheckCircle2, Lock, Save, ShieldCheck, User } from "lucide-react";
+import { useState } from "react";
+import { Bell, CheckCircle2, Save, User } from "lucide-react";
+import { ActionButton } from "../common/ActionButton.jsx";
 
 export function Settings({ instructorProfile = {}, onUpdateProfile }) {
   const [name, setName] = useState(instructorProfile.name || "Dr. R. Ramana");
@@ -107,10 +108,9 @@ export function Settings({ instructorProfile = {}, onUpdateProfile }) {
           </div>
 
           <div className="form-actions-bar">
-            <button type="submit" className="btn-primary-gradient">
-              <Save size={15} />
-              <span>Save & Update Profile</span>
-            </button>
+            <ActionButton icon={Save} type="submit" variant="primary" size="md">
+              Save & Update Profile
+            </ActionButton>
           </div>
         </form>
       </div>

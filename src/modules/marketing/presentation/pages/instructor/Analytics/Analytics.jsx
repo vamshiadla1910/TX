@@ -1,5 +1,4 @@
-import React from "react";
-import { Activity, ArrowUpRight, BarChart3, Clock, TrendingUp, Users } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { initialCourseAnalytics } from "../data/mockData";
 
 export function Analytics({ analytics = initialCourseAnalytics }) {

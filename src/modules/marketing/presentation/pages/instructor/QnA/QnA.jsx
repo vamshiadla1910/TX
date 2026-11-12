@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from "react";
-import { CheckCircle2, ChevronRight, HelpCircle, MessageSquare, Send, ThumbsUp, X } from "lucide-react";
+import { useState, useMemo } from "react";
+import { CheckCircle2, MessageSquare, Send, ThumbsUp, X } from "lucide-react";
 import { Badge } from "../common/Badge";
+import { ActionButton, IconButton } from "../common/ActionButton.jsx";
 
 export function QnA({ questions = [], onAnswerQuestion }) {
   const [filter, setFilter] = useState("All");
@@ -107,17 +108,18 @@ export function QnA({ questions = [], onAnswerQuestion }) {
                 <ThumbsUp size={12} /> {q.upvotes} Upvotes
               </span>
 
-              <button
-                type="button"
-                className="btn-action-sm"
+              <ActionButton
+                icon={MessageSquare}
+                variant={q.answer ? "secondary" : "outline-blue"}
+                size="sm"
                 onClick={() => {
                   setSelectedQuestion(q);
                   setReplyText(q.answer || "");
                 }}
+                tooltip={q.answer ? "Edit your technical answer" : "Write an answer to this question"}
               >
-                <MessageSquare size={13} />
-                <span>{q.answer ? "Edit Answer" : "Reply to Question"}</span>
-              </button>
+                {q.answer ? "Edit Answer" : "Reply to Question"}
+              </ActionButton>
             </div>
           </div>
         ))}
@@ -133,7 +135,14 @@ export function QnA({ questions = [], onAnswerQuestion }) {
                 <h2>{selectedQuestion.title}</h2>
                 <small className="modal-sub">Student: {selectedQuestion.student} · {selectedQuestion.course}</small>
               </div>
-              <button type="button" className="icon-button" onClick={() => setSelectedQuestion(null)}><X size={16} /></button>
+              <IconButton
+                icon={X}
+                size="sm"
+                variant="neutral"
+                onClick={() => setSelectedQuestion(null)}
+                tooltip="Close"
+                ariaLabel="Close technical reply dialog"
+              />
             </div>
             <div className="modal-body form-grid">
               <p className="original-query-quote">"{selectedQuestion.content}"</p>
@@ -149,11 +158,17 @@ export function QnA({ questions = [], onAnswerQuestion }) {
               </label>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn-secondary" onClick={() => setSelectedQuestion(null)}>Cancel</button>
-              <button type="submit" className="btn-primary-gradient">
-                <Send size={14} />
-                <span>Post Verified Answer</span>
-              </button>
+              <ActionButton
+                icon={X}
+                variant="secondary"
+                size="md"
+                onClick={() => setSelectedQuestion(null)}
+              >
+                Cancel
+              </ActionButton>
+              <ActionButton icon={Send} type="submit" variant="primary" size="md">
+                Post Verified Answer
+              </ActionButton>
             </div>
           </form>
         </div>
