@@ -79,24 +79,7 @@ Thank you. I look forward to your response.`
 
     return (
         <div className="whatsapp-container" ref={containerRef}>
-            {showPopup && (
-                <div className="whatsapp-popup">
-                    <button
-                        className="whatsapp-popup-close"
-                        type="button"
-                        onClick={() => setShowPopup(false)}
-                        aria-label="Close popup"
-                    >
-                        <i className="bi bi-x-lg"></i>
-                    </button>
-
-                    <div className="whatsapp-popup-header">
-                        <i className="bi bi-whatsapp"></i>
-                        <strong>Let's Chat!</strong>
-                    </div>
-                </div>
-            )}
-
+           
             <a
                 href={whatsappURL}
                 className="whatsapp-float"

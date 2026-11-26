@@ -16,8 +16,8 @@ const COURSES = [
   "Other",
 ];
  
-const YEARS = ["2024", "2025", "2026", "2027", "2028", "Other"];
-const MODES = ["Offline", "Online", "Counselling"];
+const YEARS = ["2020", "2021", "2022", "2023","2024", "2025", "2026", "2027", "2028", "Other"];
+const MODES = ["Offline", "Online", "Hybrid"];
  
 const INITIAL = {
   full_name: "",

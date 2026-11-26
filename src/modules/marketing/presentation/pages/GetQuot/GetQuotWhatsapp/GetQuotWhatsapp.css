@@ -48,115 +48,34 @@
   box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35);
 }
 
-/* WhatsApp Popup */
-.whatsapp-popup {
-  position: relative;
 
-  width: 180px;
-  padding: 22px;
-
-  margin-bottom: 16px;
-
-  background: #ffffff;
-  color: #222222;
-
-  border-radius: 14px;
-
-  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.15);
-
-  animation: whatsappPopupSlide 0.4s ease;
+.whatsapp-float {
+    animation: whatsappPulse 1.8s infinite ease-in-out;
+    transform-origin: center;
 }
 
-/* Popup Header */
-.whatsapp-popup-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+@keyframes whatsappPulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6);
+    }
 
-  margin-bottom: 17px;
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+    }
 
-  color: #25D366;
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
 }
 
-.whatsapp-popup-header .bi-whatsapp {
-  font-size: 25px;
+.whatsapp-float:hover {
+    animation-play-state: paused;
 }
 
-.whatsapp-popup-header strong {
-  font-size: 15px;
-  color: #222222;
-}
 
-/* Popup Heading */
-.whatsapp-popup h4 {
-  font-size: 17px;
-  font-weight: 700;
-
-  margin: 0 0 9px;
-
-  color: #222222;
-}
-
-/* Popup Description */
-.whatsapp-popup p {
-  font-size: 13px;
-  line-height: 1.7;
-
-  color: #666666;
-
-  margin: 0 0 15px;
-}
-
-/* Popup Link */
-.whatsapp-popup-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-
-  color: #20b858;
-
-  font-size: 13px;
-  font-weight: 600;
-
-  text-decoration: none;
-
-  transition: color 0.3s ease;
-}
-
-.whatsapp-popup-link:hover {
-  color: #128c43;
-}
-
-/* Close Button */
-.whatsapp-popup-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-
-  width: 28px;
-  height: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: #f3f4f6;
-  color: #666666;
-
-  border: none;
-  border-radius: 50%;
-
-  cursor: pointer;
-
-  transition: all 0.3s ease;
-}
-
-.whatsapp-popup-close:hover {
-  background: #e5e7eb;
-  color: #222222;
-
-  transform: rotate(90deg);
-}
 
 /* Popup Animation */
 @keyframes whatsappPopupSlide {
